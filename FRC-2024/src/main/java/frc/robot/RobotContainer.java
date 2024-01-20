@@ -9,12 +9,33 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Intake.IntakeNote;
 import frc.robot.commands.Shooter.PassAndShootNote;
+import frc.robot.commands.Swerve.SetZeroHeading;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import java.util.List;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,12 +49,22 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
+  private final Joystick driverController = new Joystick(OIConstants.kDriverControllerPort);
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  //private final CommandXboxController driverController =
+      //new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
+      swerveSubsystem,
+      () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
+      () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
+      () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
+      () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
     // Configure the trigger bindings
     configureBindings();
   }
@@ -49,8 +80,13 @@ public class RobotContainer {
    */
   private void configureBindings() {
     
-    driverController.a().whileTrue(new IntakeNote(intakeSubsystem));
-    driverController.b().whileTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+      // driverController.getRawButton(1).whileTrue(new IntakeNote(intakeSubsystem));
+      // driverController.getRawButton(0)
+      // driverController.b().whileTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+      // driverController.povUp().whileTrue(new SetZeroHeading(swerveSubsystem));
+
+    new JoystickButton(driverController, 0).whileTrue(new SetZeroHeading(swerveSubsystem));
+    //new JoystickButton(driverJoytick, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(exampleSubsystem::exampleCondition)
