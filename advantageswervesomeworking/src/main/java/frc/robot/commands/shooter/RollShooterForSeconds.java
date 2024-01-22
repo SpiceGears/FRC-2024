@@ -4,16 +4,14 @@
 
 package frc.robot.commands.shooter;
 
-import com.google.flatbuffers.Constants;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class RollShooterForSeconds extends Command {
   /** Creates a new RollShooterForSeconds. */
-
   ShooterSubsystem shooterSubsystem;
+
   double seconds;
   double startTime;
   double endTime;

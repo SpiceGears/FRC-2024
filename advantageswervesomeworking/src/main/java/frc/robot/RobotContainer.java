@@ -34,7 +34,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
@@ -73,7 +72,7 @@ public class RobotContainer {
                 new ModuleIOSparkMax(3));
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        //! add new subsystems here!
+        // ! add new subsystems here!
 
         // flywheel = new Flywheel(new FlywheelIOSparkMax());
         // drive = new Drive(
@@ -96,7 +95,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        //! add new subsystems here!
+        // ! add new subsystems here!
         // flywheel = new Flywheel(new FlywheelIOSim());
         break;
 
@@ -111,7 +110,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        //! add new subsystems here!
+        // ! add new subsystems here!
         // flywheel = new Flywheel(new FlywheelIO() {});
         break;
     }
@@ -129,10 +128,7 @@ public class RobotContainer {
         "Drive FF Characterization",
         new FeedForwardCharacterization(
             drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
-    autoChooser.addOption(
-        "Auto1, try few notes", 
-        new Auto1()
-      );
+    autoChooser.addOption("Auto1, try few notes", new Auto1());
 
     // autoChooser.addOption(
     //     "Flywheel FF Characterization",
