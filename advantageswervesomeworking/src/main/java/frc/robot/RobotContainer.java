@@ -21,14 +21,20 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.autonomous.Auto1;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FeedForwardCharacterization;
+import frc.robot.commands.intake.IntakeNote;
+import frc.robot.commands.shooter.PassAndShootNote;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
@@ -41,6 +47,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final IntakeSubsystem intakeSubsystem;
+  private final ShooterSubsystem shooterSubsystem;
   // private final Flywheel flywheel;
 
   // Controller
@@ -63,6 +71,10 @@ public class RobotContainer {
                 new ModuleIOSparkMax(1),
                 new ModuleIOSparkMax(2),
                 new ModuleIOSparkMax(3));
+        intakeSubsystem = new IntakeSubsystem();
+        shooterSubsystem = new ShooterSubsystem();
+        //! add new subsystems here!
+
         // flywheel = new Flywheel(new FlywheelIOSparkMax());
         // drive = new Drive(
         // new GyroIOPigeon2(),
@@ -82,6 +94,9 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        intakeSubsystem = new IntakeSubsystem();
+        shooterSubsystem = new ShooterSubsystem();
+        //! add new subsystems here!
         // flywheel = new Flywheel(new FlywheelIOSim());
         break;
 
@@ -94,6 +109,9 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        intakeSubsystem = new IntakeSubsystem();
+        shooterSubsystem = new ShooterSubsystem();
+        //! add new subsystems here!
         // flywheel = new Flywheel(new FlywheelIO() {});
         break;
     }
@@ -111,6 +129,11 @@ public class RobotContainer {
         "Drive FF Characterization",
         new FeedForwardCharacterization(
             drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
+    autoChooser.addOption(
+        "Auto1, try few notes", 
+        new Auto1()
+      );
+
     // autoChooser.addOption(
     //     "Flywheel FF Characterization",
     //     new FeedForwardCharacterization(
@@ -143,6 +166,10 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
+    controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+
     // controller
     //     .a()
     //     .whileTrue(
