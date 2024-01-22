@@ -34,4 +34,17 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public static class Intake {
+    public static final double intakingPower = 0.5; // how much power to use when intaking notes
+    public static final double passingPower = 0.5; // how much power to use when passing to shooter
+    public static final double passingTime =
+        0.7; // (seconds) for how long intake rolls when passing
+  }
+
+  public static class Shooter {
+    public static final double shootingPower = 1.0; // how much power to use when shooting
+    public static final double shooterSpeedupDelay =
+        0.5; // (seconds) how much time between speeding up shooter and passing
+  }
 }
