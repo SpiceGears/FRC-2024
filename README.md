@@ -6,4 +6,4 @@ Code for FRC 2024 season, Crescendo
 [Advantage Scope](https://github.com/Mechanical-Advantage/AdvantageScope) <br>
 [REVLib](https://docs.revrobotics.com/sparkmax/software-resources/spark-max-api-information) <br>
 
-Giga duzy commit Bartka
+Giga duży commit Bartka
