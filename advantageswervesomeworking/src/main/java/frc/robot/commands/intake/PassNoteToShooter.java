@@ -9,14 +9,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 
-public class PassNote extends Command {
+public class PassNoteToShooter extends Command {
 
   private final IntakeSubsystem intakeSubsystem;
   private double startTime;
   private double endTime;
 
   /** Runs intake for few seconds to pass a note to shooter */
-  public PassNote(IntakeSubsystem intakeSubsystem) {
+  public PassNoteToShooter(IntakeSubsystem intakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intakeSubsystem = intakeSubsystem;
     addRequirements(this.intakeSubsystem);
