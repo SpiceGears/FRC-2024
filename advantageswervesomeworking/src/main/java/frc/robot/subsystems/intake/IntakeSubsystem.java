@@ -18,9 +18,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem() {
 
-    intakeMaster = new Talon(PortMap.INTAKE_MASTER_PORT);
+    intakeMaster = new Talon(PortMap.Intake.INTAKE_MASTER_PORT);
     // intakeSlave = new Talon(PortMap.INTAKE_SLAVE_PORT);
-    intakeSensor = new DigitalInput(PortMap.INTAKE_SENSOR_PORT);
+    intakeSensor = new DigitalInput(PortMap.Intake.INTAKE_SENSOR_PORT);
 
     intakeMaster.setInverted(false);
     // intakeSlave.setInverted(true);
