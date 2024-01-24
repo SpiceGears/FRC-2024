@@ -6,6 +6,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 
@@ -29,7 +30,9 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    logIntakeValues();
+  }
 
   // /**
   //  * Roll intake when note is not inside
@@ -55,6 +58,7 @@ public class IntakeSubsystem extends SubsystemBase {
   //   }
   // }
 
+  
   /**
    * Roll intake with desired power
    *
@@ -64,23 +68,30 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMaster.set(power);
     // intakeSlave.set(power);
   }
-
+  
   public void stopIntake() {
     intakeMaster.stopMotor();
     // intakeSlave.stopMotor();
   }
-
+  
   public double getIntakePower() {
     return intakeMaster.get();
   }
-
+  
   public void setIntakeVolts(double volts) {
     intakeMaster.setVoltage(volts);
     // intakeSlave.setVoltage(volts);
   }
-
+  
   public boolean checkForNoteInside() {
     isNoteInside = intakeSensor.get();
     return isNoteInside;
   }
+
+  private void logIntakeValues() {
+    SmartDashboard.putNumber("intake/speed", getIntakePower());
+    SmartDashboard.putBoolean("intake/isNoteInside", checkForNoteInside());
+    SmartDashboard.updateValues();
+  }
+  
 }

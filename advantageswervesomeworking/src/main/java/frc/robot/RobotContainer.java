@@ -26,6 +26,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.shooter.PassAndShootNote;
+import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -48,6 +49,7 @@ public class RobotContainer {
   private final Drive drive;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
+  private final ShuffleBoard shuffleBoard; //TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
   // private final Flywheel flywheel;
 
   // Controller
@@ -55,8 +57,8 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-  private final LoggedDashboardNumber flywheelSpeedInput =
-      new LoggedDashboardNumber("Flywheel Speed", 1500.0);
+  // private final LoggedDashboardNumber flywheelSpeedInput =
+  //     new LoggedDashboardNumber("Flywheel Speed", 1500.0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -72,6 +74,7 @@ public class RobotContainer {
                 new ModuleIOSparkMax(3));
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
+        shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         // ! add new subsystems here!
 
         // flywheel = new Flywheel(new FlywheelIOSparkMax());
@@ -95,6 +98,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
+        shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         // ! add new subsystems here!
         // flywheel = new Flywheel(new FlywheelIOSim());
         break;
@@ -110,6 +114,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
+        shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         // ! add new subsystems here!
         // flywheel = new Flywheel(new FlywheelIO() {});
         break;
