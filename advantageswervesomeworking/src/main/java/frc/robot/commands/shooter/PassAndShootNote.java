@@ -32,10 +32,10 @@ public class PassAndShootNote extends Command {
   @Override
   public void initialize() {
     isNotePassed = false;
-    shooterSubsystem.setShooterPower(Constants.Shooter.shootingPower);
+    shooterSubsystem.setShooterPower(Constants.Shooter.SHOOTING_POWER);
     startTime = Timer.getFPGATimestamp();
-    passTime = startTime + Constants.Shooter.shooterSpeedupDelay;
-    endTime = passTime + Constants.Intake.passingTime;
+    passTime = startTime + Constants.Shooter.SHOOTER_SPEEDUP_DELAY;
+    endTime = passTime + Constants.Intake.PASSING_TIME;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
