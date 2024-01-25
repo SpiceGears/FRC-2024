@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-//https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/com/kauailabs/navx/frc/AHRS.html
+// https://www.kauailabs.com/public_files/navx-mxp/apidocs/java/com/kauailabs/navx/frc/AHRS.html
 
 package frc.robot.subsystems.drive;
 
@@ -20,7 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 
-/** IO implementation for Pigeon2 */
+/** IO implementation for Navx */
 public class GyroIONavx implements GyroIO {
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
   private final Float yaw = gyro.getYaw();
@@ -33,7 +33,7 @@ public class GyroIONavx implements GyroIO {
   @Override
   public void updateInputs(GyroIOInputs inputs) {
     inputs.connected = gyro.isConnected();
-    inputs.yawPosition = Rotation2d.fromDegrees(yaw);
-    inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelocity);
+    inputs.yawPosition = Rotation2d.fromDegrees((double) yaw);
+    inputs.yawVelocityRadPerSec = Units.degreesToRadians((double) yawVelocity);
   }
 }
