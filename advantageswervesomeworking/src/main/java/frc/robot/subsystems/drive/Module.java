@@ -18,12 +18,11 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
-  private static final double WHEEL_RADIUS = Units.inchesToMeters(2.0);
+  private static final double WHEEL_RADIUS = Constants.Swerve.WHEEL_RADIUS;
 
   private final ModuleIO io;
   private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
@@ -56,9 +55,17 @@ public class Module {
         turnFeedback = new PIDController(10.0, 0.0, 0.0);
         break;
       default:
-        driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-        driveFeedback = new PIDController(0.0, 0.0, 0.0);
-        turnFeedback = new PIDController(0.0, 0.0, 0.0);
+        driveFeedforward = new SimpleMotorFeedforward(
+          Constants.Swerve.DriveSettings.Real.DRIVE_FF_kS,
+          Constants.Swerve.DriveSettings.Real.DRIVE_FF_kV);
+        driveFeedback = new PIDController(
+          Constants.Swerve.DriveSettings.Real.DRIVE_PID_kP,
+          Constants.Swerve.DriveSettings.Real.DRIVE_PID_kI,
+          Constants.Swerve.DriveSettings.Real.DRIVE_PID_kD);
+        turnFeedback = new PIDController(
+          Constants.Swerve.DriveSettings.Real.TURN_PID_kP,
+          Constants.Swerve.DriveSettings.Real.TURN_PID_kI,
+          Constants.Swerve.DriveSettings.Real.TURN_PID_kD);
         break;
     }
 

@@ -27,7 +27,7 @@ public class RollShooterForSeconds extends Command {
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
     endTime = startTime + seconds;
-    shooterSubsystem.setShooterPower(frc.robot.Constants.Shooter.shootingPower);
+    shooterSubsystem.setShooterPower(frc.robot.Constants.Shooter.SHOOTING_POWER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
