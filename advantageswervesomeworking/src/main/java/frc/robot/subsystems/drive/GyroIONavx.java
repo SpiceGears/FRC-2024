@@ -24,7 +24,8 @@ import edu.wpi.first.wpilibj.SPI;
 public class GyroIONavx implements GyroIO {
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
   private final Float yaw = gyro.getYaw();
-  private final Float yawVelocity = gyro.getVelocityZ();
+  //private final Float yawVelocity = gyro.getVelocityZ();
+  private final Float yawVelocity = gyro.getQuaternionZ();
 
   public GyroIONavx() {
     gyro.reset();
