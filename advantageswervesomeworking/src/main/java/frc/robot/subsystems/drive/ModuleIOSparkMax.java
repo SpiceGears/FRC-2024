@@ -54,7 +54,6 @@ public class ModuleIOSparkMax implements ModuleIO {
   public ModuleIOSparkMax(int index) {
     switch (index) {
         // Bateria to front
-
       case 1: // FRONT RIGHT
         driveSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_DRIVE_FR, MotorType.kBrushless);
         turnSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_TURN_FR, MotorType.kBrushless);
