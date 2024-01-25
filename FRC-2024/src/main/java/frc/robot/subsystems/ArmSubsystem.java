@@ -26,15 +26,13 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         Constants.ARM.kSVolts, Constants.ARM.kGVolts,
         Constants.ARM.kVVoltSecondPerRad, Constants.ARM.kAVoltSecondSquaredPerRad);
   
-  private final VictorSP leftArmMaster = new VictorSP(PortMap.ARM.LEFT_MASTER_PORT);
   private final VictorSP rightArmMaster = new VictorSP(PortMap.ARM.RIGHT_MASTER_PORT);
-  private final VictorSP leftArmSlave = new VictorSP(PortMap.ARM.LEFT_SLAVE_PORT);
   private final VictorSP rightArmSlave = new VictorSP(PortMap.ARM.RIGHT_SLAVE_PORT);
   private boolean wasArmReseted;
 
   public MotorControllerGroup armGroup = new MotorControllerGroup(
-    leftArmMaster, rightArmMaster,
-    leftArmSlave, rightArmSlave
+     rightArmMaster,
+     rightArmSlave
   );
 
   public Encoder armEncoder;
