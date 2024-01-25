@@ -19,6 +19,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** IO implementation for Navx */
 public class GyroIONavx implements GyroIO {
@@ -36,5 +37,10 @@ public class GyroIONavx implements GyroIO {
     inputs.connected = gyro.isConnected();
     inputs.yawPosition = Rotation2d.fromDegrees((double) yaw);
     inputs.yawVelocityRadPerSec = Units.degreesToRadians((double) yawVelocity);
+    SmartDashboard.putNumber("Gyro/Yaw", yaw);
+    SmartDashboard.putNumber("Gyro/YawVelocity", yawVelocity);
+    SmartDashboard.putNumber("Gyro/Angle", gyro.getAngle());
+    SmartDashboard.putNumber("Gyro/VelocityZ", gyro.getVelocityZ());
+    SmartDashboard.putNumber("Gyro/QuaternionZ", gyro.getQuaternionZ());
   }
 }
