@@ -75,6 +75,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
+
         // ! add new subsystems here!
 
         // flywheel = new Flywheel(new FlywheelIOSparkMax());
@@ -115,6 +116,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
+
         // ! add new subsystems here!
         // flywheel = new Flywheel(new FlywheelIO() {});
         break;

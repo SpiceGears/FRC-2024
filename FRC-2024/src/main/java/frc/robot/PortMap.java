@@ -9,4 +9,5 @@ public class PortMap {
 
     public static final int SHOOTER_MASTER_PORT = 9;
     public static final int SHOOTER_SLAVE_PORT = 8;
+    public static final int LIMELIGHT_PORT = 5;
 }
