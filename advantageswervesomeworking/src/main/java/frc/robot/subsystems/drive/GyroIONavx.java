@@ -24,9 +24,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /** IO implementation for Navx */
 public class GyroIONavx implements GyroIO {
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-  private final Float yaw = gyro.getYaw();
+  //private final Float yaw = gyro.getYaw();
   //private final Float yawVelocity = gyro.getVelocityZ();
-  private final Float yawVelocity = gyro.getQuaternionZ();
+  //private final Float yawVelocity = gyro.getRawGyroZ();
 
   public GyroIONavx() {
     gyro.reset();
@@ -35,12 +35,16 @@ public class GyroIONavx implements GyroIO {
   @Override
   public void updateInputs(GyroIOInputs inputs) {
     inputs.connected = gyro.isConnected();
-    inputs.yawPosition = Rotation2d.fromDegrees((double) yaw);
-    inputs.yawVelocityRadPerSec = Units.degreesToRadians((double) yawVelocity);
-    SmartDashboard.putNumber("Gyro/Yaw", yaw);
-    SmartDashboard.putNumber("Gyro/YawVelocity", yawVelocity);
+    inputs.yawPosition = Rotation2d.fromDegrees((double) gyro.getYaw());
+    inputs.yawVelocityRadPerSec = Units.degreesToRadians((double) gyro.getRawGyroZ());
+    logGyroValues();
+  }
+
+  public void logGyroValues() {
+    SmartDashboard.putNumber("Gyro/Yaw", gyro.getYaw());
     SmartDashboard.putNumber("Gyro/Angle", gyro.getAngle());
     SmartDashboard.putNumber("Gyro/VelocityZ", gyro.getVelocityZ());
     SmartDashboard.putNumber("Gyro/QuaternionZ", gyro.getQuaternionZ());
+    SmartDashboard.putNumber("Gyro/QuaternionZ", gyro.getRawGyroZ());
   }
 }
