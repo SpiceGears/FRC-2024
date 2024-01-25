@@ -1,10 +1,6 @@
 # Spice Gears 5883
 Code for FRC 2024 season, Crescendo
 
-//"and I have become death, the destroyer of world"
-
-//geg
-//poprawione
 
 ## Currently using:
 [Advantage Scope](https://github.com/Mechanical-Advantage/AdvantageScope) <br>
