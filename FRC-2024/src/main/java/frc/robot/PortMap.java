@@ -41,4 +41,7 @@ public class PortMap {
         public static final int BACK_LIMIT = 7;
     }
 
+
+    public static final int LIMELIGHT_PORT = 5;
+
 }

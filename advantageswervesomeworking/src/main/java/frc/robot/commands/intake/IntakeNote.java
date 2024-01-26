@@ -22,7 +22,7 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSubsystem.setIntakePower(Constants.Intake.intakingPower);
+    intakeSubsystem.setIntakePower(Constants.Intake.INTAKING_POWER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
