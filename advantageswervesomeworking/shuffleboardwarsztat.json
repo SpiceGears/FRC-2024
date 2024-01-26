@@ -1,0 +1,453 @@
+{
+  "tabPane": [
+    {
+      "title": "SmartDashboard",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Flywheel Speed",
+              "_title": "Flywheel Speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Auto Choices",
+              "_title": "Auto Choices",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro/Yaw",
+              "_title": "Gyro/Yaw",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro/Angle",
+              "_title": "Gyro/Angle",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro/VelocityZ",
+              "_title": "Gyro/VelocityZ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro/QuaternionZ",
+              "_title": "Gyro/QuaternionZ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/intake/speed",
+              "_title": "intake/speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/intake/isNoteInside",
+              "_title": "intake/isNoteInside",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/shooter/power",
+              "_title": "shooter/power",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/shuffleboardsubsystem/intake/noteInside",
+              "_title": "shuffleboardsubsystem/intake/noteInside",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/shuffleboardsubsystem/intake/speed",
+              "_title": "shuffleboardsubsystem/intake/speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/shuffleboardsubsystem/shooter/speed",
+              "_title": "shuffleboardsubsystem/shooter/speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/shuffleboardsubsystem/drive/pose",
+              "_title": "shuffleboardsubsystem/drive/pose",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///AdvantageKit/Drive/Module0",
+              "_title": "AdvantageKit/Drive/Module0",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///AdvantageKit/Drive/Module1",
+              "_title": "AdvantageKit/Drive/Module1",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///AdvantageKit/Drive/Module2",
+              "_title": "AdvantageKit/Drive/Module2",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///AdvantageKit/Drive/Module3",
+              "_title": "AdvantageKit/Drive/Module3",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,4": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/shuffleboardsubsystem/drive/pose",
+              "_title": "SmartDashboard/shuffleboardsubsystem/drive/pose",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///AdvantageKit/Drive/Module0/TurnCurrentAmps",
+              "_title": "AdvantageKit/Drive/Module0/TurnCurrentAmps",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/AdvantageKit/Drive/Module0/TurnCurrentAmps[0]": true
+            }
+          },
+          "4,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Grid Layout",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 3,
+              "Layout/Number of rows": 3,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,0": {
+                  "_type": "Grid Layout",
+                  "_title": "Grid Layout",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Number of columns": 3,
+                  "Layout/Number of rows": 3,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": {
+                    "0,0": {
+                      "_type": "Graph",
+                      "_source0": "network_table:///AdvantageKit/Drive/Module0/TurnAppliedVolts",
+                      "_title": "AdvantageKit/Drive/Module0/TurnAppliedVolts",
+                      "_glyph": 148,
+                      "_showGlyph": false,
+                      "Graph/Visible time": 30.0,
+                      "Graph/X-axis auto scrolling": true,
+                      "Y-axis/Automatic bounds": true,
+                      "Y-axis/Upper bound": 1.0,
+                      "Y-axis/Lower bound": -1.0,
+                      "Y-axis/Unit": "ul",
+                      "Visible data/AdvantageKit/Drive/Module0/TurnAppliedVolts": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "LiveWindow",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Tab 3",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "4,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///AdvantageKit/Drive/Module0/DriveCurrentAmps",
+              "_title": "AdvantageKit/Drive/Module0/DriveCurrentAmps",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/AdvantageKit/Drive/Module0/DriveCurrentAmps[0]": true
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Grid Layout",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 3,
+              "Layout/Number of rows": 3,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,0": {
+                  "_type": "Graph",
+                  "_source0": "network_table:///AdvantageKit/Drive/Module0/TurnAppliedVolts",
+                  "_title": "AdvantageKit/Drive/Module0/TurnAppliedVolts",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Graph/Visible time": 30.0,
+                  "Graph/X-axis auto scrolling": true,
+                  "Y-axis/Automatic bounds": true,
+                  "Y-axis/Upper bound": 1.0,
+                  "Y-axis/Lower bound": -1.0,
+                  "Y-axis/Unit": "ul",
+                  "Visible data/AdvantageKit/Drive/Module0/TurnAppliedVolts": true
+                }
+              }
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Grid Layout",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 3,
+              "Layout/Number of rows": 3,
+              "Layout/Label position": "BOTTOM",
+              "_children": {
+                "0,0": {
+                  "_type": "Graph",
+                  "_source0": "network_table:///AdvantageKit/Drive/Module0/DriveAppliedVolts",
+                  "_title": "AdvantageKit/Drive/Module0/DriveAppliedVolts",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Graph/Visible time": 30.0,
+                  "Graph/X-axis auto scrolling": true,
+                  "Y-axis/Automatic bounds": true,
+                  "Y-axis/Upper bound": 1.0,
+                  "Y-axis/Lower bound": -1.0,
+                  "Y-axis/Unit": "ul",
+                  "Visible data/AdvantageKit/Drive/Module0/DriveAppliedVolts": true
+                }
+              }
+            }
+          },
+          "8,3": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///AdvantageKit/Drive/Module0/TurnCurrentAmps",
+              "_title": "AdvantageKit/Drive/Module0/TurnCurrentAmps",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/AdvantageKit/Drive/Module0/TurnCurrentAmps[0]": true
+            }
+          }
+        }
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1936.0,
+    "height": 1056.0
+  }
+}
