@@ -69,6 +69,44 @@ public class RobotContainer {
     configureBindings();
   }
 
+
+   new JoystickButton(driver, Button.kA.value)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            armSubsystem.setGoal(Constants.ARM.POSITION.INTAKE);
+            armSubsystem.enable();
+          }
+        )
+      );
+      new JoystickButton(driver, Button.kB.value)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            armSubsystem.setGoal(Constants.ARM.POSITION.HORIZONTAL);
+            armSubsystem.enable();
+          }
+        )
+      );
+      new JoystickButton(driver, Button.kY.value)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            armSubsystem.setGoal(Constants.ARM.POSITION.SECONDLEVEL);
+            armSubsystem.enable();
+          }
+        )
+      );
+      new JoystickButton(driver, Button.kX.value)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            armSubsystem.setGoal(1.4);
+            armSubsystem.enable();
+          }
+        )
+      );
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary

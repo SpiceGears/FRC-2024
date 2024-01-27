@@ -21,6 +21,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.Constants;
+import frc.robot.PortMap;
 
 /**
  * Module IO implementation for SparkMax drive motor controller, SparkMax turn motor controller (NEO
@@ -36,8 +38,8 @@ import edu.wpi.first.wpilibj.RobotController;
  */
 public class ModuleIOSparkMax implements ModuleIO {
   // Gear ratios for SDS MK4i L2, adjust as necessary
-  private static final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
-  private static final double TURN_GEAR_RATIO = 150.0 / 7.0;
+  private static final double DRIVE_GEAR_RATIO = Constants.Swerve.DRIVE_GEAR_RATIO;
+  private static final double TURN_GEAR_RATIO = Constants.Swerve.TURN_GEAR_RATIO;
 
   private final CANSparkMax driveSparkMax;
   private final CANSparkMax turnSparkMax;
@@ -51,33 +53,37 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   public ModuleIOSparkMax(int index) {
     switch (index) {
-        //Bateria to front
+        // Bateria to front
       case 1: // FRONT RIGHT
-        driveSparkMax = new CANSparkMax(1, MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(2, MotorType.kBrushless);
-        turnAbsoluteEncoder = new AnalogInput(0);
+        driveSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_DRIVE_FR, MotorType.kBrushless);
+        turnSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_TURN_FR, MotorType.kBrushless);
+        turnAbsoluteEncoder = new AnalogInput(PortMap.Swerve.ABSOLUTE_ENCODER_FR);
         // 180 - 3.141592
         // 90 - 3.141592 / 2
         // 1 - 0.01745
-        absoluteEncoderOffset = new Rotation2d(2.9 + 0.05); // CALIBRATED
+        absoluteEncoderOffset =
+            new Rotation2d(Constants.Swerve.ABSOLUTE_ENCODER_OFFSET_FR); // CALIBRATED
         break;
       case 3: // BACK RIGHT
-        driveSparkMax = new CANSparkMax(3, MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(4, MotorType.kBrushless);
-        turnAbsoluteEncoder = new AnalogInput(1);
-        absoluteEncoderOffset = new Rotation2d(-1.25); // CALIBRATED
+        driveSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_DRIVE_BR, MotorType.kBrushless);
+        turnSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_TURN_BR, MotorType.kBrushless);
+        turnAbsoluteEncoder = new AnalogInput(PortMap.Swerve.ABSOLUTE_ENCODER_BR);
+        absoluteEncoderOffset =
+            new Rotation2d(Constants.Swerve.ABSOLUTE_ENCODER_OFFSET_BR); // CALIBRATED
         break;
       case 2: // BACK LEFT
-        driveSparkMax = new CANSparkMax(5, MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(6, MotorType.kBrushless);
-        turnAbsoluteEncoder = new AnalogInput(2);
-        absoluteEncoderOffset = new Rotation2d(2.7 + 0.05); // CALIBRATED
+        driveSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_DRIVE_BL, MotorType.kBrushless);
+        turnSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_TURN_BL, MotorType.kBrushless);
+        turnAbsoluteEncoder = new AnalogInput(PortMap.Swerve.ABSOLUTE_ENCODER_BL);
+        absoluteEncoderOffset =
+            new Rotation2d(Constants.Swerve.ABSOLUTE_ENCODER_OFFSET_BL); // CALIBRATED
         break;
       case 0: // FRONT LEFT
-        driveSparkMax = new CANSparkMax(7, MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(8, MotorType.kBrushless);
-        turnAbsoluteEncoder = new AnalogInput(3);
-        absoluteEncoderOffset = new Rotation2d(-2.1 + 0.05); // CALIBRATED
+        driveSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_DRIVE_FL, MotorType.kBrushless);
+        turnSparkMax = new CANSparkMax(PortMap.Swerve.SWERVE_TURN_FL, MotorType.kBrushless);
+        turnAbsoluteEncoder = new AnalogInput(PortMap.Swerve.ABSOLUTE_ENCODER_FL);
+        absoluteEncoderOffset =
+            new Rotation2d(Constants.Swerve.ABSOLUTE_ENCODER_OFFSET_FL); // CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -137,12 +143,12 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   @Override
   public void setDriveVoltage(double volts) {
-    driveSparkMax.setVoltage(volts);
+    driveSparkMax.setVoltage(volts / 2); // TODO testing if turn jerks still with low Volts
   }
 
   @Override
   public void setTurnVoltage(double volts) {
-    turnSparkMax.setVoltage(volts);
+    turnSparkMax.setVoltage(volts / 2); // TODO testing if turn jerks still with low Volts
   }
 
   @Override
