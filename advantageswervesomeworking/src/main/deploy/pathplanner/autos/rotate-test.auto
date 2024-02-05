@@ -2,25 +2,31 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.0
+      "x": 1.3386144840226037,
+      "y": 5.536502235790949
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Run Flywheel"
+            "pathName": "rotate-test"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "rotate-test"
           }
         }
       ]
