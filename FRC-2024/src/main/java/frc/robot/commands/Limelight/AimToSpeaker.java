@@ -1,15 +1,22 @@
-package frc.robot.commands;
+package frc.robot.commands.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.PortMap;
 import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 
 public class AimToSpeaker extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final LimelightSubsystem m_subsystem;
-    private final double desired_position_y = 0; //y+ downwards
-    private final double desired_position_x = 0; //x+ right
-    private final double desired_position_z = 10; //z+ pointing out of target centre
+    private final double desired_y = 0; //y+ w dół
+    private final double desired_x = 0; //x+ w prawo
+    private final double desired_a = 50; //ile ekranu zajmuje cel [%]
+    private boolean isAuto = false;
+    private double is_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0); //czy jest apriltag
+    private double tid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(4); //id apriltaga
     
 
     
@@ -33,28 +40,22 @@ public class AimToSpeaker extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-      final double current_position_x = 0;
-      final double current_position_y = 0;
-      final double current_position_z = 0;
-      final double error_x = desired_position_x - current_position_x;
-      final double error_y = desired_position_y - current_position_y;
-      final double error_z = desired_position_z - current_position_z;
+      SmartDashboard.putBoolean("IsAuto", isAuto);
+      double tx = LimelightHelpers.getTX(null);
+      double ty = LimelightHelpers.getTY(null);
+      double ta = LimelightHelpers.getTA(null);
 
-      if(error_x != 0) {
-        if(current_position_x > desired_position_x) {
-          if(current_position_x < desired_position_x) {
+      double error_x = desired_x - tx;
+      double error_y = desired_y - ty;
+      double error_a = desired_a - ta;
 
-
-
-          }
-          else{
-
-
-          }
-
+      if(error_y != desired_y) {
+        if(error_y < desired_y) {
+          
         }
 
-      } 
+
+      }
 
     }
   

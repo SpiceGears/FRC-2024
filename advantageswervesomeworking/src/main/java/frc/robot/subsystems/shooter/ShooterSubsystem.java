@@ -27,7 +27,6 @@ public class ShooterSubsystem extends SubsystemBase {
     logShooterValues();
   }
 
-  
   /**
    * Roll shoter with desired power
    *
@@ -37,16 +36,16 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMaster.set(power);
     shooterSlave.set(power);
   }
-  
+
   public void stopShooter() {
     shooterMaster.stopMotor();
     shooterSlave.stopMotor();
   }
-  
+
   public double getShooterPower() {
     return shooterMaster.get();
   }
-  
+
   public void setShooterVolts(double volts) {
     shooterMaster.setVoltage(volts);
     shooterSlave.setVoltage(volts);
@@ -56,5 +55,4 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/power", getShooterPower());
     SmartDashboard.updateValues();
   }
-
 }

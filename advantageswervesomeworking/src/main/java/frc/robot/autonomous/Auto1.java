@@ -4,12 +4,8 @@
 
 package frc.robot.autonomous;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.*;
-import frc.robot.commands.intake.IntakeNote;
-import frc.robot.commands.intake.PassNoteToShooter;
-import frc.robot.commands.shooter.StartShooter;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -26,26 +22,28 @@ public class Auto1 extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new StartShooter(shooterSubsystem), // roll shooter up to speed
+        // ! NULL POINTER EXCEPTION WITH STARTSHOOTER COMMAND IN AUTO!!!
 
-        // [ARM] aim arm to SPEAKER (limelight data)
-        // [SHOOTER] adjust speed (limelight data)
-        new PassNoteToShooter(intakeSubsystem), // shoots note
-        new ParallelCommandGroup(
-            new IntakeNote(intakeSubsystem)
-            // [SWERVE] go back to NOTE2,
-            ),
-        // [ARM] aim arm to SPEAKER (limelight data)
-        // [SHOOTER] adjust speed (limelight data)
-        new PassNoteToShooter(intakeSubsystem), // shoots note
-        new ParallelCommandGroup(
-            new IntakeNote(intakeSubsystem)
-            // [SWERVE] go to NOTE3,
-            ),
-        // [ARM] aim arm to SPEAKER (limelight data)
-        // [SHOOTER] adjust speed (limelight data)
-        new PassNoteToShooter(intakeSubsystem) // shoots note
-        // [SWERVE] drive out of zone for points
+        // new StartShooter(shooterSubsystem), // roll shooter up to speed
+
+        // // [ARM] aim arm to SPEAKER (limelight data)
+        // // [SHOOTER] adjust speed (limelight data)
+        // new PassNoteToShooter(intakeSubsystem), // shoots note
+        // new ParallelCommandGroup(
+        //     new IntakeNote(intakeSubsystem)
+        //     // [SWERVE] go back to NOTE2,
+        //     ),
+        // // [ARM] aim arm to SPEAKER (limelight data)
+        // // [SHOOTER] adjust speed (limelight data)
+        // new PassNoteToShooter(intakeSubsystem), // shoots note
+        // new ParallelCommandGroup(
+        //     new IntakeNote(intakeSubsystem)
+        //     // [SWERVE] go to NOTE3,
+        //     ),
+        // // [ARM] aim arm to SPEAKER (limelight data)
+        // // [SHOOTER] adjust speed (limelight data)
+        // new PassNoteToShooter(intakeSubsystem) // shoots note
+        // // [SWERVE] drive out of zone for points
 
         );
   }

@@ -93,6 +93,9 @@ public class Drive extends SubsystemBase {
       module.periodic();
     }
 
+    // Update smartdashboard
+    logDriveValues();
+
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
       for (var module : modules) {
@@ -124,6 +127,10 @@ public class Drive extends SubsystemBase {
     }
     // Apply the twist (change since last loop cycle) to the current pose
     pose = pose.exp(twist);
+  }
+
+  private void logDriveValues() {
+    // TODO
   }
 
   /**

@@ -36,7 +36,6 @@ import frc.robot.subsystems.drive.ModuleIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,7 +48,8 @@ public class RobotContainer {
   private final Drive drive;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
-  private final ShuffleBoard shuffleBoard; //TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
+  private final ShuffleBoard
+      shuffleBoard; // TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
   // private final Flywheel flywheel;
 
   // Controller
