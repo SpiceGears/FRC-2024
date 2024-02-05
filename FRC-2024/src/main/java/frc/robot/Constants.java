@@ -127,9 +127,12 @@ public final class Constants {
 
         public static final double kDeadband = 0.05;
     }
-}
 
-public class ARM {
+
+    
+
+ public class ARM {
+
 
         public static final double KP = 8;
         public static final double kD = 0;
@@ -172,5 +175,6 @@ public class ARM {
 
 
         }
-        
-    }
+
+    }}
+

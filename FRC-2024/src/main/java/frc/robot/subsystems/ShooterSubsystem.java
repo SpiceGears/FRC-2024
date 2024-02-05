@@ -16,8 +16,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem() {
 
-    shooterMaster = new Talon(PortMap.SHOOTER_MASTER_PORT); 
-    shooterSlave = new Talon(PortMap.SHOOTER_SLAVE_PORT);
+    shooterMaster = new Talon(PortMap.INTA.SHOOTER_MASTER_PORT); 
+    shooterSlave = new Talon(PortMap.INTA.SHOOTER_SLAVE_PORT);
     shooterMaster.setInverted(false);
     shooterSlave.setInverted(true);
 
