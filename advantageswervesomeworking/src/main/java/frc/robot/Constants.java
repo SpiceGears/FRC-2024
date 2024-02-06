@@ -54,8 +54,9 @@ public final class Constants {
 
   public static class Swerve {
 
-    public static final double ROBOT_MAX_SPEED =
-        4.5; // maters/s | domyslnie Units.feetToMeters(14.5);
+    public static final double SPEED_FINAL_MULTIPLIER = 1;
+    public static final double ROBOT_MAX_SPEED = 4.5;
+    // Units.feetToMeters(14.5);
     public static final double ROBOT_TRACK_WIDTH_X = 0.70; // meters
     public static final double ROBOT_TRACK_WIDTH_Y = 0.70; // meters
     public static final double WHEEL_RADIUS = Units.inchesToMeters(2.0); // radius - promień
@@ -80,12 +81,12 @@ public final class Constants {
         public static final double DRIVE_FF_kV = 0;
 
         // TODO tune in
-        public static final double DRIVE_PID_kP = 0;
+        public static final double DRIVE_PID_kP = 2;
         public static final double DRIVE_PID_kI = 0;
         public static final double DRIVE_PID_kD = 0;
 
         // TODO tune in
-        public static final double TURN_PID_kP = 0;
+        public static final double TURN_PID_kP = 2;
         public static final double TURN_PID_kI = 0;
         public static final double TURN_PID_kD = 0;
       }

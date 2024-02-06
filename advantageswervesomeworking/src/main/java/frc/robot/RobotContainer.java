@@ -15,7 +15,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -138,8 +137,11 @@ public class RobotContainer {
         new FeedForwardCharacterization(
             drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
     autoChooser.addOption("Auto1, try few notes", new Auto1());
-    autoChooser.addDefaultOption("all-notes - all notes one by one with subwoofer align", new PathPlannerAuto("all-notes"));
+    autoChooser.addDefaultOption(
+        "all-notes - all notes one by one with subwoofer align", new PathPlannerAuto("all-notes"));
     autoChooser.addOption("rotate-test - 2 circles around", new PathPlannerAuto("rotate-test"));
+    autoChooser.addOption("rotate over notes", new PathPlannerAuto("rotateovernotes"));
+    autoChooser.addOption("fastallnotes", new PathPlannerAuto("fastallnotes"));
 
     // autoChooser.addOption(
     //     "Flywheel FF Characterization",
