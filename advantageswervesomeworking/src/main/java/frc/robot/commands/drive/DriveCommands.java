@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,16 +34,13 @@ public class DriveCommands {
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    */
-
-   static double swerveGoalSpeed;
-
   public static Command joystickDrive(
       Drive drive,
       LimelightSubsystem limelightSubsystem,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
-      boolean doAutoAim) {
+      Boolean doAutoAim) {
     return Commands.run(
         () -> {
           // Apply deadband
@@ -54,21 +51,11 @@ public class DriveCommands {
               new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
         double omega = 0.0;
           if (doAutoAim){
-
-            //TODO
-
-            // omega = limelightseubsystem.getTx()
-            omega = 100;
-            double kP = 0.1;
-
-            swerveGoalSpeed = omega * kP;
-
-            // MATMA DO OBRACANIA Z LIMELIGHTA DO CELU
             // omega = limelightSubsystem.getTx();
+            // omega = min(max())  i mapowanie ranga w zaleznosci od tego jakie sa wartosc / lub kP  ;) 
 
-            
           } else {
-            omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+                omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
           }
 
           // Square values
