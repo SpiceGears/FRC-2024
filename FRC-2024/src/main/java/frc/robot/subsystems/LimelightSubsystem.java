@@ -22,6 +22,9 @@ public class LimelightSubsystem extends SubsystemBase {
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
 
+    double[] pose_target_space = NetworkTableInstance.getDefault().getTable("limelight").getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+
+
     @Override
     public void periodic() {
         //read values periodically
@@ -70,11 +73,24 @@ public class LimelightSubsystem extends SubsystemBase {
         this.ta = ta;
     }
 
-    public double[] getPoseTargetSpace() {
-        double[] pose_target_space = NetworkTableInstance.getDefault().getTable("limelight").getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-       System.out.println(pose_target_space);
-        return pose_target_space;
-       //double[] pose_TargetSpace = LimelightHelpers.getBotPose_TargetSpace(null);
-       //return pose_TargetSpace;
+ 
+
+    public double getXTargetSpace() {
+        double x_target_space = pose_target_space[0];
+        return x_target_space;
     }
+
+     public double getYTargetSpace() {
+        double y_target_space = pose_target_space[1];
+        return y_target_space;
+    }
+
+    public double getZTargetSpace() {
+        double z_target_space = pose_target_space[2];
+        return z_target_space;
+    }
+
+
+
+   
 }
