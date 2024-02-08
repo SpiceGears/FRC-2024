@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,7 +27,11 @@ import frc.robot.autonomous.Auto1;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
+import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.PassAndShootNote;
+import frc.robot.commands.shooter.RollShooterForSeconds;
+import frc.robot.commands.shooter.StartShooter;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -76,8 +81,15 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
+        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+        NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
+        NamedCommands.registerCommand("PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand("RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
+        NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
 
         // ! add new subsystems here!
+        // ! add new commands here!
 
         // flywheel = new Flywheel(new FlywheelIOSparkMax());
         // drive = new Drive(
@@ -101,7 +113,14 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
+        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+        NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
+        NamedCommands.registerCommand("PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand("RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
+        NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
         // ! add new subsystems here!
+        // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIOSim());
         break;
 
@@ -117,8 +136,15 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
+        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+        NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
+        NamedCommands.registerCommand("PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand("RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
+        NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
 
         // ! add new subsystems here!
+        // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIO() {});
         break;
     }
