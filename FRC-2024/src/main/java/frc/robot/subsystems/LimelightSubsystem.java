@@ -21,7 +21,9 @@ public class LimelightSubsystem extends SubsystemBase {
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
+
     double[] pose_target_space = NetworkTableInstance.getDefault().getTable("limelight").getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+
 
     @Override
     public void periodic() {
@@ -71,6 +73,7 @@ public class LimelightSubsystem extends SubsystemBase {
         this.ta = ta;
     }
 
+ 
 
     public double getXTargetSpace() {
         double x_target_space = pose_target_space[0];
@@ -88,4 +91,6 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
 
+
+   
 }
