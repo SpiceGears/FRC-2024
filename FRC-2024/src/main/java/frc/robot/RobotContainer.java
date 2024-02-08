@@ -10,14 +10,18 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Intake.IntakeNote;
 import frc.robot.commands.Shooter.PassAndShootNote;
 import frc.robot.commands.Swerve.SetZeroHeading;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.List;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -43,12 +47,15 @@ import frc.robot.subsystems.SwerveSubsystem;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
+ 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-
+  public final static ArmSubsystem armSubsystem = new ArmSubsystem();
+ public static XboxController driver = new XboxController(PortMap.JOYSTICK.DRIVER_JOYSTICK);
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   private final Joystick driverController = new Joystick(OIConstants.kDriverControllerPort);
@@ -68,6 +75,10 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
   }
+
+
+private void configureBindings() {
+  
 
 
    new JoystickButton(driver, Button.kA.value)
@@ -116,8 +127,7 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-    
+  
       // driverController.getRawButton(1).whileTrue(new IntakeNote(intakeSubsystem));
       // driverController.getRawButton(0)
       // driverController.b().whileTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));

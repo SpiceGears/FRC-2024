@@ -28,7 +28,6 @@ public class PassNoteToShooter extends Command {
     intakeSubsystem.setIntakePower(Constants.Intake.PASSING_POWER);
     startTime = Timer.getFPGATimestamp();
     endTime = startTime + Constants.Intake.PASSING_TIME;
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

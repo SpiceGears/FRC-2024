@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -36,7 +37,6 @@ import frc.robot.subsystems.drive.ModuleIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,7 +49,8 @@ public class RobotContainer {
   private final Drive drive;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
-  private final ShuffleBoard shuffleBoard; //TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
+  private final ShuffleBoard
+      shuffleBoard; // TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
   // private final Flywheel flywheel;
 
   // Controller
@@ -136,6 +137,11 @@ public class RobotContainer {
         new FeedForwardCharacterization(
             drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
     autoChooser.addOption("Auto1, try few notes", new Auto1());
+    autoChooser.addDefaultOption(
+        "all-notes - all notes one by one with subwoofer align", new PathPlannerAuto("all-notes"));
+    autoChooser.addOption("rotate-test - 2 circles around", new PathPlannerAuto("rotate-test"));
+    autoChooser.addOption("rotate over notes", new PathPlannerAuto("rotateovernotes"));
+    autoChooser.addOption("fastallnotes", new PathPlannerAuto("fastallnotes"));
 
     // autoChooser.addOption(
     //     "Flywheel FF Characterization",

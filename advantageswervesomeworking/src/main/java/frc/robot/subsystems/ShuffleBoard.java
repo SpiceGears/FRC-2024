@@ -13,24 +13,27 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 public class ShuffleBoard extends SubsystemBase {
   /** Creates a new ShuffleBoard. */
   IntakeSubsystem intakeSubsystem;
+
   ShooterSubsystem shooterSubsystem;
   Drive drive;
-  public ShuffleBoard(
-    IntakeSubsystem intakeSubsystem,
-    ShooterSubsystem shooterSubsystem,
-    Drive drive) {
 
-      this.intakeSubsystem = intakeSubsystem;
-      this.shooterSubsystem = shooterSubsystem;
-      this.drive = drive;
+  public ShuffleBoard(
+      IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem, Drive drive) {
+
+    this.intakeSubsystem = intakeSubsystem;
+    this.shooterSubsystem = shooterSubsystem;
+    this.drive = drive;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("shuffleboardsubsystem/intake/noteInside", intakeSubsystem.checkForNoteInside());
-    SmartDashboard.putNumber("shuffleboardsubsystem/intake/speed", intakeSubsystem.getIntakePower());
-    SmartDashboard.putNumber("shuffleboardsubsystem/shooter/speed", shooterSubsystem.getShooterPower());
+    SmartDashboard.putBoolean(
+        "shuffleboardsubsystem/intake/noteInside", intakeSubsystem.checkForNoteInside());
+    SmartDashboard.putNumber(
+        "shuffleboardsubsystem/intake/speed", intakeSubsystem.getIntakePower());
+    SmartDashboard.putNumber(
+        "shuffleboardsubsystem/shooter/speed", shooterSubsystem.getShooterPower());
     SmartDashboard.putString("shuffleboardsubsystem/drive/pose", drive.getPose().toString());
   }
 }

@@ -55,17 +55,20 @@ public class Module {
         turnFeedback = new PIDController(10.0, 0.0, 0.0);
         break;
       default:
-        driveFeedforward = new SimpleMotorFeedforward(
-          Constants.Swerve.DriveSettings.Real.DRIVE_FF_kS,
-          Constants.Swerve.DriveSettings.Real.DRIVE_FF_kV);
-        driveFeedback = new PIDController(
-          Constants.Swerve.DriveSettings.Real.DRIVE_PID_kP,
-          Constants.Swerve.DriveSettings.Real.DRIVE_PID_kI,
-          Constants.Swerve.DriveSettings.Real.DRIVE_PID_kD);
-        turnFeedback = new PIDController(
-          Constants.Swerve.DriveSettings.Real.TURN_PID_kP,
-          Constants.Swerve.DriveSettings.Real.TURN_PID_kI,
-          Constants.Swerve.DriveSettings.Real.TURN_PID_kD);
+        driveFeedforward =
+            new SimpleMotorFeedforward(
+                Constants.Swerve.DriveSettings.Real.DRIVE_FF_kS,
+                Constants.Swerve.DriveSettings.Real.DRIVE_FF_kV);
+        driveFeedback =
+            new PIDController(
+                Constants.Swerve.DriveSettings.Real.DRIVE_PID_kP,
+                Constants.Swerve.DriveSettings.Real.DRIVE_PID_kI,
+                Constants.Swerve.DriveSettings.Real.DRIVE_PID_kD);
+        turnFeedback =
+            new PIDController(
+                Constants.Swerve.DriveSettings.Real.TURN_PID_kP,
+                Constants.Swerve.DriveSettings.Real.TURN_PID_kI,
+                Constants.Swerve.DriveSettings.Real.TURN_PID_kD);
         break;
     }
 

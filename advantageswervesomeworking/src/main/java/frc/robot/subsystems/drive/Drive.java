@@ -16,6 +16,7 @@ package frc.robot.subsystems.drive;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -68,8 +69,16 @@ public class Drive extends SubsystemBase {
         this::setPose,
         () -> kinematics.toChassisSpeeds(getModuleStates()),
         this::runVelocity,
-        new HolonomicPathFollowerConfig(
-            MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(Constants.Swerve.DriveSettings.Real.DRIVE_PID_kP, Constants.Swerve.DriveSettings.Real.DRIVE_PID_kI, Constants.Swerve.DriveSettings.Real.DRIVE_PID_kD), // Translation PID constants
+            new PIDConstants(Constants.Swerve.DriveSettings.Real.TURN_PID_kP, Constants.Swerve.DriveSettings.Real.TURN_PID_kI, Constants.Swerve.DriveSettings.Real.TURN_PID_kD), // Rotation PID constants
+            Constants.Swerve.ROBOT_MAX_SPEED, // Max module speed, in m/s
+            DRIVE_BASE_RADIUS, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+
+            // DEFAULT THAT COMES FROM ADVANTAGEKIT V
+            // MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
+        ),
         () ->
             DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red,
@@ -92,6 +101,9 @@ public class Drive extends SubsystemBase {
     for (var module : modules) {
       module.periodic();
     }
+
+    // Update smartdashboard
+    logDriveValues();
 
     // Stop moving when disabled
     if (DriverStation.isDisabled()) {
@@ -124,6 +136,10 @@ public class Drive extends SubsystemBase {
     }
     // Apply the twist (change since last loop cycle) to the current pose
     pose = pose.exp(twist);
+  }
+
+  private void logDriveValues() {
+    // TODO
   }
 
   /**
