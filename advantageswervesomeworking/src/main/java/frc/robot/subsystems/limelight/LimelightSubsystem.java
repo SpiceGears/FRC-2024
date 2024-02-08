@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.LimelightHelpers;
+
 
 public class LimelightSubsystem extends SubsystemBase {
 
@@ -18,9 +20,9 @@ public class LimelightSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         //read values periodically
-        double x = tx.getDouble(0.0);
-        double y = ty.getDouble(0.0);
-        double area = ta.getDouble(0.0);
+        double tx = tx.getDouble(0.0);
+        double ty = ty.getDouble(0.0);
+        double ta = ta.getDouble(0.0);
 
         //post to smart dashboard periodically
         SmartDashboard.putNumber("LimelightX", x);
@@ -31,53 +33,8 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     
-    public NetworkTable getTable() {
-        return table;
-    }
-
-    public void setTable(NetworkTable table) {
-        this.table = table;
-    }
-
-    public NetworkTableEntry getTx() {
-        return tx;
-    }
-
-    public void setTx(NetworkTableEntry tx) {
-        this.tx = tx;
-    }
-
-    public NetworkTableEntry getTy() {
-        return ty;
-    }
-
-    public void setTy(NetworkTableEntry ty) {
-        this.ty = ty;
-    }
-
-    public NetworkTableEntry getTa() {
-        return ta;
-    }
-
-    public void setTa(NetworkTableEntry ta) {
-        this.ta = ta;
-    }
 
 
-    public double getXTargetSpace() {
-        double x_target_space = pose_target_space[0];
-        return x_target_space;
-    }
 
-     public double getYTargetSpace() {
-        double y_target_space = pose_target_space[1];
-        return y_target_space;
-    }
-
-    public double getZTargetSpace() {
-        double z_target_space = pose_target_space[2];
-        return z_target_space;
-    }
-//hujighjkfgukdyfjtusfxd
-
+  
 }
