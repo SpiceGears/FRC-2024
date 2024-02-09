@@ -112,6 +112,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
+        limelightSubsystem = new LimelightSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
@@ -135,6 +136,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
+        limelightSubsystem = new LimelightSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
