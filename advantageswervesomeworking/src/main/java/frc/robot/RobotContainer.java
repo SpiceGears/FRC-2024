@@ -197,8 +197,8 @@ public class RobotContainer {
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
-    controller.x().whileTrue(DriveCommands.angleRotate(drive, limelightSubsystem.getTxDouble()));
-    controller.b().whileTrue(DriveCommands.angleRotate(drive, 10));
+    controller.x().whileTrue(DriveCommands.angleRotate(drive, limelightSubsystem.getTxDouble(), limelightSubsystem.getTvDouble()));
+    controller.b().whileTrue(DriveCommands.angleRotate(drive, 10, 1));
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     // controller
     //     .b()
