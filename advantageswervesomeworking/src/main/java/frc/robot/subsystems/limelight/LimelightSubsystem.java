@@ -1,39 +1,77 @@
 package frc.robot.subsystems.limelight;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.LimelightHelpers;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightSubsystem extends SubsystemBase {
 
-    public LimelightSubsystem() {}
+  public LimelightSubsystem() {}
 
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    @Override
-    public void periodic() {
-        //read values periodically
-        double tx = tx.getDouble(0.0);
-        double ty = ty.getDouble(0.0);
-        double ta = ta.getDouble(0.0);
+  //   NetworkTableEntry tx = table.getEntry("tx");
+  //   NetworkTableEntry ty = table.getEntry("ty");
+  //   NetworkTableEntry ta = table.getEntry("ta");
 
-        //post to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightX", tx);
-        SmartDashboard.putNumber("LimelightY", ty);
-        SmartDashboard.putNumber("LimelightArea", ta);
+  double tx =
+      table
+          .getEntry("tx")
+          .getDouble(
+              0); // Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees /
+  // LL2: -29.8 to 29.8 degrees)
+  double ty =
+      table
+          .getEntry("ty")
+          .getDouble(
+              0); // Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees /
+  // LL2: -24.85 to 24.85 degrees)
+  double ta = table.getEntry("ta").getDouble(0); // Target Area (0% of image to 100% of image)
+  double tv =
+      table.getEntry("tv").getDouble(0); // Whether the limelight has any valid targets (0 or 1)
+  double[] botpose =
+      table
+          .getEntry("botpose")
+          .getDoubleArray(new double[6]); // Robot transform in field-space. Translation (X,Y,Z)
+  // Rotation(Roll,Pitch,Yaw), total latency (cl+tl)
 
-      
-    }
+  @Override
+  public void periodic() {
+    // read values periodically
+    updateLimelightVariables();
+  }
 
-    
+  private void updateLimelightVariables() {
+    tx =
+        table
+            .getEntry("tx")
+            .getDouble(
+                0); // Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees /
+    // LL2: -29.8 to 29.8 degrees)
+    ty =
+        table
+            .getEntry("ty")
+            .getDouble(
+                0); // Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees
+    // / LL2: -24.85 to 24.85 degrees)
+    ta = table.getEntry("ta").getDouble(0); // Target Area (0% of image to 100% of image)
+    tv = table.getEntry("tv").getDouble(0); // Whether the limelight has any valid targets (0 or 1)
+    botpose =
+        table
+            .getEntry("botpose")
+            .getDoubleArray(new double[6]); // Robot transform in field-space. Translation (X,Y,Z)
+    // Rotation(Roll,Pitch,Yaw), total latency (cl+tl)
+  }
 
+  public double getTxDouble() {
+    return tx;
+  }
 
+  public double getTyDouble() {
+    return ty;
+  }
 
-  
+  public double getTaDouble() {
+    return ta;
+  }
 }

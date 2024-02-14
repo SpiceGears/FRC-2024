@@ -16,14 +16,10 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.autonomous.Auto1;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
@@ -40,6 +36,7 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.limelight.LimelightSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -54,6 +51,7 @@ public class RobotContainer {
   private final Drive drive;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
+  private final LimelightSubsystem limelightSubsystem;
   private final ShuffleBoard
       shuffleBoard; // TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
   // private final Flywheel flywheel;
@@ -80,11 +78,14 @@ public class RobotContainer {
                 new ModuleIOSparkMax(3));
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
+        limelightSubsystem = new LimelightSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
-        NamedCommands.registerCommand("PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
-        NamedCommands.registerCommand("RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand(
+            "PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand(
+            "RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
         NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
         NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
 
@@ -116,8 +117,10 @@ public class RobotContainer {
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
-        NamedCommands.registerCommand("PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
-        NamedCommands.registerCommand("RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand(
+            "PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand(
+            "RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
         NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
         NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
         // ! add new subsystems here!
@@ -140,8 +143,10 @@ public class RobotContainer {
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
-        NamedCommands.registerCommand("PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
-        NamedCommands.registerCommand("RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand(
+            "PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand(
+            "RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
         NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
         NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
 
@@ -164,7 +169,6 @@ public class RobotContainer {
         "Drive FF Characterization",
         new FeedForwardCharacterization(
             drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
-    autoChooser.addOption("Auto1, try few notes", new Auto1());
     autoChooser.addDefaultOption(
         "all-notes - all notes one by one with subwoofer align", new PathPlannerAuto("all-notes"));
     autoChooser.addOption("rotate-test - 2 circles around", new PathPlannerAuto("rotate-test"));
@@ -193,19 +197,21 @@ public class RobotContainer {
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                    drive)
-                .ignoringDisable(true));
+    controller.x().whileTrue(DriveCommands.angleRotate(drive, limelightSubsystem.getTxDouble()));
+    controller.b().whileTrue(DriveCommands.angleRotate(drive, 10));
+    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // controller
+    //     .b()
+    //     .onTrue(
+    //         Commands.runOnce(
+    //                 () ->
+    //                     drive.setPose(
+    //                         new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+    //                 drive)
+    //             .ignoringDisable(true));
 
-    controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
-    controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+    // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
+    // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
 
     // controller
     //     .a()

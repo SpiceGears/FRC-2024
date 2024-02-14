@@ -69,16 +69,25 @@ public class Drive extends SubsystemBase {
         this::setPose,
         () -> kinematics.toChassisSpeeds(getModuleStates()),
         this::runVelocity,
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(Constants.Swerve.DriveSettings.Real.DRIVE_PID_kP, Constants.Swerve.DriveSettings.Real.DRIVE_PID_kI, Constants.Swerve.DriveSettings.Real.DRIVE_PID_kD), // Translation PID constants
-            new PIDConstants(Constants.Swerve.DriveSettings.Real.TURN_PID_kP, Constants.Swerve.DriveSettings.Real.TURN_PID_kI, Constants.Swerve.DriveSettings.Real.TURN_PID_kD), // Rotation PID constants
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
+            // your Constants class
+            new PIDConstants(
+                Constants.Swerve.DriveSettings.Real.DRIVE_PID_kP,
+                Constants.Swerve.DriveSettings.Real.DRIVE_PID_kI,
+                Constants.Swerve.DriveSettings.Real.DRIVE_PID_kD), // Translation PID constants
+            new PIDConstants(
+                Constants.Swerve.DriveSettings.Real.TURN_PID_kP,
+                Constants.Swerve.DriveSettings.Real.TURN_PID_kI,
+                Constants.Swerve.DriveSettings.Real.TURN_PID_kD), // Rotation PID constants
             Constants.Swerve.ROBOT_MAX_SPEED, // Max module speed, in m/s
-            DRIVE_BASE_RADIUS, // Drive base radius in meters. Distance from robot center to furthest module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
+            DRIVE_BASE_RADIUS, // Drive base radius in meters. Distance from robot center to
+            // furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options
+            // here
 
             // DEFAULT THAT COMES FROM ADVANTAGEKIT V
             // MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
-        ),
+            ),
         () ->
             DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red,
@@ -212,7 +221,7 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
-    return pose;
+    return pose; // TODO CAN INPUT LIMELIGHT POSE HERE
   }
 
   /** Returns the current odometry rotation. */
@@ -222,7 +231,7 @@ public class Drive extends SubsystemBase {
 
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
-    this.pose = pose;
+    this.pose = pose; // TODO CAN INPUT LIMELIGHT POSE HERE
   }
 
   /** Returns the maximum linear speed in meters per sec. */

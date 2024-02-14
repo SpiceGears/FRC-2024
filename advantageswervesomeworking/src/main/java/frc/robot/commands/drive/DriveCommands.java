@@ -67,4 +67,46 @@ public class DriveCommands {
         },
         drive);
   }
+
+  public static Command angleRotate(
+      Drive drive, double omegaSupplier // ! limelightSubsystem.getTxDouble()
+      ) {
+    return Commands.run(
+        () -> {
+          // Apply deadband
+          //   double linearMagnitude =
+          //       MathUtil.applyDeadband(
+          //           Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
+          //   Rotation2d linearDirection =
+          //       new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+          double omega = MathUtil.applyDeadband(omegaSupplier, DEADBAND);
+
+          // Square values
+          //   linearMagnitude = linearMagnitude * linearMagnitude;
+
+          // ! MODYFY LIMELIGHT ERROR HERE
+          // ! INPUT IS ANGLES(-30 to 30) OUTPUT IS RAD/SECOND
+          // omega = Math.copySign(omega * omega, omega);
+          omega = omega / 30; // should be max error = 1 or -1 and center is 0
+
+          // Calcaulate new linear velocity
+          //   Translation2d linearVelocity =
+          //       new Pose2d(new Translation2d(), linearDirection)
+          //           .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+          //           .getTranslation();
+
+          // Convert to field relative speeds & send command
+          drive.runVelocity(
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  //   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                  //   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  0,
+                  0,
+                  omega
+                      * drive.getMaxAngularSpeedRadPerSec(), // TODO edit / try different outputs as
+                  // this var is rad/second already
+                  drive.getRotation()));
+        },
+        drive);
+  }
 }
