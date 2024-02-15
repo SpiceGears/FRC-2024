@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.limelight.LimelightSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {
@@ -69,52 +70,68 @@ public class DriveCommands {
   }
 
   /**
- * @param drive Drive drive 
- * @param angleSupplier -1 to 1 value of how much to the side to aim
- * @param tv check if limelight can even see any apriltag
- */
-public static Command angleRotate(
+   * @param drive Drive drive
+   * @param angleSupplier -1 to 1 value of how much to the side to aim
+   * @param tv check if limelight can even see any apriltag
+   */
+  public static Command angleRotate(
       Drive drive,
-      double angleSupplier, // ! limelightSubsystem.getTxDouble()
-      double tv
-      ) {
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      LimelightSubsystem limelightSubsystem, // ! limelightSubsystem.getTxDouble()
+      int tv) {
     return Commands.run(
         () -> {
-            if (tv == 1) {             
-                // Apply deadband
-                //   double linearMagnitude =
-                //       MathUtil.applyDeadband(
-                //           Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
-                //   Rotation2d linearDirection =
-                //       new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-                double omega = MathUtil.applyDeadband(angleSupplier, DEADBAND);
-      
-                // Square values
-                //   linearMagnitude = linearMagnitude * linearMagnitude;
-      
-                // ! MODYFY LIMELIGHT ERROR HERE
-                // ! INPUT IS ANGLES(-30 to 30) OUTPUT IS RAD/SECOND
-                // omega = Math.copySign(omega * omega, omega);
-                omega = omega / 30; // should be max error = 1 or -1 and center is 0
-      
-                // Calcaulate new linear velocity
-                //   Translation2d linearVelocity =
-                //       new Pose2d(new Translation2d(), linearDirection)
-                //           .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
-                //           .getTranslation();
-      
-                // Convert to field relative speeds & send command
-                drive.runVelocity(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                        //   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                        //   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                        0,
-                        0,
-                        omega * drive.getMaxAngularSpeedRadPerSec(), // TODO edit / try different outputs as this var is rad/second already
-                        drive.getRotation()));
-            } else {
-                drive.stopWithX();
-            }
+
+          // Apply deadband
+          double linearMagnitude =
+              MathUtil.applyDeadband(
+                  Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
+          Rotation2d linearDirection =
+              new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+          double tx = limelightSubsystem.getTxDouble();
+          double omega = MathUtil.applyDeadband(tx, DEADBAND);
+
+          // Square values
+          linearMagnitude = linearMagnitude * linearMagnitude;
+
+          // ! MODYFY LIMELIGHT ERROR HERE
+          // ! INPUT IS ANGLES(-30 to 30) OUTPUT IS RAD/SECOND
+          // omega = Math.copySign(omega * omega, omega);
+          omega = omega / 30; // should be max error = 1 or -1 and center is 0
+
+          // Calcaulate new linear velocity
+          Translation2d linearVelocity =
+              new Pose2d(new Translation2d(), linearDirection)
+                  .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+                  .getTranslation();
+
+          // Convert to field relative speeds & send command
+
+          double finalOmega = -omega;
+          finalOmega = MathUtil.applyDeadband(finalOmega, 0.02);
+          // * drive.getMaxAngularSpeedRadPerSec()
+          // / 2; // TODO edit / try different outputs as
+
+          System.out.println(finalOmega);
+
+          if (tv == 1) { // IF LIMELIGHT SEE TARGET
+
+            drive.runVelocity(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                    finalOmega, // rad/second
+                    drive.getRotation()));
+
+          } else {
+            drive.runVelocity(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                    0, // DOESNT ROTATE WITHOUT TARGET
+                    drive.getRotation()));
+          }
         },
         drive);
   }

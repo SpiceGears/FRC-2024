@@ -81,12 +81,12 @@ public final class Constants {
         public static final double DRIVE_FF_kV = 0;
 
         // TODO tune in
-        public static final double DRIVE_PID_kP = 2;
+        public static final double DRIVE_PID_kP = 0.5;
         public static final double DRIVE_PID_kI = 0;
         public static final double DRIVE_PID_kD = 0;
 
         // TODO tune in
-        public static final double TURN_PID_kP = 2;
+        public static final double TURN_PID_kP = 0.5;
         public static final double TURN_PID_kI = 0;
         public static final double TURN_PID_kD = 0;
       }
