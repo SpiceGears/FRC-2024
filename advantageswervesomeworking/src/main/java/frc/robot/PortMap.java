@@ -33,4 +33,17 @@ public class PortMap {
     public static final int ABSOLUTE_ENCODER_BL = 2;
     public static final int ABSOLUTE_ENCODER_BR = 1;
   }
+
+  public class Arm {
+
+    public static final int MASTER_PORT = 1;
+    public static final int SLAVE_PORT = 2;
+
+    public static final int ENCODER_PORT = 4; // ! NAVX2 AI0 PORT
+
+    public static final int FRONT_LIMIT_SWITCH = 0;
+    public static final int BACK_LIMIT_SWITCH = 1;
+  }
+
+  public static final int LIMELIGHT_PORT = 5;
 }

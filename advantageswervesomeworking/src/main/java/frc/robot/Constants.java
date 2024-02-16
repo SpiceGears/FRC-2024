@@ -52,6 +52,52 @@ public final class Constants {
         0.5; // (seconds) how much time between speeding up shooter and passing
   }
 
+  public static class Arm {
+
+    public static final double ENCODER_OFFSET_DEGREES = 0;
+    public static final double PWM_TEST_POWER = 0.2;
+
+    public static final double KP = 8;
+    public static final double kD = 0;
+    public static final double kI = .2;
+
+    public static final double REDUCTION_CHAIN = 2.3125; // 32t -> 74t = 2.3125:1
+
+    public static final double DEADZONE_LOW = 0;
+    public static final double DEADZONE_HIGH = 100;
+
+    public static final double SPEED_MULTIPLIER = 0.3;
+
+    public static final double ENCODER_ANGLES_PER_ROTATION =
+        360 / REDUCTION_CHAIN; // 1 rotation = 360 degrees
+    public static final double ENCODER_TICK_RATE = 2048;
+    public static final double ENCODER_MIN_RATE = 10;
+    public static final int ENCODER_SAMPLES_TO_AVERAGE = 5; // Can be between 1 and 127
+    public static final boolean ENCODER_REVERSE = true;
+
+    public static final double kMaxVelocityRadPerSecond = 80 * Math.PI / 180; // 20 degrees
+    public static final double kMaxAccelerationRadPerSecSquared = 80 * Math.PI / 180;
+    public static final double kEncoderDistancePerPulse =
+        2 * Math.PI / REDUCTION_CHAIN / ENCODER_TICK_RATE; // 2rad per full rotation
+    public static final double kArmOffsetRads = -0.3; // arm rest position counting from horizontal
+
+    public static final double MAX_VOLTAGE_OUTPUT_UP = 5.5;
+    // public static final double MAX_VOLTAGE_OUTPUT_DOWN = 4.0;
+
+    public static final double kSVolts = 0.1;
+    public static final double kGVolts = 2.9;
+    // 2.5v utrzymuje w horizontal, wyzej 2.5v to za duzo
+    public static final double kVVoltSecondPerRad = 2.5;
+    public static final double kAVoltSecondSquaredPerRad = 0.05;
+
+    public class POSITION {
+      public static final double INTAKE = -0.3;
+      public static final double HORIZONTAL = 0.0;
+      public static final double SECONDLEVEL = 0.7;
+      public static final double VERTICAL = 1.4;
+    }
+  }
+
   public static class Swerve {
 
     public static final double SPEED_FINAL_MULTIPLIER = 1;

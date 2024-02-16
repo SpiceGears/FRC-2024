@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
@@ -32,6 +33,7 @@ import frc.robot.commands.shooter.RollShooterForSeconds;
 import frc.robot.commands.shooter.StartShooter;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.subsystems.ShuffleBoard;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavx;
@@ -55,12 +57,13 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final LimelightSubsystem limelightSubsystem;
+  private final ArmSubsystem armSubsystem;
   private final ShuffleBoard
       shuffleBoard; // TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
   // private final Flywheel flywheel;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController controllerDriver = new CommandXboxController(0);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -82,6 +85,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         limelightSubsystem = new LimelightSubsystem();
+        armSubsystem = new ArmSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
@@ -117,6 +121,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         limelightSubsystem = new LimelightSubsystem();
+        armSubsystem = new ArmSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
@@ -143,6 +148,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         limelightSubsystem = new LimelightSubsystem();
+        armSubsystem = new ArmSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
@@ -197,22 +203,19 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
-    controller
+            () -> -controllerDriver.getLeftY(),
+            () -> -controllerDriver.getLeftX(),
+            () -> -controllerDriver.getRightX()));
+    controllerDriver
         .x()
         .whileTrue(
             DriveCommands.angleRotate(
                 drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
+                () -> -controllerDriver.getLeftY(),
+                () -> -controllerDriver.getLeftX(),
                 limelightSubsystem,
                 limelightSubsystem.getTvInt()));
-    // controller.b().whileTrue(DriveCommands.angleRotate(drive, 10, 1));
-    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
-    controller
+    controllerDriver
         .b()
         .onTrue(
             Commands.runOnce(
@@ -221,6 +224,15 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    //! ARM CONTROLS FOR TESTS
+    controllerDriver
+        .povUp()
+        .whileTrue(new ArmPwmCommand(armSubsystem, Constants.Arm.PWM_TEST_POWER));
+    controllerDriver
+        .povDown()
+        .whileTrue(new ArmPwmCommand(armSubsystem, -Constants.Arm.PWM_TEST_POWER));
+
 
     // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
     // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
