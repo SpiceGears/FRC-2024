@@ -157,16 +157,16 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
   private void updateArmPosition() {
     armPosition =
-      new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
-          .minus(armEncoderOffset);
+        new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
+            .minus(armEncoderOffset);
   }
-  
+
   public double getEncoderPositionDegrees() {
     return armPosition.getDegrees();
   }
 
   public Rotation2d getEncoderPositionRotation2d() {
-  return armPosition;
+    return armPosition;
   }
 
   public void logArm() {
@@ -178,5 +178,4 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     // SmartDashboard.putNumber("ARM/set_position");
 
   }
-
 }

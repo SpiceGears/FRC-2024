@@ -225,14 +225,13 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    //! ARM CONTROLS FOR TESTS
+    // ! ARM CONTROLS FOR TESTS
     controllerDriver
         .povUp()
         .whileTrue(new ArmPwmCommand(armSubsystem, Constants.Arm.PWM_TEST_POWER));
     controllerDriver
         .povDown()
         .whileTrue(new ArmPwmCommand(armSubsystem, -Constants.Arm.PWM_TEST_POWER));
-
 
     // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
     // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
