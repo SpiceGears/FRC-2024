@@ -76,12 +76,13 @@ public class DriveCommands {
    */
   public static Command angleRotate(
       Drive drive,
-      DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
+      DoubleSupplier xSupplier,
       LimelightSubsystem limelightSubsystem, // ! limelightSubsystem.getTxDouble()
       int tv) {
     return Commands.run(
         () -> {
+          double multiplier;
 
           // Apply deadband
           double linearMagnitude =
@@ -90,7 +91,7 @@ public class DriveCommands {
           Rotation2d linearDirection =
               new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
           double tx = limelightSubsystem.getTxDouble();
-          double omega = MathUtil.applyDeadband(tx, DEADBAND);
+          double omega = -MathUtil.applyDeadband(tx, DEADBAND);
 
           // Square values
           linearMagnitude = linearMagnitude * linearMagnitude;
@@ -98,7 +99,13 @@ public class DriveCommands {
           // ! MODYFY LIMELIGHT ERROR HERE
           // ! INPUT IS ANGLES(-30 to 30) OUTPUT IS RAD/SECOND
           // omega = Math.copySign(omega * omega, omega);
-          omega = omega / 30; // should be max error = 1 or -1 and center is 0
+
+          double xGamepad = xSupplier.getAsDouble();
+
+          // omega -30 to 30 degrees
+          // error -1 to 1
+          double error =
+              (omega + xGamepad *   5) / 30; // should be max error = 1 or -1 and center is 0
 
           // Calcaulate new linear velocity
           Translation2d linearVelocity =
@@ -108,12 +115,13 @@ public class DriveCommands {
 
           // Convert to field relative speeds & send command
 
-          double finalOmega = -omega;
-          finalOmega = MathUtil.applyDeadband(finalOmega, 0.02);
+          double finalRotation = error * 2.5;
+
+          finalRotation = MathUtil.applyDeadband(finalRotation, 0.02);
           // * drive.getMaxAngularSpeedRadPerSec()
           // / 2; // TODO edit / try different outputs as
 
-          System.out.println(finalOmega);
+          System.out.println(finalRotation);
 
           if (tv == 1) { // IF LIMELIGHT SEE TARGET
 
@@ -121,7 +129,7 @@ public class DriveCommands {
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                     linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                     linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                    finalOmega, // rad/second
+                    finalRotation, // rad/second
                     drive.getRotation()));
 
           } else {

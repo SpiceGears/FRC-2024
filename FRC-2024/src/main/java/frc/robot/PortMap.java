@@ -41,8 +41,8 @@ public class PortMap {
 
     public static final int ENCODER_PORT = 4; // ! NAVX2 AI0 PORT
 
-    public static final int FRONT_LIMIT_SWITCH = 0;
-    public static final int BACK_LIMIT_SWITCH = 1;
+    public static final int FRONT_LIMIT_SWITCH = 7;
+    public static final int BACK_LIMIT_SWITCH = 8;
   }
 
   public static final int LIMELIGHT_PORT = 5;
