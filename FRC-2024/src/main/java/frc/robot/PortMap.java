@@ -16,6 +16,12 @@ public class PortMap {
     public static final int SHOOTER_SLAVE_PORT = 8;
   }
 
+  public class Elevator {
+
+    public static final int ELEVATOR_LEFT_PORT = 9;
+    public static final int ELEVATOR_RIGHT_PORT = 10;
+  }
+
   public class Swerve {
 
     public static final int SWERVE_DRIVE_FL = 7;
