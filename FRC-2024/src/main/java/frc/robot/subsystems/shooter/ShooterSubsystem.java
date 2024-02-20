@@ -4,10 +4,9 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,8 +20,10 @@ public class ShooterSubsystem extends SubsystemBase {
   private static RelativeEncoder shooterEncoder;
 
   public static enum ShooterState {
-    PID, MANUAL
+    PID,
+    MANUAL
   }
+
   public static ShooterState shooterState;
   public static double shooterSetpointRPM;
   public static boolean isShooterReadyToShoot;
@@ -41,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterEncoder = shooterMaster.getEncoder();
 
     shooterPIDController = new PIDController(0, 0, 0);
-    shooterPIDController.setTolerance(100); //? tolerance in RPM
+    shooterPIDController.setTolerance(100); // ? tolerance in RPM
 
     shooterState = ShooterState.MANUAL;
     isShooterReadyToShoot = false;
@@ -51,10 +52,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
+
     // puts power to shooter depending on shooterState
     switch (shooterState) {
-      
       case PID:
         setShooterVolts(calculateShooterPIDOutput());
         if (shooterPIDController.atSetpoint()) {
@@ -74,6 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /**
    * Set RPM setpoint to Shooter PID loop
+   *
    * @param setpointRPM RPM (rates per minute)
    */
   public void setShooterPIDSetpoint(double setpointRPM) {
@@ -81,17 +82,20 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPIDController.reset();
     shooterPIDController.setSetpoint(setpointRPM);
   }
+
   private double calculateShooterPIDOutput() {
     return shooterPIDController.calculate(shooterEncoder.getVelocity());
   }
+
   public void setShooterManual(double power) {
     shooterState = ShooterState.MANUAL;
     shooterPIDController.reset();
   }
+
   public boolean getReadyForShot() {
     return isShooterReadyToShoot;
   }
-  
+
   private void setShoterManual(double power) {
     shooterMaster.set(power);
     shooterSlave.set(power);

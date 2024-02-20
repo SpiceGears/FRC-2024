@@ -30,31 +30,35 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
   private static final VictorSP armMasterMotor = new VictorSP(PortMap.Arm.MASTER_PORT);
   private static final VictorSP armSlaveMotor = new VictorSP(PortMap.Arm.SLAVE_PORT);
 
-  public static AnalogInput armEncoder = new AnalogInput(PortMap.Arm.ENCODER_PORT); // connected to NAVX AI0 port
-  public static Rotation2d armEncoderOffset = Rotation2d.fromDegrees(Constants.Arm.ENCODER_OFFSET_DEGREES);
+  public static AnalogInput armEncoder =
+      new AnalogInput(PortMap.Arm.ENCODER_PORT); // connected to NAVX AI0 port
+  public static Rotation2d armEncoderOffset =
+      Rotation2d.fromDegrees(Constants.Arm.ENCODER_OFFSET_DEGREES);
   public static Rotation2d armPosition =
-  new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
-  .minus(armEncoderOffset); // Rotation2d object that gets the value periodically, resolution of 1/4096*360 (~.09) degrees.
-  
+      new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
+          .minus(
+              armEncoderOffset); // Rotation2d object that gets the value periodically, resolution
+  // of 1/4096*360 (~.09) degrees.
+
   public static DigitalInput frontLimitSwitch = new DigitalInput(PortMap.Arm.FRONT_LIMIT_SWITCH);
   public static DigitalInput backLimitSwitch = new DigitalInput(PortMap.Arm.BACK_LIMIT_SWITCH);
-  
+
   public static boolean frontLimitSwitchState;
   public static boolean backLimitSwitchState;
-  
+
   public ArmSubsystem() {
     super(
-      new ProfiledPIDController(
-        Constants.Arm.KP,
-        Constants.Arm.kI,
-        Constants.Arm.kD,
-        new TrapezoidProfile.Constraints(
-          Constants.Arm.kMaxVelocityRadPerSecond,
-          Constants.Arm.kMaxAccelerationRadPerSecSquared)),
-          getArmPosition().getDegrees());
-          
+        new ProfiledPIDController(
+            Constants.Arm.KP,
+            Constants.Arm.kI,
+            Constants.Arm.kD,
+            new TrapezoidProfile.Constraints(
+                Constants.Arm.kMaxVelocityRadPerSecond,
+                Constants.Arm.kMaxAccelerationRadPerSecSquared)),
+        getArmPosition().getDegrees());
+
     updateArmPosition();
-    //! TODO enable();
+    // ! TODO enable();
   }
 
   @Override
@@ -88,8 +92,8 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     double measurement = 0;
 
-    //! TODO CODE TO UNCOMMENT AFTER CALIBRATING ARM ENCODER OFFSET
-    //! TODO armPosition.getDegrees should be 0 when paralell to ground.
+    // ! TODO CODE TO UNCOMMENT AFTER CALIBRATING ARM ENCODER OFFSET
+    // ! TODO armPosition.getDegrees should be 0 when paralell to ground.
 
     measurement = armPosition.getDegrees();
 
@@ -133,12 +137,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     armSlaveMotor.set(0);
   }
 
-
   private static void updateArmPosition() {
     armPosition =
         new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
             .minus(armEncoderOffset);
   }
+
   private static Rotation2d getArmPosition() {
     updateArmPosition();
     return armPosition;
@@ -149,6 +153,5 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     SmartDashboard.putNumber("arm/armposition [degrees]", getArmPosition().getDegrees());
     SmartDashboard.putBoolean("arm/frontLimitSwitch", frontLimitSwitchState);
     SmartDashboard.putBoolean("arm/backLimitSwitch", backLimitSwitchState);
-
   }
 }

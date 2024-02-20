@@ -13,7 +13,7 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 public class DisableArm extends InstantCommand {
 
   private final ArmSubsystem armSubsystem;
-  
+
   public DisableArm(ArmSubsystem armSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.armSubsystem = armSubsystem;

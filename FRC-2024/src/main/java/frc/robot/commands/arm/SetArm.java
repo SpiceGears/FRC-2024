@@ -11,7 +11,7 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetArm extends InstantCommand {
-  
+
   private final ArmSubsystem armSubsystem;
   private final double position;
 
