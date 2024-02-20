@@ -84,11 +84,11 @@ public final class Constants {
     public static final double MAX_VOLTAGE_OUTPUT_UP = 5.5;
     // public static final double MAX_VOLTAGE_OUTPUT_DOWN = 4.0;
 
-    public static final double kSVolts = 0.1;
-    public static final double kGVolts = 2.9;
+    public static final double kSVolts = 0;
+    public static final double kGVolts = 0;
     // 2.5v utrzymuje w horizontal, wyzej 2.5v to za duzo
-    public static final double kVVoltSecondPerRad = 2.5;
-    public static final double kAVoltSecondSquaredPerRad = 0.05;
+    public static final double kVVoltSecondPerRad = 0;
+    public static final double kAVoltSecondSquaredPerRad = 0;
 
     public class POSITION {
       public static final double INTAKE = -0.3;
