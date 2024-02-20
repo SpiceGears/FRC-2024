@@ -11,10 +11,10 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class StartShooter extends InstantCommand {
+public class StartShooterManual extends InstantCommand {
   ShooterSubsystem shooterSubsystem;
 
-  public StartShooter(ShooterSubsystem shooterSubsystem) {
+  public StartShooterManual(ShooterSubsystem shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
     addRequirements(this.shooterSubsystem);
@@ -23,6 +23,6 @@ public class StartShooter extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterSubsystem.setShooterPower(Constants.Shooter.SHOOTING_POWER);
+    shooterSubsystem.setShooterManual(Constants.Shooter.SHOOTING_POWER);
   }
 }

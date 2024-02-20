@@ -4,16 +4,19 @@
 
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.arm.ArmSubsystem;
 
-public class SetArm extends Command {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class SetArm extends InstantCommand {
+
   private final ArmSubsystem armSubsystem;
   private final double position;
 
   /** Creates a new SetArmCommand. */
   public SetArm(ArmSubsystem armSubsystem, double position) {
-
     // Use addRequirements() here to declare subsystem dependencies.
     this.position = position;
     this.armSubsystem = armSubsystem;
@@ -23,27 +26,7 @@ public class SetArm extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    System.out.println("> SetArm(" + position + ") radians");
     armSubsystem.enable();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-
-    // Move the arm to [position] radians above horizontal when the button is pressed.
     armSubsystem.setGoal(position);
-    armSubsystem.enable();
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
   }
 }
