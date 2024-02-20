@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.elevator;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
@@ -13,8 +12,8 @@ import frc.robot.PortMap;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
-
   public Talon elevatorMotorLeft;
+
   public Talon elevatorMotorRight;
   public Encoder elevatorEncoderLeft;
   public Encoder elevatorEncoderRight;
@@ -33,7 +32,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorLimitLeft = new DigitalInput(0);
     elevatorLimitRight = new DigitalInput(1);
-
   }
 
   @Override
@@ -53,18 +51,21 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Encoder getEncoderLeft() {
     return elevatorEncoderLeft;
   }
+
   public Encoder getEncoderRight() {
     return elevatorEncoderRight;
   }
+
   public void setElevatorBothPower(double speed) {
     elevatorMotorLeft.set(speed);
     elevatorMotorRight.set(speed);
   }
+
   public void setElevatorLeftPower(double speed) {
     elevatorMotorLeft.set(speed);
   }
+
   public void setElevatorRightPower(double speed) {
     elevatorMotorRight.set(speed);
   }
-
 }

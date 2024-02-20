@@ -32,8 +32,8 @@ public class ShuffleBoard extends SubsystemBase {
         "shuffleboardsubsystem/intake/noteInside", intakeSubsystem.checkForNoteInside());
     SmartDashboard.putNumber(
         "shuffleboardsubsystem/intake/speed", intakeSubsystem.getIntakePower());
-    SmartDashboard.putNumber(
-        "shuffleboardsubsystem/shooter/speed", shooterSubsystem.getShooterPower());
+    // SmartDashboard.putNumber(
+    //     "shuffleboardsubsystem/shooter/speed", shooterSubsystem.getShooterPower());
     SmartDashboard.putString("shuffleboardsubsystem/drive/pose", drive.getPose().toString());
   }
 }

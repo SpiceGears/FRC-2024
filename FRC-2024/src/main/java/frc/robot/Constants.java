@@ -57,9 +57,9 @@ public final class Constants {
     public static final double ENCODER_OFFSET_DEGREES = 0;
     public static final double PWM_TEST_POWER = 0.2;
 
-    public static final double KP = 8;
+    public static final double KP = 0;
     public static final double kD = 0;
-    public static final double kI = .2;
+    public static final double kI = 0;
 
     public static final double REDUCTION_CHAIN = 2.3125; // 32t -> 74t = 2.3125:1
 
@@ -75,8 +75,8 @@ public final class Constants {
     public static final int ENCODER_SAMPLES_TO_AVERAGE = 5; // Can be between 1 and 127
     public static final boolean ENCODER_REVERSE = true;
 
-    public static final double kMaxVelocityRadPerSecond = 80 * Math.PI / 180; // 20 degrees
-    public static final double kMaxAccelerationRadPerSecSquared = 80 * Math.PI / 180;
+    public static final double kMaxVelocityRadPerSecond = Math.toRadians(30);
+    public static final double kMaxAccelerationRadPerSecSquared = Math.toRadians(30);
     public static final double kEncoderDistancePerPulse =
         2 * Math.PI / REDUCTION_CHAIN / ENCODER_TICK_RATE; // 2rad per full rotation
     public static final double kArmOffsetRads = -0.3; // arm rest position counting from horizontal

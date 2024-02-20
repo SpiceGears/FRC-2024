@@ -29,9 +29,9 @@ import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.PassAndShootNote;
-import frc.robot.commands.shooter.RollShooterForSeconds;
-import frc.robot.commands.shooter.StartShooter;
-import frc.robot.commands.shooter.StopShooter;
+import frc.robot.commands.shooter.StartShooterManualForSeconds;
+import frc.robot.commands.shooter.StartShooterManual;
+import frc.robot.commands.shooter.StopShooterPID;
 import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.Drive;
@@ -92,9 +92,9 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
         NamedCommands.registerCommand(
-            "RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
-        NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
-        NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
+            "RollShooterForSeconds(5)", new StartShooterManualForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooter", new StartShooterManual(shooterSubsystem));
+        NamedCommands.registerCommand("Stophooter", new StopShooterPID(shooterSubsystem));
 
         // ! add new subsystems here!
         // ! add new commands here!
@@ -128,9 +128,9 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
         NamedCommands.registerCommand(
-            "RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
-        NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
-        NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
+            "RollShooterForSeconds(5)", new StartShooterManualForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooter", new StartShooterManual(shooterSubsystem));
+        NamedCommands.registerCommand("Stophooter", new StopShooterPID(shooterSubsystem));
         // ! add new subsystems here!
         // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIOSim());
@@ -155,9 +155,9 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "PassAndShootNote", new PassAndShootNote(shooterSubsystem, intakeSubsystem));
         NamedCommands.registerCommand(
-            "RollShooterForSeconds(5)", new RollShooterForSeconds(shooterSubsystem, 5));
-        NamedCommands.registerCommand("StartShooter", new StartShooter(shooterSubsystem));
-        NamedCommands.registerCommand("Stophooter", new StopShooter(shooterSubsystem));
+            "RollShooterForSeconds(5)", new StartShooterManualForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooter", new StartShooterManual(shooterSubsystem));
+        NamedCommands.registerCommand("Stophooter", new StopShooterPID(shooterSubsystem));
 
         // ! add new subsystems here!
         // ! add new commands here!

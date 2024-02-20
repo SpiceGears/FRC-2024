@@ -105,7 +105,7 @@ public class DriveCommands {
           // omega -30 to 30 degrees
           // error -1 to 1
           double error =
-              (omega + xGamepad *   5) / 30; // should be max error = 1 or -1 and center is 0
+              (omega + xGamepad * 5) / 30; // should be max error = 1 or -1 and center is 0
 
           // Calcaulate new linear velocity
           Translation2d linearVelocity =

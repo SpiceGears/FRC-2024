@@ -6,54 +6,38 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.commands.intake.PassNoteToShooter;
-import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
-public class PassAndShootNote extends Command {
-
-  IntakeSubsystem intakeSubsystem;
+public class StartShooterManualForSeconds extends Command {
+  /** Creates a new RollShooterForSeconds. */
   ShooterSubsystem shooterSubsystem;
-  double startTime;
-  double passTime;
-  double endTime;
-  boolean isNotePassed;
 
-  /** Speed up the shooter, then pass a note and end. */
-  public PassAndShootNote(ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) {
+  double seconds;
+  double startTime;
+  double endTime;
+
+  public StartShooterManualForSeconds(ShooterSubsystem shooterSubsystem, double seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
-    this.intakeSubsystem = intakeSubsystem;
-    addRequirements(this.shooterSubsystem, this.intakeSubsystem);
+    addRequirements(this.shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isNotePassed = false;
-    shooterSubsystem.setShooterPower(Constants.Shooter.SHOOTING_POWER);
     startTime = Timer.getFPGATimestamp();
-    passTime = startTime + Constants.Shooter.SHOOTER_SPEEDUP_DELAY;
-    endTime = passTime + Constants.Intake.PASSING_TIME;
+    endTime = startTime + seconds;
+    shooterSubsystem.setShooterManual(frc.robot.Constants.Shooter.SHOOTING_POWER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    if (!isNotePassed) {
-      if (Timer.getFPGATimestamp() > passTime) {
-        new PassNoteToShooter(intakeSubsystem);
-        isNotePassed = true;
-      }
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.stopShooter();
-    intakeSubsystem.stopIntake();
+    shooterSubsystem.setShooterManual(0);
   }
 
   // Returns true when the command should end.
