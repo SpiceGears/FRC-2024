@@ -4,11 +4,14 @@
 
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOInputsAutoLogged;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
@@ -19,8 +22,16 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Encoder elevatorEncoderRight;
   public DigitalInput elevatorLimitLeft;
   public DigitalInput elevatorLimitRight;
+  private final GyroIO gyro;
+  private GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+  private double rollError;
+  private double correctRollPower;
 
-  public ElevatorSubsystem() {
+  public static PIDController elevatorPIDController;
+
+  public ElevatorSubsystem(GyroIO gyro) {
+
+    this.gyro = gyro;
 
     elevatorMotorLeft = new Talon(PortMap.Elevator.ELEVATOR_LEFT_PORT);
     elevatorMotorRight = new Talon(PortMap.Elevator.ELEVATOR_RIGHT_PORT);
@@ -39,13 +50,31 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     elevatorEncoderLeft.get();
     elevatorEncoderRight.get();
+    gyro.updateInputs(gyroInputs);
 
+    this.rollError = gyroInputs.rollPosition.getDegrees();
+    this.correctRollPower = elevatorPIDController.calculate(rollError);
+    
+
+    /* PSEUDOKOD NA WINDE
+
+     * korekta = PID * rollError
+     * 
+     * leftMotor.setPower(korekta)
+     * rightMotor.setPower(-korekta)
+     * 
+     */
+    
     if (elevatorLimitLeft.get()) {
       elevatorEncoderLeft.reset();
     }
     if (elevatorLimitRight.get()) {
       elevatorEncoderRight.reset();
     }
+  }
+
+  public void ejectToSetPoint() {
+
   }
 
   public Encoder getEncoderLeft() {
