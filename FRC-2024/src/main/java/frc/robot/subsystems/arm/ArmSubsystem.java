@@ -46,6 +46,8 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
   public static boolean frontLimitSwitchState;
   public static boolean backLimitSwitchState;
 
+  public double manualPower = 0;
+
   public ArmSubsystem() {
     super(
         new ProfiledPIDController(
@@ -58,7 +60,18 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
         getArmPosition().getDegrees());
 
     updateArmPosition();
-    // ! TODO enable();
+    enable();
+    // disable();
+  }
+
+  public void periodic() {
+    setArmPower(manualPower);
+    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
+    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
+    SmartDashboard.putNumber("arm/manualPower", manualPower);
+    SmartDashboard.putNumber("arm/encoderoutput [degrees]", getArmPosition().getDegrees());
+    SmartDashboard.putNumber("arm/encoder raw", armEncoder.getVoltage());
+    SmartDashboard.putNumber("arm/encoder v/5/360", armEncoder.getVoltage() / 5 / 360);
   }
 
   @Override
@@ -74,11 +87,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     // Add the feedforward to the PID output to get the motor output
     double finalOutput = MathUtil.clamp(pidOutput + feedforwardOutput, -maxVoltage, maxVoltage);
 
-    setArmVolts(finalOutput);
+    // setArmVolts(finalOutput);
+    setArmPower(manualPower);
 
     SmartDashboard.putNumber("ARM/finalOutput", finalOutput);
     SmartDashboard.putNumber("ARM/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("ARM/pidOutput", pidOutput);
+    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
+    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
   }
 
   @Override
@@ -89,8 +105,12 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     frontLimitSwitchState = isFrontLimitSwitchHit();
     backLimitSwitchState = isBackLimitSwitchHit();
     logArmValues();
+    disable();
 
     double measurement = 0;
+
+    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
+    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
 
     // ! TODO CODE TO UNCOMMENT AFTER CALIBRATING ARM ENCODER OFFSET
     // ! TODO armPosition.getDegrees should be 0 when paralell to ground.
@@ -114,14 +134,19 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     return measurement;
   }
 
-  public void setArmVolts(double volts) {
-    armMasterMotor.setVoltage(volts);
-    armSlaveMotor.setVoltage(volts);
-  }
+  // public void setArmVolts(double volts) {
+  //   armMasterMotor.setVoltage(volts);
+  //   armSlaveMotor.setVoltage(volts);
+  // }
 
   public void setArmPower(double power) {
     armMasterMotor.set(power);
     armSlaveMotor.set(power);
+  }
+
+  public void setManualPower(double power) {
+    manualPower = power;
+    System.out.println("power set to " + power);
   }
 
   public boolean isFrontLimitSwitchHit() {

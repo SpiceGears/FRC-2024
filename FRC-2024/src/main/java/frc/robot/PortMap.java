@@ -18,8 +18,8 @@ public class PortMap {
 
   public class Elevator {
 
-    public static final int ELEVATOR_LEFT_PORT = 9;
-    public static final int ELEVATOR_RIGHT_PORT = 10;
+    public static final int ELEVATOR_LEFT_PORT = 10;
+    public static final int ELEVATOR_RIGHT_PORT = 11;
   }
 
   public class Swerve {
@@ -42,8 +42,8 @@ public class PortMap {
 
   public class Arm {
 
-    public static final int MASTER_PORT = 1;
-    public static final int SLAVE_PORT = 2;
+    public static final int MASTER_PORT = 0;
+    public static final int SLAVE_PORT = 1;
 
     public static final int ENCODER_PORT = 4; // ! NAVX2 AI0 PORT
 
