@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
-public class StartShooterManualForSeconds extends Command {
+public class SetShooterManualForSeconds extends Command {
   /** Creates a new RollShooterForSeconds. */
   ShooterSubsystem shooterSubsystem;
 
@@ -16,7 +16,7 @@ public class StartShooterManualForSeconds extends Command {
   double startTime;
   double endTime;
 
-  public StartShooterManualForSeconds(ShooterSubsystem shooterSubsystem, double seconds) {
+  public SetShooterManualForSeconds(ShooterSubsystem shooterSubsystem, double seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
     addRequirements(this.shooterSubsystem);

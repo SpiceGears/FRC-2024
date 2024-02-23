@@ -28,10 +28,9 @@ import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
-import frc.robot.commands.shooter.StartShooterManual;
-import frc.robot.commands.shooter.StartShooterManualForSeconds;
-import frc.robot.commands.shooter.StartShooterPID;
-import frc.robot.commands.shooter.StopShooterManual;
+import frc.robot.commands.shooter.SetShooterManual;
+import frc.robot.commands.shooter.SetShooterManualForSeconds;
+import frc.robot.commands.shooter.SetShooterPID;
 import frc.robot.commands.shooter.StopShooterPID;
 import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.arm.ArmSubsystem;
@@ -91,12 +90,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
         NamedCommands.registerCommand(
-            "RollShooterForSeconds(5)", new StartShooterManualForSeconds(shooterSubsystem, 5));
+            "RollShooterForSeconds(5)", new SetShooterManualForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooterManual", new SetShooterManual(shooterSubsystem));
         NamedCommands.registerCommand(
-            "StartShooterManual", new StartShooterManual(shooterSubsystem));
-        NamedCommands.registerCommand("StopShooterManual", new StopShooterManual(shooterSubsystem));
-        NamedCommands.registerCommand(
-            "StartShooterPID(1000rpm)", new StartShooterPID(shooterSubsystem, 1000));
+            "StartShooterPID(1000rpm)", new SetShooterPID(shooterSubsystem, 1000));
         NamedCommands.registerCommand("StopShooterPID", new StopShooterPID(shooterSubsystem));
 
         // ! add new subsystems here!
@@ -129,12 +126,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
         NamedCommands.registerCommand(
-            "RollShooterForSeconds(5)", new StartShooterManualForSeconds(shooterSubsystem, 5));
+            "RollShooterForSeconds(5)", new SetShooterManualForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooterManual", new SetShooterManual(shooterSubsystem));
         NamedCommands.registerCommand(
-            "StartShooterManual", new StartShooterManual(shooterSubsystem));
-        NamedCommands.registerCommand("StopShooterManual", new StopShooterManual(shooterSubsystem));
-        NamedCommands.registerCommand(
-            "StartShooterPID(1000rpm)", new StartShooterPID(shooterSubsystem, 1000));
+            "StartShooterPID(1000rpm)", new SetShooterPID(shooterSubsystem, 1000));
         NamedCommands.registerCommand("StopShooterPID", new StopShooterPID(shooterSubsystem));
         // ! add new subsystems here!
         // ! add new commands here!
@@ -158,12 +153,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("PassNoteToShooter", new PassNoteToShooter(intakeSubsystem));
         NamedCommands.registerCommand(
-            "RollShooterForSeconds(5)", new StartShooterManualForSeconds(shooterSubsystem, 5));
+            "RollShooterForSeconds(5)", new SetShooterManualForSeconds(shooterSubsystem, 5));
+        NamedCommands.registerCommand("StartShooterManual", new SetShooterManual(shooterSubsystem));
         NamedCommands.registerCommand(
-            "StartShooterManual", new StartShooterManual(shooterSubsystem));
-        NamedCommands.registerCommand("StopShooterManual", new StopShooterManual(shooterSubsystem));
-        NamedCommands.registerCommand(
-            "StartShooterPID(1000rpm)", new StartShooterPID(shooterSubsystem, 1000));
+            "StartShooterPID(1000rpm)", new SetShooterPID(shooterSubsystem, 1000));
         NamedCommands.registerCommand("StopShooterPID", new StopShooterPID(shooterSubsystem));
 
         // ! add new subsystems here!
@@ -235,6 +228,8 @@ public class RobotContainer {
     // ! ARM AND SHOOTER CONTROLS FOR TESTS
     controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
     controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
+    controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
+    controllerDriver.y().whileTrue(new SetShooterManual(shooterSubsystem));
     // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
     // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
 

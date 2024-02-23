@@ -34,6 +34,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     ENCODER,
     MANUAL
   }
+
   public static ArmState armState = ArmState.MANUAL;
 
   public static AnalogInput armEncoder =
@@ -80,13 +81,14 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     // Limit output voltage
     double maxVoltage = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
     // Add the feedforward to the PID output to get the motor output
-    double encoderStateOutput = MathUtil.clamp(pidOutput + feedforwardOutput, -maxVoltage, maxVoltage);
+    double encoderStateOutput =
+        MathUtil.clamp(pidOutput + feedforwardOutput, -maxVoltage, maxVoltage);
 
     switch (armState) {
       case ENCODER:
         setArmVolts(encoderStateOutput);
         break;
-    
+
       case MANUAL:
         setArmPower(manualPower);
         break;
@@ -105,18 +107,17 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     frontLimitSwitchState = getFrontLimitSwitchHit();
     backLimitSwitchState = getBackLimitSwitchHit();
-    
+
     double measurement = getArmPosition().getDegrees();
 
     logArmValues();
     return measurement;
   }
 
-  
   public void setManualPower(double power) {
     armState = ArmState.MANUAL;
     manualPower = power;
-    System.out.println("manual power set to " + power); //TODO
+    System.out.println("manual power set to " + power); // TODO
   }
 
   public void setArmState(ArmState armState) {
@@ -126,11 +127,11 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
   public static boolean getFrontLimitSwitchHit() {
     return frontLimitSwitch.get();
   }
-  
+
   public static boolean getBackLimitSwitchHit() {
     return backLimitSwitch.get();
   }
-  
+
   public static Rotation2d getArmPosition() {
     updateArmPosition();
     return armPosition;
@@ -145,10 +146,8 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     armMasterMotor.set(power);
     armSlaveMotor.set(power);
   }
-  
-  /**
-   * Get latest arm position reading and set it for armPosition
-   */
+
+  /** Get latest arm position reading and set it for armPosition */
   private static void updateArmPosition() {
     armPosition =
         new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
@@ -164,6 +163,5 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     SmartDashboard.putNumber("arm/manualPower", manualPower);
     SmartDashboard.putNumber("arm/encoderoutput [degrees]", getArmPosition().getDegrees());
     SmartDashboard.putNumber("arm/encoder raw voltage", armEncoder.getVoltage());
-
   }
 }
