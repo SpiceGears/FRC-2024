@@ -234,7 +234,7 @@ public class RobotContainer {
 
     // ! ARM AND SHOOTER CONTROLS FOR TESTS
     controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
-    controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.5));
+    controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
     // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
     // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
 

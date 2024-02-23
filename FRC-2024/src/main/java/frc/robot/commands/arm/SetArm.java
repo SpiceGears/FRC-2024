@@ -6,6 +6,7 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.arm.ArmSubsystem.ArmState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -16,9 +17,9 @@ public class SetArm extends InstantCommand {
   private final double position;
 
   /** Creates a new SetArmCommand. */
-  public SetArm(ArmSubsystem armSubsystem, double position) {
+  public SetArm(ArmSubsystem armSubsystem, double setpointAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.position = position;
+    this.position = setpointAngle;
     this.armSubsystem = armSubsystem;
     addRequirements(armSubsystem);
   }
@@ -26,7 +27,7 @@ public class SetArm extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    armSubsystem.enable();
+    armSubsystem.setArmState(ArmState.ENCODER);
     armSubsystem.setGoal(position);
   }
 }

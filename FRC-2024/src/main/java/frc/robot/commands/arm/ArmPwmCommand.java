@@ -23,21 +23,18 @@ public class ArmPwmCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // armSubsystem.disable();
-    armSubsystem.manualPower = power;
+    armSubsystem.setManualPower(power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armSubsystem.manualPower = power;
-    System.out.println(armSubsystem.manualPower);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    armSubsystem.manualPower = 0;
+    armSubsystem.setManualPower(power);
   }
 
   // Returns true when the command should end.
