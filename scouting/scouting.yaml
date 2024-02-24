@@ -1,0 +1,370 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/omagarwal25/scouting-app/main/packages/game/schemas/game.schema.json
+name: Crescendo
+description: music
+year: 2024
+allianceSize: 3
+elements:
+  - name: scoutId
+    label: Scout ID
+    screens:
+      - SubjectiveInfo
+    field:
+      fieldType: Dropdown
+      options:
+        - Red S
+        - Blue S
+  - name: teamOneNumber
+    label: Team One Number
+    screens:
+      - SubjectiveInfo
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: false
+      min: 0
+  - name: teamTwoNumber
+    label: Team Two Number
+    screens:
+      - SubjectiveInfo
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: false
+      min: 0
+  - name: teamThreeNumber
+    label: Team Three Number
+    screens:
+      - SubjectiveInfo
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: false
+      min: 0
+  - name: scoutId
+    label: Scout ID
+    screens:
+      - ObjectiveInfo
+    field:
+      fieldType: Dropdown
+      options:
+        - Red 1
+        - Red 2
+        - Red 3
+        - Blue 1
+        - Blue 2
+        - Blue 3
+  - name: scoutId
+    label: Scout ID
+    screens:
+      - SubjectiveInfo
+    field:
+      fieldType: Dropdown
+      options:
+        - Red S
+        - Blue S
+  - name: matchType
+    label: Match Type
+    screens:
+      - ObjectiveInfo
+      - SubjectiveInfo
+    field:
+      fieldType: Dropdown
+      options:
+        - Practice
+        - Qualification
+        - Elimination
+  - name: matchNumber
+    label: Match Number
+    screens:
+      - ObjectiveInfo
+      - SubjectiveInfo
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: false
+      min: 0
+  - name: teamNumber
+    label: Team Number
+    screens:
+      - ObjectiveInfo
+      - PitInfo
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: false
+      min: 0
+  - name: scoutName
+    label: Scout Name
+    screens:
+      - ObjectiveOther
+      - SubjectiveOther
+      - PitOther
+    field:
+      fieldType: Text
+  - name: startingPosition
+    label: Starting Position
+    screens:
+      - ObjectivePregame
+    field:
+      fieldType: Dropdown
+      options:
+        - Left
+        - Right
+        - Middle
+  - name: preload
+    label: Preload
+    screens:
+      - ObjectivePregame
+      - PitAuto
+    field:
+      fieldType: Dropdown
+      options:
+        - None
+        - Note
+  - name: autoAttempted
+    label: Auto Attempted
+    screens:
+      - ObjectiveAuto
+    field:
+      fieldType: Boolean
+  - name: gamePiecesPickedUp
+    label: Game Pieces Picked Up
+    screens:
+      - ObjectiveAuto
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: true
+      min: 0
+  - name: notesScoredAmpAuto
+    label: Notes Scored AMP Auto
+    screens:
+    - ObjectiveAuto
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: true
+      min: 0
+  - name: notesScoredSpeakerAuto
+    label: Notes Scored Speaker Auto
+    screens:
+    - ObjectiveAuto
+    field:
+      fieldType: Numeric
+      isInteger: true
+      incrementable: true
+      min: 0
+  - name: leaveAuto
+    label: Leave Auto
+    screens:
+      - ObjectiveAuto
+      - PitAuto
+    field:
+      fieldType: Boolean
+  - name: endPosition
+    label: End Position
+    screens:
+      - ObjectiveEndgame
+    field:
+      fieldType: Dropdown
+      options:
+        - Parked
+        - On Stage
+        - None 
+  - name: spotlight
+    label: Spotlight
+    screens:
+      - ObjectiveEndgame
+    field:
+      fieldType: Boolean
+        - label: Route
+          name: route
+          screens:
+            - ObjectiveTeleop
+          field:
+            fieldType: Dropdown
+            options:
+              - Barrier
+              - Charge Station
+              - Cable Bump
+              - None
+        - label: Bulldozed?
+          name: bulldoze
+          screens:
+            - ObjectiveTeleop
+          field:
+            fieldType: Boolean
+
+        - label: Pickup to Score Cycle Lenght
+          name: pickupToScoreCycleLenght
+          screens:
+            - ObjectiveTeleop
+          field:
+            fieldType: Numeric
+            isInteger: false
+            incrementable: false
+            min: 0
+
+        - label: Encountered Defense?
+          name: encounteredDefense
+          field:
+            fieldType: Boolean
+          screens:
+            - ObjectiveTeleop
+
+        - label: Offensive Fouls
+          name: offensiveFouls
+          screens:
+            - ObjectiveTeleop
+          field:
+            fieldType: Numeric
+            isInteger: true
+            incrementable: true
+            min: 0
+  - name: defensiveCycles
+    label: Defensive Cycles
+    screens:
+      - ObjectiveTeleop
+    field:
+      fieldType: Grouping
+      fields:
+        - label: Pins
+          name: pins
+          screens:
+            - ObjectiveTeleop
+          field:
+            fieldType: Numeric
+            isInteger: true
+            incrementable: true
+            min: 0
+        - label: Defensive Fouls
+          name: defensiveFouls
+          screens:
+            - ObjectiveTeleop
+          field:
+            fieldType: Numeric
+            isInteger: true
+            incrementable: true
+            min: 0
+        - label: Defense Time
+          name: defenseTime
+          screens:
+            - ObjectiveTeleop
+          field:
+            fieldType: Numeric
+            isInteger: false
+            incrementable: false
+            min: 0
+  - name: driverAwareness
+    label: Driver Awareness
+    screens:
+      - SubjectiveTeam
+    field:
+      fieldType: Dropdown
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "N/A"
+  - name: interactions
+    label: Interactions
+    screens:
+      - SubjectiveTeam
+    field:
+      fieldType: Dropdown
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "N/A"
+  - name: defense
+    label: Defense
+    screens:
+      - SubjectiveTeam
+    field:
+      fieldType: Dropdown
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "N/A"
+  - name: robustness
+    label: Robustness
+    screens:
+      - SubjectiveTeam
+    field:
+      fieldType: Dropdown
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "N/A"
+  - name: drivetrainSpeed
+    label: Drivetrain Speed
+    screens:
+      - PitDrive
+    field:
+      fieldType: Numeric
+      isInteger: false
+      incrementable: false
+  - name: drivetrainType
+    label: Drivetrain Type
+    screens:
+      - PitDrive
+    field:
+      fieldType: Dropdown
+      options:
+        - Mecanum
+        - Omni
+        - Tank
+        - Swerve
+        - Other
+  - name: robotSize
+    label: Robot Size
+    screens:
+    - PitDrive
+    field: 
+      fieldType: Text
+  - name: intakeMethod
+    label: Intake Method
+    screens:
+      - PitDrive
+    field:
+      fieldType: Dropdown
+      options:
+      - over the bumper
+      - under the bumper
+      - doesn't intake
+  - name: intakeType
+    label: Intake Type
+    screens:
+    - PitDrive
+    field:
+      fieldType: Text
+  - name: canFitWithOtherRobots
+    label: Can Fit With Other Robots
+    screens:
+      - PitEndgame
+    field:
+      fieldType: Dropdown
+      options:
+        - "1"
+        - "2"
+        - None
+  
+  
+
+  - name: notes
+    label: Notes
+    screens:
+      - SubjectiveTeam
+      - ObjectivePostgame
+      - PitOther
+    field:
+      fieldType: Text
+  - name: intakeInsideFramePerimeter
+    label: Intake Inside Frame Perimeter
+    screens:
+      - PitTeleop
+    field:
+      fieldType: Boolean
