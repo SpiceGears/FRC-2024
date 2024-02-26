@@ -214,7 +214,7 @@ public class RobotContainer {
         drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
-                1,
+                () -> 1,
                 () -> -controllerDriver.getLeftY(),
                 () -> -controllerDriver.getLeftX(),
                 () -> -controllerDriver.getRightX()));
@@ -223,7 +223,7 @@ public class RobotContainer {
             .whileTrue(
                 DriveCommands.angleRotate(
                     drive,
-                    1,
+                    () -> 1,
                     () -> -controllerDriver.getLeftY(),
                     () -> -controllerDriver.getLeftX(),
                     limelightSubsystem,
@@ -254,14 +254,14 @@ public class RobotContainer {
         drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
-                -joystick.getRawAxis(3),
+                () -> -joystick.getRawAxis(3),
                 () -> -joystick.getY(),
                 () -> -joystick.getX(),
                 () -> -joystick.getRawAxis(2)));
         if (joystick.getRawButton(1)) {
           DriveCommands.angleRotate(
               drive,
-              -joystick.getRawAxis(3),
+              () -> -joystick.getRawAxis(3),
               () -> -joystick.getY(),
               () -> -joystick.getX(),
               limelightSubsystem,

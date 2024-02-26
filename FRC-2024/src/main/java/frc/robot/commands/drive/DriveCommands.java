@@ -35,7 +35,7 @@ public class DriveCommands {
    */
   public static Command joystickDrive(
       Drive drive,
-      double speedSupplier,
+      DoubleSupplier speedSupplier,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier) {
@@ -60,7 +60,7 @@ public class DriveCommands {
                   .getTranslation();
 
           // ! adjust joystick axis [-1 to 1] value to usable modifier [0-1]
-          double speedModifier = (speedSupplier + 1) / 2;
+          double speedModifier = (speedSupplier.getAsDouble() + 1) / 2;
           double speedModifierMinimum = 0.2;
           if (speedModifier < speedModifierMinimum) {
             speedModifier = speedModifierMinimum;
@@ -84,7 +84,7 @@ public class DriveCommands {
    */
   public static Command angleRotate(
       Drive drive,
-      double speedSupplier,
+      DoubleSupplier speedSupplier,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       LimelightSubsystem limelightSubsystem, // ! limelightSubsystem.getTxDouble()
@@ -130,7 +130,7 @@ public class DriveCommands {
           // / 2; // TODO edit / try different outputs as
 
           // ! adjust joystick axis [-1 to 1] value to usable modifier [0-1]
-          double speedModifier = (speedSupplier + 1) / 2;
+          double speedModifier = (speedSupplier.getAsDouble() + 1) / 2;
           double speedModifierMinimum = 0.2;
           if (speedModifier < speedModifierMinimum) {
             speedModifier = speedModifierMinimum;
