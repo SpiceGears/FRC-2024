@@ -19,6 +19,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -64,6 +65,12 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controllerDriver = new CommandXboxController(0);
+  private final Joystick joystick = new Joystick(0);
+
+  private enum SteeringDevice {
+    GAMEPAD,
+    JOYSTICK
+  }
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -200,47 +207,82 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controllerDriver.getLeftY(),
-            () -> -controllerDriver.getLeftX(),
-            () -> -controllerDriver.getRightX()));
-    controllerDriver
-        .x()
-        .whileTrue(
-            DriveCommands.angleRotate(
+
+    SteeringDevice steeringDevice = SteeringDevice.JOYSTICK;
+    switch (steeringDevice) {
+      case GAMEPAD:
+        drive.setDefaultCommand(
+            DriveCommands.joystickDrive(
                 drive,
                 () -> -controllerDriver.getLeftY(),
                 () -> -controllerDriver.getLeftX(),
-                limelightSubsystem,
-                limelightSubsystem.getTvInt()));
-    controllerDriver
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                    drive)
-                .ignoringDisable(true));
+                () -> -controllerDriver.getRightX()));
+        controllerDriver
+            .x()
+            .whileTrue(
+                DriveCommands.angleRotate(
+                    drive,
+                    () -> -controllerDriver.getLeftY(),
+                    () -> -controllerDriver.getLeftX(),
+                    limelightSubsystem,
+                    limelightSubsystem.getTvInt()));
+        controllerDriver
+            .b()
+            .onTrue(
+                Commands.runOnce(
+                        () ->
+                            drive.setPose(
+                                new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                        drive)
+                    .ignoringDisable(true));
 
-    // ! ARM AND SHOOTER CONTROLS FOR TESTS
-    controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
-    controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
-    controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
-    controllerDriver.y().whileTrue(new SetShooterManual(shooterSubsystem));
-    // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
-    // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
+        // ! ARM AND SHOOTER CONTROLS FOR TESTS
+        controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
+        controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
+        controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
+        controllerDriver.y().whileTrue(new SetShooterManual(shooterSubsystem));
+        // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
+        // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
 
-    // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
-    // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
+        // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        break;
 
-    // controller
-    //     .a()
-    //     .whileTrue(
-    //         Commands.startEnd(
-    //             () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel));
+      case JOYSTICK:
+        drive.setDefaultCommand(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -joystick.getY(),
+                () -> -joystick.getX(),
+                () -> -joystick.getRawAxis(3)));
+        if (joystick.getRawButton(1)) {
+          DriveCommands.angleRotate(
+              drive,
+              () -> -joystick.getY(),
+              () -> -joystick.getX(),
+              limelightSubsystem,
+              limelightSubsystem.getTvInt());
+        }
+        if (joystick.getRawButton(2)) {
+          Commands.runOnce(
+                  () ->
+                      drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                  drive)
+              .ignoringDisable(true);
+        }
+
+        // ! ARM AND SHOOTER CONTROLS FOR TESTS
+        controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
+        controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
+        controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
+        controllerDriver.y().whileTrue(new SetShooterManual(shooterSubsystem));
+        // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
+        // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
+
+        // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
+        // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
+        break;
+    }
   }
 
   /**
