@@ -64,8 +64,9 @@ public class RobotContainer {
   // private final Flywheel flywheel;
 
   // Controller
-  private final CommandXboxController controllerDriver = new CommandXboxController(0);
-  private final Joystick joystick = new Joystick(0);
+  public final CommandXboxController controllerDriver = new CommandXboxController(0);
+  public final Joystick joystick = new Joystick(0);
+  public SteeringDevice steeringDevice = SteeringDevice.JOYSTICK;
 
   private enum SteeringDevice {
     GAMEPAD,
@@ -208,12 +209,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    SteeringDevice steeringDevice = SteeringDevice.JOYSTICK;
     switch (steeringDevice) {
       case GAMEPAD:
         drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
+                1,
                 () -> -controllerDriver.getLeftY(),
                 () -> -controllerDriver.getLeftX(),
                 () -> -controllerDriver.getRightX()));
@@ -222,6 +223,7 @@ public class RobotContainer {
             .whileTrue(
                 DriveCommands.angleRotate(
                     drive,
+                    1,
                     () -> -controllerDriver.getLeftY(),
                     () -> -controllerDriver.getLeftX(),
                     limelightSubsystem,
@@ -252,12 +254,14 @@ public class RobotContainer {
         drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
+                -joystick.getRawAxis(3),
                 () -> -joystick.getY(),
                 () -> -joystick.getX(),
-                () -> -joystick.getRawAxis(3)));
+                () -> -joystick.getRawAxis(2)));
         if (joystick.getRawButton(1)) {
           DriveCommands.angleRotate(
               drive,
+              -joystick.getRawAxis(3),
               () -> -joystick.getY(),
               () -> -joystick.getX(),
               limelightSubsystem,
