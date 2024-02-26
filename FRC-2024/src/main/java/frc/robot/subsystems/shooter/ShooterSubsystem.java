@@ -6,16 +6,19 @@ package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.PortMap;
 
 public class ShooterSubsystem extends SubsystemBase {
 
   private static CANSparkMax shooterMaster;
   private static CANSparkMax shooterSlave;
 
-  private static RelativeEncoder shooterEncoder;
+  private static RelativeEncoder shooterEncoder;  //! TODO FOR NEO SHOOTER
 
   public static enum ShooterState {
     PID,
@@ -31,43 +34,57 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem() {
 
-    // shooterMaster = new CANSparkMax(PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless);
-    // shooterMaster = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
-    // shooterMaster.setInverted(false);
-    // shooterSlave.setInverted(true);
-    // shooterSlave.follow(shooterMaster);
+    shooterMaster.restoreFactoryDefaults();
 
-    // shooterEncoder = shooterMaster.getEncoder();
+    shooterMaster.setCANTimeout(250);
 
-    // shooterPIDController = new PIDController(0, 0, 0);
-    // shooterPIDController.setTolerance(100); // ? tolerance in RPM
+    shooterMaster.setSmartCurrentLimit(40);
+    shooterMaster.enableVoltageCompensation(12.0);
 
-    // shooterState = ShooterState.MANUAL;
-    // isShooterReadyToShoot = false;
-    // shooterManualPower = 0;
-    // setShooterPIDSetpoint(0);
+    shooterEncoder.setPosition(0.0);  //! TODO FOR NEO SHOOTER
+    shooterEncoder.setMeasurementPeriod(10);
+    shooterEncoder.setAverageDepth(2);
+
+    shooterMaster.setCANTimeout(0);
+
+    shooterMaster.burnFlash();
+    shooterMaster = new CANSparkMax(PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushed);
+    shooterMaster = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushed);
+    shooterMaster.setInverted(false);
+    shooterSlave.setInverted(true);
+    shooterSlave.follow(shooterMaster);
+
+    shooterEncoder = shooterMaster.getEncoder();  //! TODO FOR NEO SHOOTER
+
+    shooterPIDController = new PIDController(0, 0, 0);
+    shooterPIDController.setTolerance(100); // ? tolerance in RPM
+
+    shooterState = ShooterState.MANUAL;
+    isShooterReadyToShoot = false;
+    shooterManualPower = 0;
+    setShooterPIDSetpoint(0);
   }
 
   @Override
   public void periodic() {
 
     // puts power to shooter depending on shooterState
-    // switch (shooterState) {
-    //   case PID:
-    //     setShooterVolts(calculateShooterPIDOutput());
-    //     if (shooterPIDController.atSetpoint()) {
-    //       isShooterReadyToShoot = true;
-    //     } else {
-    //       isShooterReadyToShoot = false;
-    //     }
-    //     break;
-    //   case MANUAL:
-    //     setShoterManual(shooterManualPower);
-    //     isShooterReadyToShoot = true;
-    //     break;
-    // }
+    switch (shooterState) {
+      case PID:
+        setShooterVolts(calculateShooterPIDOutput()); //! TODO FOR NEO SHOOTER
+        if (shooterPIDController.atSetpoint()) {
+          isShooterReadyToShoot = true;
+        } else {
+          isShooterReadyToShoot = false;
+        }
+        break;
+      case MANUAL:
+        setShoterManual(shooterManualPower);
+        isShooterReadyToShoot = true;
+        break;
+    }
 
-    // logShooterValues();
+    logShooterValues();
   }
 
   /**
@@ -81,7 +98,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPIDController.setSetpoint(setpointRPM);
   }
 
-  private double calculateShooterPIDOutput() {
+  private double calculateShooterPIDOutput() {  //! TODO FOR NEO SHOOTER
     return shooterPIDController.calculate(shooterEncoder.getVelocity());
   }
 
@@ -105,7 +122,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void logShooterValues() {
-    SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
+    // SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());  //! TODO FOR NEO SHOOTER
     SmartDashboard.updateValues();
   }
 }

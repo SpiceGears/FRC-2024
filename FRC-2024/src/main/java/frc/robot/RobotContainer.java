@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -66,7 +67,7 @@ public class RobotContainer {
   // Controller
   public final CommandXboxController controllerDriver = new CommandXboxController(0);
   public final Joystick joystick = new Joystick(0);
-  public SteeringDevice steeringDevice = SteeringDevice.JOYSTICK;
+  public SteeringDevice steeringDevice = SteeringDevice.JOYSTICK; // TODO CHOOSE DRIVER STEERING DEVICE
 
   private enum SteeringDevice {
     GAMEPAD,
@@ -276,6 +277,15 @@ public class RobotContainer {
         }
 
         // ! ARM AND SHOOTER CONTROLS FOR TESTS
+        if (joystick.getRawButtonPressed(1)) {
+          new SetShooterManual(shooterSubsystem);
+        }
+        if (joystick.getRawButtonPressed(2)) {
+          new SetShooterPID(shooterSubsystem, 100);
+        }
+        if (joystick.getRawButtonPressed(3)) {
+          new SetShooterPID(shooterSubsystem, 0);
+        }
         controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
         controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
