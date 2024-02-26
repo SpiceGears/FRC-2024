@@ -66,12 +66,14 @@ public class DriveCommands {
             speedModifier = speedModifierMinimum;
           }
 
+
+
           // Convert to field relative speeds & send command
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
-                  omega * drive.getMaxAngularSpeedRadPerSec(),
+                  omega * drive.getMaxAngularSpeedRadPerSec() * speedModifier,
                   drive.getRotation()));
         },
         drive);
