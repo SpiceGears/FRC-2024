@@ -39,10 +39,12 @@ public class IntakeNote extends Command {
   @Override
   public boolean isFinished() {
     // End command when note is inside
-    if (intakeSubsystem.checkForNoteInside()) {
-      return true;
-    } else {
-      return false;
-    }
+    // if (intakeSubsystem.checkForNoteInside()) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+
+    return false;
   }
 }

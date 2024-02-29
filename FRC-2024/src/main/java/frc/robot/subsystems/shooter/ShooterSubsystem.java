@@ -15,7 +15,7 @@ import frc.robot.PortMap;
 public class ShooterSubsystem extends SubsystemBase {
 
   private static CANSparkMax shooterMaster;
-  private static CANSparkMax shooterSlave;
+  // private static CANSparkMax shooterSlave;
 
   private static RelativeEncoder shooterEncoder; // ! TODO FOR NEO SHOOTER
 
@@ -66,7 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterState = ShooterState.MANUAL;
     isShooterReadyToShoot = false;
     shooterManualPower = 0;
-    setShooterPIDSetpoint(0);
+    // setShooterPIDSetpoint(0);
   }
 
   @Override
@@ -74,14 +74,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // puts power to shooter depending on shooterState
     switch (shooterState) {
-      case PID:
-        setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
-        if (shooterPIDController.atSetpoint()) {
-          isShooterReadyToShoot = true;
-        } else {
-          isShooterReadyToShoot = false;
-        }
-        break;
+        // case PID:
+        //   setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
+        //   if (shooterPIDController.atSetpoint()) {
+        //     isShooterReadyToShoot = true;
+        //   } else {
+        //     isShooterReadyToShoot = false;
+        //   }
+        //   break;
       case MANUAL:
         setShoterManual(shooterManualPower);
         isShooterReadyToShoot = true;
@@ -96,15 +96,15 @@ public class ShooterSubsystem extends SubsystemBase {
    *
    * @param setpointRPM RPM (rates per minute)
    */
-  public void setShooterPIDSetpoint(double setpointRPM) {
-    shooterState = ShooterState.PID;
-    shooterPIDController.reset();
-    shooterPIDController.setSetpoint(setpointRPM);
-  }
+  // public void setShooterPIDSetpoint(double setpointRPM) {
+  //   shooterState = ShooterState.PID;
+  //   shooterPIDController.reset();
+  //   shooterPIDController.setSetpoint(setpointRPM);
+  // }
 
-  private double calculateShooterPIDOutput() {
-    return shooterPIDController.calculate(shooterEncoder.getVelocity());
-  }
+  // private double calculateShooterPIDOutput() {
+  //   return shooterPIDController.calculate(shooterEncoder.getVelocity());
+  // }
 
   public void setShooterManual(double power) {
     shooterState = ShooterState.MANUAL;
@@ -122,7 +122,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private void setShooterVolts(double volts) {
     shooterMaster.setVoltage(volts);
-    shooterSlave.setVoltage(volts); // TODO
+    // shooterSlave.setVoltage(volts); // TODO
   }
 
   private void logShooterValues() {

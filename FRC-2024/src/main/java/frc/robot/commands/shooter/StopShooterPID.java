@@ -22,6 +22,6 @@ public class StopShooterPID extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterSubsystem.setShooterPIDSetpoint(0);
+    // shooterSubsystem.setShooterPIDSetpoint(0);
   }
 }
