@@ -83,7 +83,7 @@ public class ShooterSubsystem extends SubsystemBase {
         //   }
         //   break;
       case MANUAL:
-        setShoterManual(shooterManualPower);
+        setShooterManual(shooterManualPower);
         isShooterReadyToShoot = true;
         break;
     }
@@ -106,16 +106,11 @@ public class ShooterSubsystem extends SubsystemBase {
   //   return shooterPIDController.calculate(shooterEncoder.getVelocity());
   // }
 
-  public void setShooterManual(double power) {
-    shooterState = ShooterState.MANUAL;
-    shooterPIDController.reset();
-  }
-
   public boolean getReadyForShot() {
     return isShooterReadyToShoot;
   }
 
-  private void setShoterManual(double power) {
+  public void setShooterManual(double power) {
     shooterMaster.set(power);
     // shooterSlave.set(power); //TODO
   }
