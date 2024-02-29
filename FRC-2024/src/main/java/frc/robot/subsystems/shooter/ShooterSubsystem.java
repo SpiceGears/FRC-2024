@@ -33,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem() {
 
-    // shooterMaster.restoreFactoryDefaults();
+    // shooterMaster.restoreFactoryDefaults(); // TODO UNCOMMENT AFTER SPARK
     // shooterMaster.setCANTimeout(250);
     // shooterMaster.setSmartCurrentLimit(40);
     // shooterMaster.enableVoltageCompensation(12.0);
@@ -44,21 +44,21 @@ public class ShooterSubsystem extends SubsystemBase {
     //         PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushed); // ! TODO FOR NEO SHOOTER
     // shooterMaster.burnFlash();
 
-    shooterSlave.restoreFactoryDefaults();
-    shooterSlave.setCANTimeout(250);
-    shooterSlave.setSmartCurrentLimit(40);
-    shooterSlave.enableVoltageCompensation(12.0);
-    shooterSlave.setCANTimeout(0);
-    shooterSlave.setInverted(true);
-    // shooterSlave.follow(shooterMaster);
+    // shooterSlave.restoreFactoryDefaults();
+    // shooterSlave.setCANTimeout(250);
+    // shooterSlave.setSmartCurrentLimit(40);
+    // shooterSlave.enableVoltageCompensation(12.0);
+    // shooterSlave.setCANTimeout(0);
+    // shooterSlave.setInverted(true);
+    // shooterSlave.follow(shooterMaster); // TODO UNCOMMENT AFTER SPARK
     shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushed);
-    shooterSlave.burnFlash();
+    // shooterSlave.burnFlash();
 
-    // shooterEncoder.setPosition(0.0); // ! TODO FOR NEO SHOOTER
+    // shooterEncoder.setPosition(0.0); // TODO UNCOMMENT AFTER SPARK
     // shooterEncoder.setMeasurementPeriod(10);
     // shooterEncoder.setAverageDepth(2);
 
-    // shooterEncoder = shooterMaster.getEncoder(); // ! TODO FOR NEO SHOOTER
+    // shooterEncoder = shooterMaster.getEncoder(); // TODO UNCOMMENT AFTER SPARK
 
     shooterPIDController = new PIDController(0, 0, 0);
     shooterPIDController.setTolerance(100); // ? tolerance in RPM
@@ -102,7 +102,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPIDController.setSetpoint(setpointRPM);
   }
 
-  private double calculateShooterPIDOutput() { // ! TODO FOR NEO SHOOTER
+  private double calculateShooterPIDOutput() {
     return shooterPIDController.calculate(shooterEncoder.getVelocity());
   }
 
@@ -116,18 +116,17 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setShoterManual(double power) {
-    shooterMaster.set(power);
+    // shooterMaster.set(power); //TODO
     shooterSlave.set(power);
   }
 
   private void setShooterVolts(double volts) {
-    shooterMaster.setVoltage(volts);
+    // shooterMaster.setVoltage(volts); //TODO
     shooterSlave.setVoltage(volts);
   }
 
   private void logShooterValues() {
-    // SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());  //! TODO FOR NEO
-    // SHOOTER
+    SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
     SmartDashboard.updateValues();
   }
 }
