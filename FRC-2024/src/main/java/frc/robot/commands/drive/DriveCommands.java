@@ -66,8 +66,6 @@ public class DriveCommands {
             speedModifier = speedModifierMinimum;
           }
 
-
-
           // Convert to field relative speeds & send command
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(

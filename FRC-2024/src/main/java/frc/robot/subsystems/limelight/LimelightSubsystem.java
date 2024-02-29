@@ -1,7 +1,6 @@
 package frc.robot.subsystems.limelight;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -66,11 +65,11 @@ public class LimelightSubsystem extends SubsystemBase {
             .getDoubleArray(new double[6]); // Robot transform in field-space. Translation (X,Y,Z)
     // Rotation(Roll,Pitch,Yaw), total latency (cl+tl)
 
-        // how many degrees back is your limelight rotated from perfectly vertical?
-    double limelightMountAngleDegrees = 25.0; 
+    // how many degrees back is your limelight rotated from perfectly vertical?
+    double limelightMountAngleDegrees = 25.0;
 
     // distance from the center of the Limelight lens to the floor
-    double limelightLensHeightCm = 20.0;  
+    double limelightLensHeightCm = 20.0;
 
     // distance from the target to the floor
     double goalHeightCm = 145; // to center of speaker apriltag
@@ -78,8 +77,9 @@ public class LimelightSubsystem extends SubsystemBase {
     double angleToGoalDegrees = limelightMountAngleDegrees + ty;
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
 
-    //calculate distance
-    distanceFromLimelightToGoalCm = (goalHeightCm - limelightLensHeightCm) / Math.tan(angleToGoalRadians);
+    // calculate distance
+    distanceFromLimelightToGoalCm =
+        (goalHeightCm - limelightLensHeightCm) / Math.tan(angleToGoalRadians);
   }
 
   public double getTxDouble() {

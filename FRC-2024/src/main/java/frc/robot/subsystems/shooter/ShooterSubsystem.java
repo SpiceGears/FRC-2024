@@ -4,10 +4,9 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private static CANSparkMax shooterMaster;
   private static CANSparkMax shooterSlave;
 
-  private static RelativeEncoder shooterEncoder;  //! TODO FOR NEO SHOOTER
+  private static RelativeEncoder shooterEncoder; // ! TODO FOR NEO SHOOTER
 
   public static enum ShooterState {
     PID,
@@ -34,27 +33,32 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem() {
 
-    shooterMaster.restoreFactoryDefaults();
+    // shooterMaster.restoreFactoryDefaults();
+    // shooterMaster.setCANTimeout(250);
+    // shooterMaster.setSmartCurrentLimit(40);
+    // shooterMaster.enableVoltageCompensation(12.0);
+    // shooterMaster.setCANTimeout(0);
+    // shooterMaster.setInverted(false);
+    // shooterMaster =
+    //     new CANSparkMax(
+    //         PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushed); // ! TODO FOR NEO SHOOTER
+    // shooterMaster.burnFlash();
 
-    shooterMaster.setCANTimeout(250);
-
-    shooterMaster.setSmartCurrentLimit(40);
-    shooterMaster.enableVoltageCompensation(12.0);
-
-    shooterEncoder.setPosition(0.0);  //! TODO FOR NEO SHOOTER
-    shooterEncoder.setMeasurementPeriod(10);
-    shooterEncoder.setAverageDepth(2);
-
-    shooterMaster.setCANTimeout(0);
-
-    shooterMaster.burnFlash();
-    shooterMaster = new CANSparkMax(PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushed); //! TODO FOR NEO SHOOTER
-    shooterMaster = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushed); //! TODO FOR NEO SHOOTER
-    shooterMaster.setInverted(false);
+    shooterSlave.restoreFactoryDefaults();
+    shooterSlave.setCANTimeout(250);
+    shooterSlave.setSmartCurrentLimit(40);
+    shooterSlave.enableVoltageCompensation(12.0);
+    shooterSlave.setCANTimeout(0);
     shooterSlave.setInverted(true);
-    shooterSlave.follow(shooterMaster);
+    // shooterSlave.follow(shooterMaster);
+    shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushed);
+    shooterSlave.burnFlash();
 
-    shooterEncoder = shooterMaster.getEncoder();  //! TODO FOR NEO SHOOTER
+    // shooterEncoder.setPosition(0.0); // ! TODO FOR NEO SHOOTER
+    // shooterEncoder.setMeasurementPeriod(10);
+    // shooterEncoder.setAverageDepth(2);
+
+    // shooterEncoder = shooterMaster.getEncoder(); // ! TODO FOR NEO SHOOTER
 
     shooterPIDController = new PIDController(0, 0, 0);
     shooterPIDController.setTolerance(100); // ? tolerance in RPM
@@ -71,7 +75,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // puts power to shooter depending on shooterState
     switch (shooterState) {
       case PID:
-        setShooterVolts(calculateShooterPIDOutput()); //! TODO FOR NEO SHOOTER
+        setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
         if (shooterPIDController.atSetpoint()) {
           isShooterReadyToShoot = true;
         } else {
@@ -98,7 +102,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPIDController.setSetpoint(setpointRPM);
   }
 
-  private double calculateShooterPIDOutput() {  //! TODO FOR NEO SHOOTER
+  private double calculateShooterPIDOutput() { // ! TODO FOR NEO SHOOTER
     return shooterPIDController.calculate(shooterEncoder.getVelocity());
   }
 
@@ -122,7 +126,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void logShooterValues() {
-    // SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());  //! TODO FOR NEO SHOOTER
+    // SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());  //! TODO FOR NEO
+    // SHOOTER
     SmartDashboard.updateValues();
   }
 }

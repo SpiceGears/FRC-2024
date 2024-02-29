@@ -24,13 +24,13 @@ public class PortMap {
 
   public class Swerve {
 
-    //CAN ID
+    // CAN ID
     public static final int SWERVE_DRIVE_FL = 7;
     public static final int SWERVE_DRIVE_FR = 1;
     public static final int SWERVE_DRIVE_BL = 5;
     public static final int SWERVE_DRIVE_BR = 3;
-    
-    //CAN ID
+
+    // CAN ID
     public static final int SWERVE_TURN_FL = 8;
     public static final int SWERVE_TURN_FR = 2;
     public static final int SWERVE_TURN_BL = 6;
