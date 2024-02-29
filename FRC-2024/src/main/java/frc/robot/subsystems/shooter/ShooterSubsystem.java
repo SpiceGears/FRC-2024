@@ -39,9 +39,9 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterMaster.enableVoltageCompensation(12.0);
     // shooterMaster.setCANTimeout(0);
     // shooterMaster.setInverted(false);
-    // shooterMaster =
-    //     new CANSparkMax(
-    //         PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless); // ! TODO FOR NEO SHOOTER
+    shooterMaster =
+        new CANSparkMax(
+            PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless); // ! TODO FOR NEO SHOOTER
     // shooterMaster.burnFlash();
 
     // shooterSlave.restoreFactoryDefaults();
@@ -50,8 +50,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterSlave.enableVoltageCompensation(12.0);
     // shooterSlave.setCANTimeout(0);
     // shooterSlave.setInverted(true);
-    // shooterSlave.follow(shooterMaster); // TODO UNCOMMENT AFTER SPARK
-    shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
+    // shooterSlave.follow(shooterMaster);
+    // shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
     // shooterSlave.burnFlash();
 
     // shooterEncoder.setPosition(0.0); // TODO UNCOMMENT AFTER SPARK
@@ -88,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
         break;
     }
 
-    logShooterValues();
+    // logShooterValues();
   }
 
   /**
@@ -116,17 +116,17 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setShoterManual(double power) {
-    // shooterMaster.set(power); //TODO
-    shooterSlave.set(power);
+    shooterMaster.set(power);
+    // shooterSlave.set(power); //TODO
   }
 
   private void setShooterVolts(double volts) {
-    // shooterMaster.setVoltage(volts); //TODO
-    shooterSlave.setVoltage(volts);
+    shooterMaster.setVoltage(volts);
+    shooterSlave.setVoltage(volts); // TODO
   }
 
   private void logShooterValues() {
-    SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
+    // SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
     SmartDashboard.updateValues();
   }
 }
