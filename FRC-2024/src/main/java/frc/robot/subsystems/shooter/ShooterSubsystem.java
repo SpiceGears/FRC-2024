@@ -41,7 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterMaster.setInverted(false);
     // shooterMaster =
     //     new CANSparkMax(
-    //         PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushed); // ! TODO FOR NEO SHOOTER
+    //         PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless); // ! TODO FOR NEO SHOOTER
     // shooterMaster.burnFlash();
 
     // shooterSlave.restoreFactoryDefaults();
@@ -51,7 +51,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterSlave.setCANTimeout(0);
     // shooterSlave.setInverted(true);
     // shooterSlave.follow(shooterMaster); // TODO UNCOMMENT AFTER SPARK
-    shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushed);
+    shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
     // shooterSlave.burnFlash();
 
     // shooterEncoder.setPosition(0.0); // TODO UNCOMMENT AFTER SPARK
