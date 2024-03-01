@@ -33,32 +33,31 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem() {
 
-    // shooterMaster.restoreFactoryDefaults(); // TODO UNCOMMENT AFTER SPARK
+    shooterMaster =
+        new CANSparkMax(
+            PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless); // ! TODO FOR NEO SHOOTER
+    shooterMaster.restoreFactoryDefaults(); // TODO UNCOMMENT AFTER SPARK
     // shooterMaster.setCANTimeout(250);
     // shooterMaster.setSmartCurrentLimit(40);
     // shooterMaster.enableVoltageCompensation(12.0);
     // shooterMaster.setCANTimeout(0);
-    // shooterMaster.setInverted(false);
-    shooterMaster =
-        new CANSparkMax(
-            PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless); // ! TODO FOR NEO SHOOTER
+    shooterMaster.setInverted(true);
     // shooterMaster.burnFlash();
 
+    // shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
     // shooterSlave.restoreFactoryDefaults();
     // shooterSlave.setCANTimeout(250);
     // shooterSlave.setSmartCurrentLimit(40);
     // shooterSlave.enableVoltageCompensation(12.0);
     // shooterSlave.setCANTimeout(0);
-    // shooterSlave.setInverted(true);
+    // shooterSlave.setInverted(false);
     // shooterSlave.follow(shooterMaster);
-    // shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
     // shooterSlave.burnFlash();
 
-    // shooterEncoder.setPosition(0.0); // TODO UNCOMMENT AFTER SPARK
-    // shooterEncoder.setMeasurementPeriod(10);
-    // shooterEncoder.setAverageDepth(2);
-
-    // shooterEncoder = shooterMaster.getEncoder(); // TODO UNCOMMENT AFTER SPARK
+    shooterEncoder = shooterMaster.getEncoder(); // TODO UNCOMMENT AFTER SPARK
+    shooterEncoder.setPosition(0.0); // TODO UNCOMMENT AFTER SPARK
+    shooterEncoder.setMeasurementPeriod(10);
+    shooterEncoder.setAverageDepth(2);
 
     shooterPIDController = new PIDController(0, 0, 0);
     shooterPIDController.setTolerance(100); // ? tolerance in RPM
@@ -74,14 +73,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // puts power to shooter depending on shooterState
     switch (shooterState) {
-        // case PID:
-        //   setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
-        //   if (shooterPIDController.atSetpoint()) {
-        //     isShooterReadyToShoot = true;
-        //   } else {
-        //     isShooterReadyToShoot = false;
-        //   }
-        //   break;
+      case PID:
+        setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
+        if (shooterPIDController.atSetpoint()) {
+          isShooterReadyToShoot = true;
+        } else {
+          isShooterReadyToShoot = false;
+        }
+        break;
       case MANUAL:
         setShooterManual(shooterManualPower);
         isShooterReadyToShoot = true;
@@ -96,15 +95,15 @@ public class ShooterSubsystem extends SubsystemBase {
    *
    * @param setpointRPM RPM (rates per minute)
    */
-  // public void setShooterPIDSetpoint(double setpointRPM) {
-  //   shooterState = ShooterState.PID;
-  //   shooterPIDController.reset();
-  //   shooterPIDController.setSetpoint(setpointRPM);
-  // }
+  public void setShooterPIDSetpoint(double setpointRPM) {
+    shooterState = ShooterState.PID;
+    shooterPIDController.reset();
+    shooterPIDController.setSetpoint(setpointRPM);
+  }
 
-  // private double calculateShooterPIDOutput() {
-  //   return shooterPIDController.calculate(shooterEncoder.getVelocity());
-  // }
+  private double calculateShooterPIDOutput() {
+    return shooterPIDController.calculate(shooterEncoder.getVelocity());
+  }
 
   public boolean getReadyForShot() {
     return isShooterReadyToShoot;

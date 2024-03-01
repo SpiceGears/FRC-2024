@@ -150,7 +150,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
   /** Get latest arm position reading and set it for armPosition */
   private static void updateArmPosition() {
     armPosition =
-        new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
+        new Rotation2d(-armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
             .minus(armEncoderOffset);
   }
 

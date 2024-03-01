@@ -54,7 +54,7 @@ public final class Constants {
 
   public static class Arm {
 
-    public static final double ENCODER_OFFSET_DEGREES = 0;
+    public static final double ENCODER_OFFSET_DEGREES = 17 - 90;
     public static final double PWM_TEST_POWER = 0.2;
 
     public static final double KP = 0.5;
