@@ -30,6 +30,13 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
   private static final VictorSP armMasterMotor = new VictorSP(PortMap.Arm.MASTER_PORT);
   private static final VictorSP armSlaveMotor = new VictorSP(PortMap.Arm.SLAVE_PORT);
 
+  public static enum ArmState {
+    ENCODER,
+    MANUAL
+  }
+
+  public static ArmState armState = ArmState.MANUAL;
+
   public static AnalogInput armEncoder =
       new AnalogInput(PortMap.Arm.ENCODER_PORT); // connected to NAVX AI0 port
   public static Rotation2d armEncoderOffset =
@@ -46,7 +53,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
   public static boolean frontLimitSwitchState;
   public static boolean backLimitSwitchState;
 
-  public double manualPower = 0;
+  public static double manualPower = 0;
 
   public ArmSubsystem() {
     super(
@@ -61,122 +68,100 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
 
     updateArmPosition();
     enable();
-    // disable();
   }
 
-  public void periodic() {
-    setArmPower(manualPower);
-    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
-    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
-    SmartDashboard.putNumber("arm/manualPower", manualPower);
-    SmartDashboard.putNumber("arm/encoderoutput [degrees]", getArmPosition().getDegrees());
-    SmartDashboard.putNumber("arm/encoder raw", armEncoder.getVoltage());
-    SmartDashboard.putNumber("arm/encoder v/5/360", armEncoder.getVoltage() / 5 / 360);
-  }
-
+  // Runs when subsystem is enabled();
   @Override
   public void useOutput(double pidOutput, TrapezoidProfile.State setpoint) {
 
+    // update values
     updateArmPosition();
     // Calculate the feedforward from the sepoint
     double feedforwardOutput = m_feedforward.calculate(setpoint.position, setpoint.velocity);
-
     // Limit output voltage
     double maxVoltage = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
-
     // Add the feedforward to the PID output to get the motor output
-    double finalOutput = MathUtil.clamp(pidOutput + feedforwardOutput, -maxVoltage, maxVoltage);
+    double encoderStateOutput =
+        MathUtil.clamp(pidOutput + feedforwardOutput, -maxVoltage, maxVoltage);
 
-    // setArmVolts(finalOutput);
-    setArmPower(manualPower);
+    switch (armState) {
+      case ENCODER:
+        setArmVolts(encoderStateOutput);
+        break;
 
-    SmartDashboard.putNumber("ARM/finalOutput", finalOutput);
+      case MANUAL:
+        setArmPower(manualPower);
+        break;
+    }
+
+    SmartDashboard.putNumber("ARM/encoderStateOutput", encoderStateOutput);
     SmartDashboard.putNumber("ARM/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("ARM/pidOutput", pidOutput);
     SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
     SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
   }
 
-  @Override
   // Executes periodically, use instead of periodic() because of @Override problems
+  @Override
   public double getMeasurement() {
 
-    updateArmPosition();
-    frontLimitSwitchState = isFrontLimitSwitchHit();
-    backLimitSwitchState = isBackLimitSwitchHit();
+    frontLimitSwitchState = getFrontLimitSwitchHit();
+    backLimitSwitchState = getBackLimitSwitchHit();
+
+    double measurement = getArmPosition().getDegrees();
+
     logArmValues();
-    disable();
-
-    double measurement = 0;
-
-    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
-    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
-
-    // ! TODO CODE TO UNCOMMENT AFTER CALIBRATING ARM ENCODER OFFSET
-    // ! TODO armPosition.getDegrees should be 0 when paralell to ground.
-
-    measurement = armPosition.getDegrees();
-
-    // if(frontLimitSwitch.get()) {
-    //   resetEncoder();
-    //   wasArmReseted = true;
-    // }
-
-    // if(wasArmReseted){
-    //   measurement = armEncoder.getDistance() + Constants.Arm.kArmOffsetRads;
-    // } else {
-    //   measurement = armEncoder.getDistance() + Constants.Arm.POSITION.VERTICAL;
-    // }
-
-    // SmartDashboard.putNumber("ARM/getMeasurement()", measurement);
-    // SmartDashboard.putBoolean("CHECK/armNotReseted", !wasArmReseted);
-
     return measurement;
   }
 
-  // public void setArmVolts(double volts) {
-  //   armMasterMotor.setVoltage(volts);
-  //   armSlaveMotor.setVoltage(volts);
-  // }
-
-  public void setArmPower(double power) {
-    armMasterMotor.set(power);
-    armSlaveMotor.set(power);
-  }
-
   public void setManualPower(double power) {
+    armState = ArmState.MANUAL;
     manualPower = power;
-    System.out.println("power set to " + power);
+    System.out.println("manual power set to " + power); // TODO
   }
 
-  public boolean isFrontLimitSwitchHit() {
+  public void setArmState(ArmState armState) {
+    ArmSubsystem.armState = armState;
+  }
+
+  public static boolean getFrontLimitSwitchHit() {
     return frontLimitSwitch.get();
   }
 
-  public boolean isBackLimitSwitchHit() {
+  public static boolean getBackLimitSwitchHit() {
     return backLimitSwitch.get();
   }
 
-  public void stopArm() {
-    armMasterMotor.set(0);
-    armSlaveMotor.set(0);
-  }
-
-  private static void updateArmPosition() {
-    armPosition =
-        new Rotation2d(armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
-            .minus(armEncoderOffset);
-  }
-
-  private static Rotation2d getArmPosition() {
+  public static Rotation2d getArmPosition() {
     updateArmPosition();
     return armPosition;
   }
 
+  private static void setArmVolts(double volts) {
+    armMasterMotor.setVoltage(volts);
+    armSlaveMotor.setVoltage(volts);
+  }
+
+  private static void setArmPower(double power) {
+    armMasterMotor.set(power);
+    armSlaveMotor.set(power);
+  }
+
+  /** Get latest arm position reading and set it for armPosition */
+  private static void updateArmPosition() {
+    armPosition =
+        new Rotation2d(-armEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI)
+            .minus(armEncoderOffset);
+  }
+
   public void logArmValues() {
 
-    SmartDashboard.putNumber("arm/armposition [degrees]", getArmPosition().getDegrees());
-    SmartDashboard.putBoolean("arm/frontLimitSwitch", frontLimitSwitchState);
-    SmartDashboard.putBoolean("arm/backLimitSwitch", backLimitSwitchState);
+    SmartDashboard.putBoolean("arm/frontLimitSwitch", getFrontLimitSwitchHit());
+    SmartDashboard.putBoolean("arm/backLimitSwitch", getBackLimitSwitchHit());
+    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
+    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
+    SmartDashboard.putNumber("arm/manualPower", manualPower);
+    SmartDashboard.putNumber("arm/encoderoutput [degrees]", getArmPosition().getDegrees());
+    SmartDashboard.putNumber("arm/encoder raw voltage", armEncoder.getVoltage());
   }
 }

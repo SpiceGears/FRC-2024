@@ -35,6 +35,7 @@ public class DriveCommands {
    */
   public static Command joystickDrive(
       Drive drive,
+      DoubleSupplier speedSupplier,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier) {
@@ -58,12 +59,19 @@ public class DriveCommands {
                   .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
                   .getTranslation();
 
+          // ! adjust joystick axis [-1 to 1] value to usable modifier [0-1]
+          double speedModifier = (speedSupplier.getAsDouble() + 1) / 2;
+          double speedModifierMinimum = 0.2;
+          if (speedModifier < speedModifierMinimum) {
+            speedModifier = speedModifierMinimum;
+          }
+
           // Convert to field relative speeds & send command
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                  omega * drive.getMaxAngularSpeedRadPerSec(),
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
+                  omega * drive.getMaxAngularSpeedRadPerSec() * speedModifier,
                   drive.getRotation()));
         },
         drive);
@@ -76,13 +84,13 @@ public class DriveCommands {
    */
   public static Command angleRotate(
       Drive drive,
+      DoubleSupplier speedSupplier,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       LimelightSubsystem limelightSubsystem, // ! limelightSubsystem.getTxDouble()
       int tv) {
     return Commands.run(
         () -> {
-          double multiplier;
 
           // Apply deadband
           double linearMagnitude =
@@ -121,22 +129,27 @@ public class DriveCommands {
           // * drive.getMaxAngularSpeedRadPerSec()
           // / 2; // TODO edit / try different outputs as
 
-          System.out.println(finalRotation);
+          // ! adjust joystick axis [-1 to 1] value to usable modifier [0-1]
+          double speedModifier = (speedSupplier.getAsDouble() + 1) / 2;
+          double speedModifierMinimum = 0.2;
+          if (speedModifier < speedModifierMinimum) {
+            speedModifier = speedModifierMinimum;
+          }
 
           if (tv == 1) { // IF LIMELIGHT SEE TARGET
 
             drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
+                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
                     finalRotation, // rad/second
                     drive.getRotation()));
 
           } else {
             drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
+                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
                     0, // DOESNT ROTATE WITHOUT TARGET
                     drive.getRotation()));
           }
