@@ -19,12 +19,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private static RelativeEncoder shooterEncoder; // ! TODO FOR NEO SHOOTER
 
-  public static enum ShooterState {
+  public static enum ShooterMode {
     PID,
     MANUAL
   }
 
-  public static ShooterState shooterState;
+  public static ShooterMode shooterMode;
   public static double shooterSetpointRPM;
   public static boolean isShooterReadyToShoot;
   public static double shooterManualPower;
@@ -62,7 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPIDController = new PIDController(0, 0, 0);
     shooterPIDController.setTolerance(100); // ? tolerance in RPM
 
-    shooterState = ShooterState.MANUAL;
+    shooterMode = ShooterMode.MANUAL;
     isShooterReadyToShoot = false;
     shooterManualPower = 0;
     // setShooterPIDSetpoint(0);
@@ -72,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
 
     // puts power to shooter depending on shooterState
-    switch (shooterState) {
+    switch (shooterMode) {
       case PID:
         setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
         if (shooterPIDController.atSetpoint()) {
@@ -82,7 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
         break;
       case MANUAL:
-        setShooterManual(shooterManualPower);
+        setShooterPower(shooterManualPower);
         isShooterReadyToShoot = true;
         break;
     }
@@ -96,7 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param setpointRPM RPM (rates per minute)
    */
   public void setShooterPIDSetpoint(double setpointRPM) {
-    shooterState = ShooterState.PID;
+    shooterMode = ShooterMode.PID;
     shooterPIDController.reset();
     shooterPIDController.setSetpoint(setpointRPM);
   }
@@ -105,11 +105,16 @@ public class ShooterSubsystem extends SubsystemBase {
     return shooterPIDController.calculate(shooterEncoder.getVelocity());
   }
 
+  public void setShooterManual(double power) {
+    shooterMode = ShooterMode.MANUAL;
+    shooterPIDController.reset();
+  }
+
   public boolean getReadyForShot() {
     return isShooterReadyToShoot;
   }
 
-  public void setShooterManual(double power) {
+  private void setShooterPower(double power) {
     shooterMaster.set(power);
     // shooterSlave.set(power); //TODO
   }
