@@ -28,11 +28,8 @@ import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.elevator.SetElevatorManual;
 import frc.robot.commands.intake.IntakeNote;
-import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterManual;
-import frc.robot.commands.shooter.SetShooterManualForSeconds;
 import frc.robot.commands.shooter.SetShooterPID;
-import frc.robot.commands.shooter.StopShooterPID;
 import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.Drive;
@@ -232,37 +229,9 @@ public class RobotContainer {
         // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
         // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
 
-
         // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
         // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
         break;
-
-
-      case JOYSTICK:
-        drive.setDefaultCommand(
-            DriveCommands.joystickDrive(
-                drive,
-                () -> joystick.getRawAxis(3),
-                () -> -joystick.getY(),
-                () -> -joystick.getX(),
-                () -> -joystick.getRawAxis(2)));
-        if (joystick.getRawButton(1)) {
-          DriveCommands.angleRotate(
-              drive,
-              () -> joystick.getRawAxis(3),
-              () -> -joystick.getY(),
-              () -> -joystick.getX(),
-              limelightSubsystem,
-              limelightSubsystem.getTvInt());
-        }
-        if (joystick.getRawButton(2)) {
-          Commands.runOnce(
-                  () ->
-                      drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                  drive)
-              .ignoringDisable(true);
-        }
-
 
       case JOYSTICK:
         drive.setDefaultCommand(
