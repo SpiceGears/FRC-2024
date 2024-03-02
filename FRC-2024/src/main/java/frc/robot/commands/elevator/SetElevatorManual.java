@@ -10,7 +10,9 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 public class SetElevatorManual extends Command {
   /** Creates a new SetElevatorManual. */
   ElevatorSubsystem elevatorSubsystem;
+
   double power;
+
   public SetElevatorManual(ElevatorSubsystem elevatorSubsystem, double power) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevatorSubsystem);
@@ -26,9 +28,7 @@ public class SetElevatorManual extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

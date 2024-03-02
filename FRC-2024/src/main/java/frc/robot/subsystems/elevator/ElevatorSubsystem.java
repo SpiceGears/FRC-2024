@@ -23,15 +23,18 @@ public class ElevatorSubsystem extends SubsystemBase {
   public DigitalInput elevatorLimitLeft;
   public DigitalInput elevatorLimitRight;
   public ElevatorMode elevatorState; // Elevator state/mode
-  public double elevatorManualPower; // Power that is periodically sent to elevator motors when in MANUAL mode
+  public double
+      elevatorManualPower; // Power that is periodically sent to elevator motors when in MANUAL mode
+
   private static enum ElevatorMode {
-    MANUAL, PID
+    MANUAL,
+    PID
   }
+
   private GyroIO gyro;
   private GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private double rollError;
   private double correctRollPower;
-
 
   public static PIDController elevatorPIDController;
 
@@ -45,9 +48,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotorRight = new Talon(PortMap.Elevator.ELEVATOR_RIGHT_PORT);
 
     elevatorEncoderLeft = new Encoder(0, 1);
-    elevatorEncoderLeft.setDistancePerPulse(1); //TODO find correct values for our rope roll
+    elevatorEncoderLeft.setDistancePerPulse(1); // TODO find correct values for our rope roll
     elevatorEncoderRight = new Encoder(2, 3);
-    elevatorEncoderRight.setDistancePerPulse(1); //TODO find correct values for our rope roll
+    elevatorEncoderRight.setDistancePerPulse(1); // TODO find correct values for our rope roll
 
     elevatorLimitLeft = new DigitalInput(0);
     elevatorLimitRight = new DigitalInput(1);
@@ -69,23 +72,22 @@ public class ElevatorSubsystem extends SubsystemBase {
       case MANUAL:
         setElevatorBothPower(elevatorManualPower);
         break;
-    
+
       case PID:
-        //TODO pid / setpoint controling
+        // TODO pid / setpoint controling
 
         break;
     }
-    
 
     /* PSEUDOKOD NA WINDE
 
-     * korekta = PID * rollError
-     * 
-     * leftMotor.setPower(korekta)
-     * rightMotor.setPower(-korekta)
-     * 
-     */
-    
+    * korekta = PID * rollError
+    *
+    * leftMotor.setPower(korekta)
+    * rightMotor.setPower(-korekta)
+    *
+    */
+
     if (elevatorLimitLeft.get()) {
       elevatorEncoderLeft.reset();
     }
@@ -94,9 +96,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
-  public void ejectToSetPoint() {
-
-  }
+  public void ejectToSetPoint() {}
 
   public void setElevatorManual(double power) {
     elevatorState = ElevatorMode.MANUAL;

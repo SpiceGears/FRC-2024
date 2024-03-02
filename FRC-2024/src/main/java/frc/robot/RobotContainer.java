@@ -14,14 +14,12 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,11 +28,8 @@ import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.elevator.SetElevatorManual;
 import frc.robot.commands.intake.IntakeNote;
-import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterManual;
-import frc.robot.commands.shooter.SetShooterManualForSeconds;
 import frc.robot.commands.shooter.SetShooterPID;
-import frc.robot.commands.shooter.StopShooterPID;
 import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.Drive;
@@ -221,9 +216,9 @@ public class RobotContainer {
                                 new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                         drive)
                     .ignoringDisable(true));
-        
+
         controllerDriver.povUp().whileTrue(new SetElevatorManual(elevatorSubsystem, 0.5));
-        controllerDriver.povDown().whileTrue(new SetElevatorManual(elevatorSubsystem, -0.5)); 
+        controllerDriver.povDown().whileTrue(new SetElevatorManual(elevatorSubsystem, -0.5));
         controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
         controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
