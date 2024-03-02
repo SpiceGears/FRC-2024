@@ -217,12 +217,17 @@ public class RobotContainer {
                         drive)
                     .ignoringDisable(true));
 
+        // ! ARM AND SHOOTER CONTROLS FOR TESTS
+
         controllerDriver.povUp().whileTrue(new SetElevatorManual(elevatorSubsystem, 0.5));
         controllerDriver.povDown().whileTrue(new SetElevatorManual(elevatorSubsystem, -0.5));
         controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
         controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
         controllerDriver.y().whileTrue(new SetShooterManual(shooterSubsystem));
+
+        // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
+        // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
 
         // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
         // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));

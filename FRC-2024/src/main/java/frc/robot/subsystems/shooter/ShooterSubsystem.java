@@ -61,8 +61,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterPIDController = new PIDController(0, 0, 0);
     shooterPIDController.setTolerance(100); // ? tolerance in RPM
-
     shooterMode = ShooterMode.MANUAL;
+
     isShooterReadyToShoot = false;
     shooterManualPower = 0;
     // setShooterPIDSetpoint(0);
@@ -72,6 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
 
     // puts power to shooter depending on shooterState
+
     switch (shooterMode) {
       case PID:
         setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
