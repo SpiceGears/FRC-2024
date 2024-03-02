@@ -4,19 +4,15 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
-public class StartShooterManualForSeconds extends Command {
-  /** Creates a new RollShooterForSeconds. */
+public class SetShooterManual extends Command {
+  /** Creates a new SetShooterManual. */
   ShooterSubsystem shooterSubsystem;
 
-  double seconds;
-  double startTime;
-  double endTime;
-
-  public StartShooterManualForSeconds(ShooterSubsystem shooterSubsystem, double seconds) {
+  public SetShooterManual(ShooterSubsystem shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
     addRequirements(this.shooterSubsystem);
@@ -25,14 +21,14 @@ public class StartShooterManualForSeconds extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-    endTime = startTime + seconds;
-    shooterSubsystem.setShooterManual(frc.robot.Constants.Shooter.SHOOTING_POWER);
+    shooterSubsystem.setShooterManual(Constants.Shooter.SHOOTING_POWER);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    shooterSubsystem.setShooterManual(Constants.Shooter.SHOOTING_POWER);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -43,10 +39,6 @@ public class StartShooterManualForSeconds extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Timer.getFPGATimestamp() > endTime) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 }

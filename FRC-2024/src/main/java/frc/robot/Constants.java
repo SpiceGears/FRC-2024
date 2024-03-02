@@ -39,10 +39,10 @@ public final class Constants {
 
   public static class Intake {
 
-    public static final double INTAKING_POWER = 0.5; // how much power to use when intaking notes
+    public static final double INTAKING_POWER = 1; // how much power to use when intaking notes
     public static final double PASSING_POWER = 0.5; // how much power to use when passing to shooter
     public static final double PASSING_TIME =
-        0.7; // (seconds) for how long intake rolls when passing
+        1.5; // (seconds) for how long intake rolls when passing
   }
 
   public static class Shooter {
@@ -54,10 +54,10 @@ public final class Constants {
 
   public static class Arm {
 
-    public static final double ENCODER_OFFSET_DEGREES = 0;
+    public static final double ENCODER_OFFSET_DEGREES = 17 - 90;
     public static final double PWM_TEST_POWER = 0.2;
 
-    public static final double KP = 0;
+    public static final double KP = 0.5;
     public static final double kD = 0;
     public static final double kI = 0;
 
@@ -81,7 +81,7 @@ public final class Constants {
         2 * Math.PI / REDUCTION_CHAIN / ENCODER_TICK_RATE; // 2rad per full rotation
     public static final double kArmOffsetRads = -0.3; // arm rest position counting from horizontal
 
-    public static final double MAX_VOLTAGE_OUTPUT_UP = 5.5;
+    public static final double MAX_VOLTAGE_OUTPUT_UP = 8;
     // public static final double MAX_VOLTAGE_OUTPUT_DOWN = 4.0;
 
     public static final double kSVolts = 0;
