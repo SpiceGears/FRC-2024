@@ -22,27 +22,37 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Encoder elevatorEncoderRight;
   public DigitalInput elevatorLimitLeft;
   public DigitalInput elevatorLimitRight;
-  private final GyroIO gyro;
+  public ElevatorMode elevatorState; // Elevator state/mode
+  public double elevatorManualPower; // Power that is periodically sent to elevator motors when in MANUAL mode
+  private static enum ElevatorMode {
+    MANUAL, PID
+  }
+  private GyroIO gyro;
   private GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private double rollError;
   private double correctRollPower;
 
+
   public static PIDController elevatorPIDController;
 
-  public ElevatorSubsystem(GyroIO gyro) {
+  public ElevatorSubsystem() {
 
-    this.gyro = gyro;
+    // Need to get gyro in different way, because we dont have gyro objecty in RobotContainer
+    // public ElevatorSubsystem(GyroIO gyro) {
+    // this.gyro = gyro;
 
     elevatorMotorLeft = new Talon(PortMap.Elevator.ELEVATOR_LEFT_PORT);
     elevatorMotorRight = new Talon(PortMap.Elevator.ELEVATOR_RIGHT_PORT);
 
     elevatorEncoderLeft = new Encoder(0, 1);
-    elevatorEncoderLeft.setDistancePerPulse(1);
+    elevatorEncoderLeft.setDistancePerPulse(1); //TODO find correct values for our rope roll
     elevatorEncoderRight = new Encoder(2, 3);
-    elevatorEncoderRight.setDistancePerPulse(1);
+    elevatorEncoderRight.setDistancePerPulse(1); //TODO find correct values for our rope roll
 
     elevatorLimitLeft = new DigitalInput(0);
     elevatorLimitRight = new DigitalInput(1);
+
+    elevatorState = ElevatorMode.MANUAL; // Starting elevator state/mode
   }
 
   @Override
@@ -54,6 +64,17 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     this.rollError = gyroInputs.rollPosition.getDegrees();
     this.correctRollPower = elevatorPIDController.calculate(rollError);
+
+    switch (elevatorState) {
+      case MANUAL:
+        setElevatorBothPower(elevatorManualPower);
+        break;
+    
+      case PID:
+        //TODO pid / setpoint controling
+
+        break;
+    }
     
 
     /* PSEUDOKOD NA WINDE
@@ -77,6 +98,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   }
 
+  public void setElevatorManual(double power) {
+    elevatorState = ElevatorMode.MANUAL;
+    elevatorManualPower = power;
+  }
+
   public Encoder getEncoderLeft() {
     return elevatorEncoderLeft;
   }
@@ -85,16 +111,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorEncoderRight;
   }
 
-  public void setElevatorBothPower(double speed) {
+  private void setElevatorBothPower(double speed) {
     elevatorMotorLeft.set(speed);
     elevatorMotorRight.set(speed);
   }
 
-  public void setElevatorLeftPower(double speed) {
+  private void setElevatorLeftPower(double speed) {
     elevatorMotorLeft.set(speed);
   }
 
-  public void setElevatorRightPower(double speed) {
+  private void setElevatorRightPower(double speed) {
     elevatorMotorRight.set(speed);
   }
 }

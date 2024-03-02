@@ -17,12 +17,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private static RelativeEncoder shooterEncoder;
 
-  public static enum ShooterState {
+  public static enum ShooterMode {
     PID,
     MANUAL
   }
 
-  public static ShooterState shooterState;
+  public static ShooterMode shooterMode;
   public static double shooterSetpointRPM;
   public static boolean isShooterReadyToShoot;
   public static double shooterManualPower;
@@ -76,7 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param setpointRPM RPM (rates per minute)
    */
   public void setShooterPIDSetpoint(double setpointRPM) {
-    shooterState = ShooterState.PID;
+    shooterMode = ShooterMode.PID;
     shooterPIDController.reset();
     shooterPIDController.setSetpoint(setpointRPM);
   }
@@ -86,7 +86,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterManual(double power) {
-    shooterState = ShooterState.MANUAL;
+    shooterMode = ShooterMode.MANUAL;
     shooterPIDController.reset();
   }
 
