@@ -246,6 +246,133 @@ public class RobotContainer {
     //     .whileTrue(
     //         Commands.startEnd(
     //             () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel));
+    
+    // Driver: While Right Stick button is pressed, drive while pointing to alliance speaker
+        // AND adjusting Arm angle AND running Shooter
+        m_driverCtrl.rightStick().whileTrue(Commands.parallel(
+            m_drivetrain.applyRequest(
+                () -> m_head.withVelocityX(-m_driverCtrl.getLeftY() * m_MaxSpeed)
+                        .withVelocityY(-m_driverCtrl.getLeftX() * m_MaxSpeed)
+                        .withTargetDirection(m_drivetrain.RotToSpeaker())
+                        .withDeadband(m_MaxSpeed * 0.1)
+                        .withRotationalDeadband(m_AngularRate * 0.1)
+            ),
+            new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker())
+        ));
+
+        m_driverCtrl.start().onTrue(new LookUpShot(m_armSubsystem, m_shooterSubsystem, () -> m_drivetrain.calcDistToSpeaker()));
+
+         // Driver: DPad Left: put swerve modules in Brake mode (modules make an 'X') (while pressed)
+        m_driverCtrl.povLeft().whileTrue(m_drivetrain.applyRequest(() -> m_brake));
+
+         // Driver: DPad Up: Reset the field-centric heading (when pressed)
+        m_driverCtrl.povUp().onTrue(m_drivetrain.runOnce(() -> m_drivetrain.seedFieldRelative()));
+
+        // Driver: While Left Bumper is held, reduce speed by 50%
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_HalfSpeed)
+                .andThen(() -> m_AngularRate = m_HalfAngularRate));
+        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
+                .andThen(() -> m_AngularRate = m_MaxAngularRate));
+        
+        // Driver: While Right Bumper is held, reduce speed by 25%
+         m_driverCtrl.leftBumper().onTrue(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_QuarterSpeed)
+                .andThen(() -> m_AngularRate = m_QuarterAngularRate));
+        m_driverCtrl.leftBumper().onFalse(runOnce(() -> m_MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * m_lastSpeed)
+                .andThen(() -> m_AngularRate = m_MaxAngularRate));
+        
+        // Driver: When LeftTrigger is pressed, lower the Arm and then run the Intake and Stage until a Note is found
+        m_driverCtrl.leftTrigger(0.4).onTrue(m_armSubsystem.prepareForIntakeCommand()
+            .andThen(new intakeNote(m_intakeSubsystem, m_stageSubsystem)));
+
+        // Driver: When RightTrigger is pressed, release Note to shooter, then lower Arm
+        m_driverCtrl.rightTrigger(0.4).onTrue(m_stageSubsystem.feedNote2ShooterCommand()
+            .andThen(m_armSubsystem.prepareForIntakeCommand()));
+
+        // Driver: While start button held, adjust Arm elevation based on goal
+        //m_driverCtrl.start().onTrue(Commands.parallel(m_shooterSubsystem.runShooterCommand(),m_armSubsystem.moveToDegreeCommand()));
+
+        /*
+         * OPERATOR Controls
+         */
+        // Operator: When A button is pressed, stop Shooter
+        //m_operatorCtrl.a().onTrue(m_shooterSubsystem.runShooterCommand());
+        m_operatorCtrl.a().onFalse(m_shooterSubsystem.stopShooterCommand());
+
+        
+
+         // Operator: X Button: Arm to Stowed Position (when pressed)
+         m_operatorCtrl.x().onTrue(new prepareToShoot(RobotConstants.STOWED, ()->m_stageSubsystem.isNoteInStage(),
+                m_armSubsystem, m_shooterSubsystem));
+
+        // Operator: Use Left Bumper and Left Stick Y-Axis to manually control Arm
+        m_armSubsystem.setDefaultCommand(
+            new ArmDefault(m_armSubsystem, m_operatorCtrl.leftBumper(), () -> (-1.0)*m_operatorCtrl.getLeftY())
+        );
+
+         // Operator: DPad Left: Arm to Podium position (when pressed)
+         m_operatorCtrl.povLeft().onTrue(new prepareToShoot(RobotConstants.PODIUM, ()->m_stageSubsystem.isNoteInStage(),
+                m_armSubsystem, m_shooterSubsystem));
+
+         // Operator: DPad Up: Shooter/Arm to AMP Position & Speed (when pressed)
+        m_operatorCtrl.povUp().onTrue(new prepareToShoot(RobotConstants.AMP, ()->m_stageSubsystem.isNoteInStage(),
+                m_armSubsystem, m_shooterSubsystem));
+
+         // Operator: DPad Right: Arm to Wing Position (when pressed)
+         m_operatorCtrl.povRight().onTrue(new prepareToShoot(RobotConstants.WING, ()->m_stageSubsystem.isNoteInStage(),
+                m_armSubsystem, m_shooterSubsystem));
+
+         // Operator: DPad Down: Arm to Subwoofer Position (when pressed)
+         m_operatorCtrl.povDown().onTrue(new prepareToShoot(RobotConstants.SUBWOOFER, ()->m_stageSubsystem.isNoteInStage(),
+                m_armSubsystem, m_shooterSubsystem));
+
+        // Operator: Use Left and Right Triggers to run Intake at variable speed (left = in, right = out)
+        m_intakeSubsystem.setDefaultCommand(new IntakeDefault(m_intakeSubsystem, m_stageSubsystem,
+                                            ()-> m_operatorCtrl.getLeftTriggerAxis(),
+                                            () -> m_operatorCtrl.getRightTriggerAxis()));
+
+        //
+        m_operatorCtrl.rightTrigger().whileTrue(m_stageSubsystem.ejectBackManualCommand());
+        m_operatorCtrl.leftTrigger().whileTrue(m_stageSubsystem.ejectFrontManualCommand());
+        m_operatorCtrl.b().whileTrue(m_stageSubsystem.ejectFrontManualCommand());
+        m_operatorCtrl.y().onTrue(m_armSubsystem.prepareForIntakeCommand());
+
+        /*
+         * Put Commands on Shuffleboard
+         */
+        if (RobotConstants.kIsShooterTuningMode) {
+            SmartDashboard.putData("Update Shooter Gains", m_shooterSubsystem.updateShooterGainsCommand());
+            SmartDashboard.putData("Run Shooter", m_shooterSubsystem.runShooterCommand());
+            SmartDashboard.putData("Stop Shooter", m_shooterSubsystem.stopShooterCommand());
+            SmartDashboard.putData("Arm to Angle", m_armSubsystem.moveToDegreeCommand());
+        }
+        SmartDashboard.putData("Move Arm To Setpoint", m_armSubsystem.tuneArmSetPointCommand());
+       
+    }
+
+    private void configureSysIDProfiling() {
+
+        /*
+         * These bindings will only be used when characterizing the Drivetrain. They can
+         * eventually be commented out.
+         */
+/*
+        m_driverCtrl.x().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kForward));
+        m_driverCtrl.x().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runDriveQuasiTest(Direction.kReverse));
+
+        m_driverCtrl.y().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveDynamTest(Direction.kForward));
+        m_driverCtrl.y().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runDriveDynamTest(Direction.kReverse));
+
+        m_driverCtrl.a().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kForward));
+        m_driverCtrl.a().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerQuasiTest(Direction.kReverse));
+
+        m_driverCtrl.b().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kForward));
+        m_driverCtrl.b().and(m_driverCtrl.pov(180)).whileTrue(m_drivetrain.runSteerDynamTest(Direction.kReverse));
+
+        // Drivetrain needs to be placed against a sturdy wall and test stopped
+        // immediately upon wheel slip
+        m_driverCtrl.back().and(m_driverCtrl.pov(0)).whileTrue(m_drivetrain.runDriveSlipTest());
+    */
+    }
   }
 
   /**
