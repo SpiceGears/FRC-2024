@@ -47,13 +47,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotorLeft = new Talon(PortMap.Elevator.ELEVATOR_LEFT_PORT);
     elevatorMotorRight = new Talon(PortMap.Elevator.ELEVATOR_RIGHT_PORT);
 
-    elevatorEncoderLeft = new Encoder(0, 1);
+    elevatorEncoderLeft = new Encoder(1, 2);
     elevatorEncoderLeft.setDistancePerPulse(1); // TODO find correct values for our rope roll
-    elevatorEncoderRight = new Encoder(2, 3);
+    elevatorEncoderRight = new Encoder(3, 4);
     elevatorEncoderRight.setDistancePerPulse(1); // TODO find correct values for our rope roll
 
-    elevatorLimitLeft = new DigitalInput(0);
-    elevatorLimitRight = new DigitalInput(1);
+    elevatorLimitLeft = new DigitalInput(5);
+    elevatorLimitRight = new DigitalInput(6);
 
     elevatorState = ElevatorMode.MANUAL; // Starting elevator state/mode
   }
@@ -63,14 +63,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     elevatorEncoderLeft.get();
     elevatorEncoderRight.get();
-    gyro.updateInputs(gyroInputs);
+    // gyro.updateInputs(gyroInputs);
 
-    this.rollError = gyroInputs.rollPosition.getDegrees();
-    this.correctRollPower = elevatorPIDController.calculate(rollError);
+    // this.rollError = gyroInputs.rollPosition.getDegrees();
+    // this.correctRollPower = elevatorPIDController.calculate(rollError);
 
     switch (elevatorState) {
       case MANUAL:
-        setElevatorBothPower(elevatorManualPower);
+        // setElevatorBothPower(elevatorManualPower);
         break;
 
       case PID:
