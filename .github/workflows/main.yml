@@ -30,8 +30,8 @@ jobs:
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
-      run: chmod +x FRC-2024/gradlew
+      run: cd FRC-2024 && chmod +x gradlew
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      run: ./FRC-2024/gradlew build
+      run: cd FRC-2024 && ./gradlew build
