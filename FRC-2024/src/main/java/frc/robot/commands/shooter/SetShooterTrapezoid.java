@@ -4,49 +4,52 @@
 
 package frc.robot.commands.shooter;
 
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
-public class SetShooterManualForSeconds extends Command {
-  /** Creates a new RollShooterForSeconds. */
+public class SetShooterTrapezoid extends Command {
+  /** Creates a new SetShooterTrapezoid. */
   ShooterSubsystem shooterSubsystem;
-
-  double seconds;
+  double speedRPM;
   double startTime;
-  double endTime;
-
-  public SetShooterManualForSeconds(ShooterSubsystem shooterSubsystem, double seconds) {
+  double timeGoal;
+  
+  public SetShooterTrapezoid(ShooterSubsystem shooterSubsystem, double speedRPM) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
-    addRequirements(this.shooterSubsystem);
+    this.speedRPM = speedRPM;
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-    endTime = startTime + seconds;
-    shooterSubsystem.setShooterManual(frc.robot.Constants.Shooter.SHOOTING_POWER);
+    this.startTime = Timer.getFPGATimestamp();
+    timeGoal = 1; // in seconds
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double finalOutput = 0;
+    double currentTime = Timer.getFPGATimestamp();
+    finalOutput = Math.min(currentTime/timeGoal, 1)  * speedRPM;
+
+    shooterSubsystem.setShooterPIDSetpoint(finalOutput);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.setShooterManual(0);
+    shooterSubsystem.setShooterPIDSetpoint(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Timer.getFPGATimestamp() > endTime) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 }

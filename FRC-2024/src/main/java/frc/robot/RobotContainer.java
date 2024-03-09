@@ -29,7 +29,6 @@ import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.elevator.SetElevatorManual;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.shooter.SetShooterManual;
-import frc.robot.commands.shooter.SetShooterPID;
 import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.Drive;
@@ -55,7 +54,7 @@ public class RobotContainer {
   private final Drive drive;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
-  private final ElevatorSubsystem elevatorSubsystem;
+  // private final ElevatorSubsystem elevatorSubsystem;
   private final LimelightSubsystem limelightSubsystem;
   private final ArmSubsystem armSubsystem;
   private final ShuffleBoard
@@ -92,7 +91,7 @@ public class RobotContainer {
                 new ModuleIOSparkMax(3));
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        elevatorSubsystem = new ElevatorSubsystem();
+        // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystem = new ArmSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
@@ -121,7 +120,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        elevatorSubsystem = new ElevatorSubsystem();
+        // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystem = new ArmSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
@@ -141,7 +140,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        elevatorSubsystem = new ElevatorSubsystem();
+        // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystem = new ArmSubsystem();
         shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
@@ -219,8 +218,8 @@ public class RobotContainer {
 
         // ! ARM AND SHOOTER CONTROLS FOR TESTS
 
-        controllerDriver.povUp().whileTrue(new SetElevatorManual(elevatorSubsystem, 0.5));
-        controllerDriver.povDown().whileTrue(new SetElevatorManual(elevatorSubsystem, -0.5));
+        // controllerDriver.povUp().whileTrue(new SetElevatorManual(elevatorSubsystem, 0.5));
+        // controllerDriver.povDown().whileTrue(new SetElevatorManual(elevatorSubsystem, -0.5));
         controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
         controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
@@ -261,12 +260,6 @@ public class RobotContainer {
         // ! ARM AND SHOOTER CONTROLS FOR TESTS
         if (joystick.getRawButtonPressed(1)) {
           new SetShooterManual(shooterSubsystem).schedule();
-        }
-        if (joystick.getRawButtonPressed(2)) {
-          new SetShooterPID(shooterSubsystem, 100);
-        }
-        if (joystick.getRawButtonPressed(3)) {
-          new SetShooterPID(shooterSubsystem, 0);
         }
         controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
         controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));

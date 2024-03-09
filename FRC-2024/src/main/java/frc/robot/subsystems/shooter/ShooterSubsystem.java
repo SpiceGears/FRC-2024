@@ -7,6 +7,8 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,9 +17,9 @@ import frc.robot.PortMap;
 public class ShooterSubsystem extends SubsystemBase {
 
   private static CANSparkMax shooterMaster;
-  // private static CANSparkMax shooterSlave;
+  private static CANSparkMax shooterSlave;
 
-  private static RelativeEncoder shooterEncoder; // ! TODO FOR NEO SHOOTER
+  private static RelativeEncoder shooterEncoder;
 
   public static enum ShooterMode {
     PID,
@@ -29,7 +31,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public static boolean isShooterReadyToShoot;
   public static double shooterManualPower;
 
-  public static PIDController shooterPIDController;
+  private static PIDController shooterPIDController;
 
   public ShooterSubsystem() {
 
@@ -41,16 +43,18 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterMaster.setSmartCurrentLimit(40);
     // shooterMaster.enableVoltageCompensation(12.0);
     // shooterMaster.setCANTimeout(0);
-    shooterMaster.setInverted(true);
+    shooterMaster.setInverted(false);
+    shooterMaster.setIdleMode(IdleMode.kCoast);
     // shooterMaster.burnFlash();
 
-    // shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
-    // shooterSlave.restoreFactoryDefaults();
+    shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
+    shooterSlave.restoreFactoryDefaults();
     // shooterSlave.setCANTimeout(250);
     // shooterSlave.setSmartCurrentLimit(40);
     // shooterSlave.enableVoltageCompensation(12.0);
     // shooterSlave.setCANTimeout(0);
-    // shooterSlave.setInverted(false);
+    shooterSlave.setInverted(false);
+    shooterSlave.setIdleMode(IdleMode.kCoast);
     // shooterSlave.follow(shooterMaster);
     // shooterSlave.burnFlash();
 
@@ -61,11 +65,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterPIDController = new PIDController(0, 0, 0);
     shooterPIDController.setTolerance(100); // ? tolerance in RPM
+
     shooterMode = ShooterMode.MANUAL;
 
     isShooterReadyToShoot = false;
     shooterManualPower = 0;
-    // setShooterPIDSetpoint(0);
+    shooterSetpointRPM = 0;
   }
 
   @Override
@@ -98,31 +103,33 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setShooterPIDSetpoint(double setpointRPM) {
     shooterMode = ShooterMode.PID;
-    shooterPIDController.reset();
     shooterPIDController.setSetpoint(setpointRPM);
-  }
-
-  private double calculateShooterPIDOutput() {
-    return shooterPIDController.calculate(shooterEncoder.getVelocity());
   }
 
   public void setShooterManual(double power) {
     shooterMode = ShooterMode.MANUAL;
     shooterPIDController.reset();
+    shooterManualPower = power;
   }
 
   public boolean getReadyForShot() {
     return isShooterReadyToShoot;
   }
 
+  
+  private double calculateShooterPIDOutput() {
+    return shooterPIDController.calculate(shooterEncoder.getVelocity());
+  }
+
+
   private void setShooterPower(double power) {
     shooterMaster.set(power);
-    // shooterSlave.set(power); //TODO
+    shooterSlave.set(power);
   }
 
   private void setShooterVolts(double volts) {
     shooterMaster.setVoltage(volts);
-    // shooterSlave.setVoltage(volts); // TODO
+    shooterSlave.setVoltage(volts);
   }
 
   private void logShooterValues() {
