@@ -15,7 +15,7 @@ import frc.robot.PortMap;
 public class ShooterSubsystem extends SubsystemBase {
 
   private static CANSparkMax shooterMaster;
-  // private static CANSparkMax shooterSlave;
+  private static CANSparkMax shooterSlave;
 
   private static RelativeEncoder shooterEncoder; // ! TODO FOR NEO SHOOTER
 
@@ -41,16 +41,16 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterMaster.setSmartCurrentLimit(40);
     // shooterMaster.enableVoltageCompensation(12.0);
     // shooterMaster.setCANTimeout(0);
-    shooterMaster.setInverted(true);
+    shooterMaster.setInverted(false);
     // shooterMaster.burnFlash();
 
-    // shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
-    // shooterSlave.restoreFactoryDefaults();
+    shooterSlave = new CANSparkMax(PortMap.Shooter.SHOOTER_SLAVE_PORT, MotorType.kBrushless);
+    shooterSlave.restoreFactoryDefaults();
     // shooterSlave.setCANTimeout(250);
     // shooterSlave.setSmartCurrentLimit(40);
     // shooterSlave.enableVoltageCompensation(12.0);
     // shooterSlave.setCANTimeout(0);
-    // shooterSlave.setInverted(false);
+    shooterSlave.setInverted(false);
     // shooterSlave.follow(shooterMaster);
     // shooterSlave.burnFlash();
 
@@ -111,7 +111,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setShooterManual(double power) {
     shooterMaster.set(power);
-    // shooterSlave.set(power); //TODO
+    shooterSlave.set(power); // TODO
   }
 
   private void setShooterVolts(double volts) {
