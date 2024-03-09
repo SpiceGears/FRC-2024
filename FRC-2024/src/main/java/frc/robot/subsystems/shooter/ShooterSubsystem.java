@@ -4,11 +4,10 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,7 +26,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public static ShooterMode shooterMode;
-  public static double shooterSetpointRPM;
   public static boolean isShooterReadyToShoot;
   public static double shooterManualPower;
 
@@ -70,7 +68,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     isShooterReadyToShoot = false;
     shooterManualPower = 0;
-    shooterSetpointRPM = 0;
   }
 
   @Override
@@ -81,6 +78,7 @@ public class ShooterSubsystem extends SubsystemBase {
     switch (shooterMode) {
       case PID:
         setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
+        System.out.println("test|pidoputput= " + calculateShooterPIDOutput());
         if (shooterPIDController.atSetpoint()) {
           isShooterReadyToShoot = true;
         } else {
@@ -116,11 +114,9 @@ public class ShooterSubsystem extends SubsystemBase {
     return isShooterReadyToShoot;
   }
 
-  
   private double calculateShooterPIDOutput() {
     return shooterPIDController.calculate(shooterEncoder.getVelocity());
   }
-
 
   private void setShooterPower(double power) {
     shooterMaster.set(power);
@@ -133,7 +129,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void logShooterValues() {
-    // SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
+    SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
+    SmartDashboard.putNumber("test/pidoutput", calculateShooterPIDOutput());
+
     SmartDashboard.updateValues();
   }
 }

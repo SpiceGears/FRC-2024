@@ -15,6 +15,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -26,9 +29,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
-import frc.robot.commands.elevator.SetElevatorManual;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.shooter.SetShooterManual;
+import frc.robot.commands.shooter.SetShooterTrapezoid;
 import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.Drive;
@@ -37,7 +40,6 @@ import frc.robot.subsystems.drive.GyroIONavx;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.limelight.LimelightSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -151,6 +153,15 @@ public class RobotContainer {
         break;
     }
 
+    // Creates UsbCamera and MjpegServer [1] and connects them
+    CameraServer.startAutomaticCapture();
+
+    // Creates the CvSink and connects it to the UsbCamera
+    CvSink cvSink = CameraServer.getVideo();
+
+    // Creates the CvSource and MjpegServer [2] and connects them
+    CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
+
     // Set up auto routines
     // NamedCommands.registerCommand(
     //     "Run Flywheel",
@@ -223,7 +234,7 @@ public class RobotContainer {
         controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
         controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
-        controllerDriver.y().whileTrue(new SetShooterManual(shooterSubsystem));
+        controllerDriver.y().whileTrue(new SetShooterTrapezoid(shooterSubsystem, 5000));
 
         // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
         // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));

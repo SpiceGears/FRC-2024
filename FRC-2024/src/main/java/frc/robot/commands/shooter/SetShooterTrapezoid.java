@@ -4,8 +4,6 @@
 
 package frc.robot.commands.shooter;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -13,10 +11,11 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 public class SetShooterTrapezoid extends Command {
   /** Creates a new SetShooterTrapezoid. */
   ShooterSubsystem shooterSubsystem;
+
   double speedRPM;
   double startTime;
   double timeGoal;
-  
+
   public SetShooterTrapezoid(ShooterSubsystem shooterSubsystem, double speedRPM) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
@@ -36,8 +35,9 @@ public class SetShooterTrapezoid extends Command {
   public void execute() {
     double finalOutput = 0;
     double currentTime = Timer.getFPGATimestamp();
-    finalOutput = Math.min(currentTime/timeGoal, 1)  * speedRPM;
+    finalOutput = Math.min(currentTime - startTime / timeGoal, 1) * speedRPM;
 
+    System.out.println(finalOutput);
     shooterSubsystem.setShooterPIDSetpoint(finalOutput);
   }
 
