@@ -37,7 +37,7 @@ public class IntakeNote extends Command {
   public void execute() {
     switch (intakeState) {
       case INTAKING:
-        intakeSubsystem.setIntakeVolts(8);
+        intakeSubsystem.setIntakeVolts(6);
         if (intakeSubsystem.checkForNoteInside()) {
           intakeState = IntakeState.BACKING;
         }
@@ -45,7 +45,7 @@ public class IntakeNote extends Command {
 
       case BACKING:
         if (intakeSubsystem.checkForNoteInside()) {
-          intakeSubsystem.setIntakeVolts(-4.5);
+          intakeSubsystem.setIntakeVolts(-3.6);
         } else {
           intakeState = IntakeState.READY;
         }
