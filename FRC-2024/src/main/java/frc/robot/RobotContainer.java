@@ -260,7 +260,7 @@ public class RobotContainer {
         // controllerDriver.a().whileTrue(new SetShooterManual(shooterSubsystem));
         // controllerDriver.y().whileTrue(new SetShooterTrapezoid(shooterSubsystem, 4200));
         controllerDriver.rightTrigger().whileTrue(new PassNoteToShooter(intakeSubsystem));
-        controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, 70));
+        controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, 25));
         controllerDriver.povDown().whileTrue(new SetArm(armSubsystemNew, 15));
         controllerDriver.povRight().whileTrue(new SetArm(armSubsystemNew, 40));
         controllerDriver.povLeft().whileTrue(new DisableArm(armSubsystemNew));
