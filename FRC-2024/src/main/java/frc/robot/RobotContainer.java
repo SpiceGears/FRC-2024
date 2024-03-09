@@ -20,6 +20,8 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -32,7 +34,6 @@ import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.shooter.SetShooterManual;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
-import frc.robot.subsystems.ShuffleBoard;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -59,8 +60,6 @@ public class RobotContainer {
   // private final ElevatorSubsystem elevatorSubsystem;
   private final LimelightSubsystem limelightSubsystem;
   private final ArmSubsystem armSubsystem;
-  private final ShuffleBoard
-      shuffleBoard; // TODO test if it works in shuffleboard (shuffleboardsubsystem tab)
   // private final Flywheel flywheel;
 
   // Controller
@@ -96,7 +95,6 @@ public class RobotContainer {
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystem = new ArmSubsystem();
-        shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
 
         // ! add new subsystems here!
         // ! add new commands here!
@@ -125,7 +123,6 @@ public class RobotContainer {
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystem = new ArmSubsystem();
-        shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
         // ! add new subsystems here!
         // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIOSim());
@@ -145,7 +142,6 @@ public class RobotContainer {
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystem = new ArmSubsystem();
-        shuffleBoard = new ShuffleBoard(intakeSubsystem, shooterSubsystem, drive);
 
         // ! add new subsystems here!
         // ! add new commands here!
@@ -161,6 +157,23 @@ public class RobotContainer {
 
     // Creates the CvSource and MjpegServer [2] and connects them
     CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
+
+    // Must be a PWM header, not MXP or DIO
+    AddressableLED m_led = new AddressableLED(3);
+
+    // Reuse buffer
+    // Default to a length of 60, start empty output
+    // Length is expensive to set, so only set it once, then just update data
+    AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(78 + 23);
+    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      // Sets the specified LED to the RGB values for red
+      m_ledBuffer.setRGB(i, 255, 0, 0);
+    }
+    m_led.setLength(m_ledBuffer.getLength());
+
+    // Set the data
+    m_led.setData(m_ledBuffer);
+    m_led.start();
 
     // Set up auto routines
     // NamedCommands.registerCommand(

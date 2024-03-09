@@ -83,7 +83,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean checkForNoteInside() {
-    isNoteInside = intakeSensor.get();
+    isNoteInside = !intakeSensor.get();
     return isNoteInside;
   }
 
