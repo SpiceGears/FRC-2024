@@ -15,7 +15,7 @@ import frc.robot.subsystems.arm.ArmSubsystemNew.ArmState;
 public class SetArm extends InstantCommand {
 
   private final ArmSubsystemNew ArmSubsystemNew;
-  private final double position;
+  private double position;
 
   /** Creates a new SetArmCommand. */
   public SetArm(ArmSubsystemNew ArmSubsystemNew, double setpointAngle) {

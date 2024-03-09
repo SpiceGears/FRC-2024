@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.arm.DisableArm;
 import frc.robot.commands.arm.SetArm;
+import frc.robot.commands.arm.SetArmLimelight;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
@@ -235,7 +236,7 @@ public class RobotContainer {
                     limelightSubsystem,
                     limelightSubsystem.getTvInt()));
         controllerDriver
-            .b()
+            .povCenter()
             .onTrue(
                 Commands.runOnce(
                         () ->
@@ -246,31 +247,44 @@ public class RobotContainer {
 
         // ! ARM AND SHOOTER CONTROLS FOR TESTS
 
-        // controllerDriver.povUp().whileTrue(new SetElevatorManual(elevatorSubsystem, 0.5));
-        // controllerDriver.povDown().whileTrue(new SetElevatorManual(elevatorSubsystem, -0.5));
-        controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, 0.5));
-        controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, -0.3));
+        // controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, 0.5));
+        // controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, -0.3));
+
         controllerDriver
-            .y()
+            .leftTrigger()
+            .whileTrue(
+                new ParallelCommandGroup(
+                    new SetArm(armSubsystemNew, 15), new IntakeNote(intakeSubsystem)));
+
+        controllerDriver.leftBumper().whileTrue(new SetArm(armSubsystemNew, 69));
+
+        controllerDriver
+            .a()
+            .whileTrue(
+                new ParallelCommandGroup(
+                    new SetArmLimelight(armSubsystemNew, limelightSubsystem),
+                    // new SetShooterTrapezoid(shooterSubsystem, 4200),
+                    DriveCommands.angleRotate(
+                        drive,
+                        () -> 1,
+                        () -> -controllerDriver.getLeftY(),
+                        () -> -controllerDriver.getLeftX(),
+                        limelightSubsystem,
+                        limelightSubsystem.getTvInt())));
+
+        controllerDriver
+            .rightTrigger()
             .whileTrue(
                 new ParallelCommandGroup(
                     new DisableArm(armSubsystemNew),
                     new SetShooterTrapezoid(shooterSubsystem, 4200)));
-        controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
-        // controllerDriver.a().whileTrue(new SetShooterManual(shooterSubsystem));
-        // controllerDriver.y().whileTrue(new SetShooterTrapezoid(shooterSubsystem, 4200));
-        controllerDriver.rightTrigger().whileTrue(new PassNoteToShooter(intakeSubsystem));
+
+        controllerDriver.rightBumper().whileTrue(new PassNoteToShooter(intakeSubsystem));
+
         controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, 25));
         controllerDriver.povDown().whileTrue(new SetArm(armSubsystemNew, 15));
         controllerDriver.povRight().whileTrue(new SetArm(armSubsystemNew, 40));
         controllerDriver.povLeft().whileTrue(new DisableArm(armSubsystemNew));
-
-        // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
-        // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
-
-        // controller.rightBumper().whileTrue(new IntakeNote(intakeSubsystem));
-        // controller.leftBumper().onTrue(new PassAndShootNote(shooterSubsystem, intakeSubsystem));
-        break;
 
       case JOYSTICK:
         drive.setDefaultCommand(
