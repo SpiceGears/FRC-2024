@@ -37,7 +37,7 @@ public class IntakeNote extends Command {
   public void execute() {
     switch (intakeState) {
       case INTAKING:
-        intakeSubsystem.setIntakeVolts(12);
+        intakeSubsystem.setIntakeVolts(8);
         if (intakeSubsystem.checkForNoteInside()) {
           intakeState = IntakeState.BACKING;
         }
@@ -53,7 +53,7 @@ public class IntakeNote extends Command {
         break;
 
       case READY:
-        intakeSubsystem.setIntakePower(0);
+        // intakeSubsystem.setIntakeVolts(0);
         break;
     }
   }
@@ -61,13 +61,12 @@ public class IntakeNote extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeSubsystem.setIntakePower(0);
+    intakeSubsystem.setIntakeVolts(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    intakeSubsystem.setIntakePower(0);
     return intakeState == IntakeState.READY;
   }
 }
