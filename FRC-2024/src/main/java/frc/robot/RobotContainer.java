@@ -226,16 +226,6 @@ public class RobotContainer {
                 () -> -controllerDriver.getLeftX(),
                 () -> -controllerDriver.getRightX()));
         controllerDriver
-            .x()
-            .whileTrue(
-                DriveCommands.angleRotate(
-                    drive,
-                    () -> 1,
-                    () -> -controllerDriver.getLeftY(),
-                    () -> -controllerDriver.getLeftX(),
-                    limelightSubsystem,
-                    limelightSubsystem.getTvInt()));
-        controllerDriver
             .povCenter()
             .onTrue(
                 Commands.runOnce(
@@ -247,30 +237,29 @@ public class RobotContainer {
 
         // ! ARM AND SHOOTER CONTROLS FOR TESTS
 
+        
+
         // controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, 0.5));
         // controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, -0.3));
 
-        controllerDriver
-            .leftTrigger()
-            .whileTrue(
-                new ParallelCommandGroup(
-                    new SetArm(armSubsystemNew, 15), new IntakeNote(intakeSubsystem)));
+        // controllerDriver.leftTrigger().whileTrue(new IntakeNote(intakeSubsystem));
+        // controllerDriver.leftTrigger().whileTrue(new SetArm(armSubsystemNew, 15));
 
         controllerDriver.leftBumper().whileTrue(new SetArm(armSubsystemNew, 69));
 
-        controllerDriver
-            .a()
-            .whileTrue(
-                new ParallelCommandGroup(
-                    new SetArmLimelight(armSubsystemNew, limelightSubsystem),
-                    // new SetShooterTrapezoid(shooterSubsystem, 4200),
-                    DriveCommands.angleRotate(
-                        drive,
-                        () -> 1,
-                        () -> -controllerDriver.getLeftY(),
-                        () -> -controllerDriver.getLeftX(),
-                        limelightSubsystem,
-                        limelightSubsystem.getTvInt())));
+        controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
+        // new SetShooterTrapezoid(shooterSubsystem, 4200),
+
+        // controllerDriver
+        //     .a()
+        //     .whileTrue(
+        //         DriveCommands.angleRotate(
+        //             drive,
+        //             () -> 1,
+        //             () -> -controllerDriver.getLeftY(),
+        //             () -> -controllerDriver.getLeftX(),
+        //             limelightSubsystem,
+        //             limelightSubsystem.getTvInt()));
 
         controllerDriver
             .rightTrigger()

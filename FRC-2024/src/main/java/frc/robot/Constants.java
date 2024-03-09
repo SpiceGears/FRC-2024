@@ -39,7 +39,7 @@ public final class Constants {
 
   public static class Intake {
 
-    public static final double INTAKING_POWER = 1; // how much power to use when intaking notes
+    public static final double INTAKING_POWER = 0.8; // how much power to use when intaking notes
     public static final double PASSING_POWER = 0.5; // how much power to use when passing to shooter
     public static final double PASSING_TIME =
         1.5; // (seconds) for how long intake rolls when passing
@@ -101,7 +101,7 @@ public final class Constants {
   public static class Swerve {
 
     public static final double SPEED_FINAL_MULTIPLIER = 1;
-    public static final double ROBOT_MAX_SPEED = 4.5;
+    public static final double ROBOT_MAX_SPEED = 2.5;
     // Units.feetToMeters(14.5);
     public static final double ROBOT_TRACK_WIDTH_X = 0.70; // meters
     public static final double ROBOT_TRACK_WIDTH_Y = 0.70; // meters

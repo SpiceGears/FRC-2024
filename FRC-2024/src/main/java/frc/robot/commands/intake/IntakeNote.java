@@ -53,6 +53,7 @@ public class IntakeNote extends Command {
         break;
 
       case READY:
+        intakeSubsystem.setIntakePower(0);
         break;
     }
   }
@@ -66,6 +67,7 @@ public class IntakeNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    intakeSubsystem.setIntakePower(0);
     return intakeState == IntakeState.READY;
   }
 }
