@@ -12,8 +12,8 @@ public class PortMap {
   public class Shooter {
 
     // CAN ID
-    public static final int SHOOTER_MASTER_PORT = 9;
-    public static final int SHOOTER_SLAVE_PORT = 10;
+    public static final int SHOOTER_MASTER_PORT = 10;
+    public static final int SHOOTER_SLAVE_PORT = 9;
   }
 
   public class Elevator {

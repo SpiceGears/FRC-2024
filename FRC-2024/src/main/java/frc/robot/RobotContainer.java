@@ -27,14 +27,18 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.arm.ArmPwmCommand;
+import frc.robot.commands.arm.DisableArm;
+import frc.robot.commands.arm.SetArm;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
+import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterManual;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
-import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.arm.ArmSubsystemNew;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavx;
@@ -59,7 +63,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSubsystem;
   // private final ElevatorSubsystem elevatorSubsystem;
   private final LimelightSubsystem limelightSubsystem;
-  private final ArmSubsystem armSubsystem;
+  private final ArmSubsystemNew armSubsystemNew;
   // private final Flywheel flywheel;
 
   // Controller
@@ -94,7 +98,7 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem();
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
-        armSubsystem = new ArmSubsystem();
+        armSubsystemNew = new ArmSubsystemNew();
 
         // ! add new subsystems here!
         // ! add new commands here!
@@ -122,7 +126,7 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem();
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
-        armSubsystem = new ArmSubsystem();
+        armSubsystemNew = new ArmSubsystemNew();
         // ! add new subsystems here!
         // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIOSim());
@@ -141,7 +145,7 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem();
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
-        armSubsystem = new ArmSubsystem();
+        armSubsystemNew = new ArmSubsystemNew();
 
         // ! add new subsystems here!
         // ! add new commands here!
@@ -167,7 +171,7 @@ public class RobotContainer {
     AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(78 + 23);
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for red
-      m_ledBuffer.setRGB(i, 255, 0, 0);
+      m_ledBuffer.setRGB(i, 25, 0, 0);
     }
     m_led.setLength(m_ledBuffer.getLength());
 
@@ -244,11 +248,22 @@ public class RobotContainer {
 
         // controllerDriver.povUp().whileTrue(new SetElevatorManual(elevatorSubsystem, 0.5));
         // controllerDriver.povDown().whileTrue(new SetElevatorManual(elevatorSubsystem, -0.5));
-        controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
-        controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
+        controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, 0.5));
+        controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, -0.3));
+        controllerDriver
+            .y()
+            .whileTrue(
+                new ParallelCommandGroup(
+                    new DisableArm(armSubsystemNew),
+                    new SetShooterTrapezoid(shooterSubsystem, 4200)));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
-        controllerDriver.y().whileTrue(new SetShooterTrapezoid(shooterSubsystem, 5000));
-        controllerDriver.x().whileTrue(new SetShooterManual(shooterSubsystem));
+        // controllerDriver.a().whileTrue(new SetShooterManual(shooterSubsystem));
+        // controllerDriver.y().whileTrue(new SetShooterTrapezoid(shooterSubsystem, 4200));
+        controllerDriver.rightTrigger().whileTrue(new PassNoteToShooter(intakeSubsystem));
+        controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, 70));
+        controllerDriver.povDown().whileTrue(new SetArm(armSubsystemNew, 15));
+        controllerDriver.povRight().whileTrue(new SetArm(armSubsystemNew, 40));
+        controllerDriver.povLeft().whileTrue(new DisableArm(armSubsystemNew));
 
         // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
         // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));
@@ -286,8 +301,8 @@ public class RobotContainer {
         if (joystick.getRawButtonPressed(1)) {
           new SetShooterManual(shooterSubsystem).schedule();
         }
-        controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystem, 0.5));
-        controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
+        controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, 0.5));
+        controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, -0.3));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
         controllerDriver.y().whileTrue(new SetShooterManual(shooterSubsystem));
         // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));

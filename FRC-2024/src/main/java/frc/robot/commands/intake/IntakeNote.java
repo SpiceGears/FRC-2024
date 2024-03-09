@@ -5,12 +5,19 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class IntakeNote extends Command {
 
   private final IntakeSubsystem intakeSubsystem;
+
+  private enum IntakeState {
+    INTAKING,
+    BACKING,
+    READY
+  }
+
+  private IntakeState intakeState;
 
   /** Intake notes until note is collected */
   public IntakeNote(IntakeSubsystem intakeSubsystem) {
@@ -22,12 +29,33 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSubsystem.setIntakePower(Constants.Intake.INTAKING_POWER);
+    intakeState = IntakeState.INTAKING;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    switch (intakeState) {
+      case INTAKING:
+        intakeSubsystem.setIntakeVolts(12);
+        if (intakeSubsystem.checkForNoteInside()) {
+          intakeState = IntakeState.BACKING;
+        }
+        break;
+
+      case BACKING:
+        if (intakeSubsystem.checkForNoteInside()) {
+          intakeSubsystem.setIntakeVolts(-4.5);
+        } else {
+          intakeState = IntakeState.READY;
+        }
+
+        break;
+
+      case READY:
+        break;
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -38,13 +66,6 @@ public class IntakeNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // End command when note is inside
-    // if (intakeSubsystem.checkForNoteInside()) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
-
-    return false;
+    return intakeState == IntakeState.READY;
   }
 }

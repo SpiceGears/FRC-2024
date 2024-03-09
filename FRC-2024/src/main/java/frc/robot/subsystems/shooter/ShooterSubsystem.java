@@ -61,8 +61,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterEncoder.setMeasurementPeriod(10);
     shooterEncoder.setAverageDepth(2);
 
-    shooterPIDController = new PIDController(0, 0, 0);
-    shooterPIDController.setTolerance(100); // ? tolerance in RPM
+    shooterPIDController = new PIDController(0.02, 0.012, 0);
+    shooterPIDController.setTolerance(50); // ? tolerance in RPM
 
     shooterMode = ShooterMode.MANUAL;
 
@@ -77,8 +77,23 @@ public class ShooterSubsystem extends SubsystemBase {
 
     switch (shooterMode) {
       case PID:
-        setShooterVolts(calculateShooterPIDOutput()); // ! TODO FOR NEO SHOOTER
-        System.out.println("test|pidoputput= " + calculateShooterPIDOutput());
+        double output_shooter = calculateShooterPIDOutput();
+
+        if (shooterPIDController.getSetpoint() == 0 || output_shooter < 0) {
+          output_shooter = 0;
+        } else {
+          output_shooter += 0;
+        }
+
+        setShooterVolts(output_shooter); // ! TODO FOR NEO SHOOTER
+        System.out.println(
+            "test|pidoputput= "
+                + String.format("%.3f%n", output_shooter)
+                + " goal "
+                + this.shooterPIDController.getSetpoint()
+                + " velocity "
+                + String.format("%.3f%n", shooterEncoder.getVelocity()));
+
         if (shooterPIDController.atSetpoint()) {
           isShooterReadyToShoot = true;
         } else {
@@ -91,7 +106,7 @@ public class ShooterSubsystem extends SubsystemBase {
         break;
     }
 
-    // logShooterValues();
+    logShooterValues();
   }
 
   /**
@@ -108,6 +123,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMode = ShooterMode.MANUAL;
     shooterPIDController.reset();
     shooterManualPower = power;
+  }
+
+  public void resetPIDController() {
+    shooterPIDController.reset();
   }
 
   public boolean getReadyForShot() {
@@ -129,7 +148,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void logShooterValues() {
-    SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
+    SmartDashboard.putNumber("shooter/power", shooterMaster.getAppliedOutput());
+    SmartDashboard.putNumber("shooter/encoder", shooterEncoder.getVelocity());
+    SmartDashboard.putNumber("shooter/setpoint", shooterPIDController.getSetpoint());
+    SmartDashboard.putString("shooter/mode", shooterMode.name());
     SmartDashboard.putNumber("test/pidoutput", calculateShooterPIDOutput());
     SmartDashboard.putBoolean("test/isShooterPIDMode", shooterMode.equals(ShooterMode.PID));
 

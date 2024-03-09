@@ -26,8 +26,9 @@ public class SetShooterTrapezoid extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    this.shooterSubsystem.resetPIDController();
     this.startTime = Timer.getFPGATimestamp();
-    timeGoal = 1; // in seconds
+    timeGoal = 2; // in seconds
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,9 +36,7 @@ public class SetShooterTrapezoid extends Command {
   public void execute() {
     double finalOutput = 0;
     double currentTime = Timer.getFPGATimestamp();
-    finalOutput = Math.min(currentTime - startTime / timeGoal, 1) * speedRPM;
-
-    System.out.println(finalOutput);
+    finalOutput = Math.min((currentTime - this.startTime) / this.timeGoal, 1) * this.speedRPM;
     shooterSubsystem.setShooterPIDSetpoint(finalOutput);
   }
 

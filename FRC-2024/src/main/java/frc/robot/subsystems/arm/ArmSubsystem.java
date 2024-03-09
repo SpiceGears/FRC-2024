@@ -79,10 +79,10 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     // Calculate the feedforward from the sepoint
     double feedforwardOutput = m_feedforward.calculate(setpoint.position, setpoint.velocity);
     // Limit output voltage
-    double maxVoltage = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
+    double maxVoltageUp = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
+    double maxVoltageDown = Constants.Arm.MAX_VOLTAGE_OUTPUT_DOWN;
     // Add the feedforward to the PID output to get the motor output
-    double encoderStateOutput =
-        MathUtil.clamp(pidOutput + feedforwardOutput, -maxVoltage, maxVoltage);
+    double encoderStateOutput = MathUtil.clamp(-pidOutput, -maxVoltageUp, maxVoltageDown);
 
     switch (armState) {
       case ENCODER:
@@ -97,6 +97,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     SmartDashboard.putNumber("ARM/encoderStateOutput", encoderStateOutput);
     SmartDashboard.putNumber("ARM/feedforwardOutput", feedforwardOutput);
     SmartDashboard.putNumber("ARM/pidOutput", pidOutput);
+    SmartDashboard.putString("ARM/armstate", armState.name());
     SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
     SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
   }
@@ -121,6 +122,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
   }
 
   public void setArmState(ArmState armState) {
+    enable();
     ArmSubsystem.armState = armState;
   }
 
