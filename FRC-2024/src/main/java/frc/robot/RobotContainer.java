@@ -235,6 +235,7 @@ public class RobotContainer {
         controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystem, -0.3));
         controllerDriver.a().whileTrue(new IntakeNote(intakeSubsystem));
         controllerDriver.y().whileTrue(new SetShooterTrapezoid(shooterSubsystem, 5000));
+        controllerDriver.x().whileTrue(new SetShooterManual(shooterSubsystem));
 
         // controllerDriver.leftBumper().whileTrue(new StartShooterPID(shooterSubsystem, 1000));
         // controllerDriver.rightBumper().whileTrue(new StopShooterPID(shooterSubsystem));

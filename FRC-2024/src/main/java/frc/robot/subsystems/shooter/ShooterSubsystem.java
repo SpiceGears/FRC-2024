@@ -131,6 +131,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private void logShooterValues() {
     SmartDashboard.putNumber("shooter/power", calculateShooterPIDOutput());
     SmartDashboard.putNumber("test/pidoutput", calculateShooterPIDOutput());
+    SmartDashboard.putBoolean("test/isShooterPIDMode", shooterMode.equals(ShooterMode.PID));
 
     SmartDashboard.updateValues();
   }
