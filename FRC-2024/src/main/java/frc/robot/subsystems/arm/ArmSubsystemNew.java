@@ -21,6 +21,8 @@ public class ArmSubsystemNew extends PIDSubsystem {
 
   private static final VictorSP armSlaveMotor = new VictorSP(PortMap.Arm.SLAVE_PORT);
 
+  public boolean onSetpoint;
+
   public static enum ArmState {
     ENCODER,
     MANUAL
@@ -44,6 +46,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
     super(
         // The PIDController used by the subsystem
         new PIDController(1.92, 0.00, 0));
+    getController().setTolerance(1);
   }
 
   public static Rotation2d getArmPosition() {
@@ -104,6 +107,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
   public double getMeasurement() {
     double measurement = getArmPosition().getDegrees();
 
+    onSetpoint = getController().atSetpoint();
     logArmValues();
     return measurement;
   }

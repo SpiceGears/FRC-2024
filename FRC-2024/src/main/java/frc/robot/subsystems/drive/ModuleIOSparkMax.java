@@ -143,18 +143,13 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   @Override
   public void setDriveVoltage(double volts) {
-    driveSparkMax.setVoltage(
-        volts
-            * Constants.Swerve
-                .SPEED_FINAL_MULTIPLIER); // TODO testing if turn jerks still with low Volts
+    driveSparkMax.setVoltage(volts);
   }
 
   @Override
   public void setTurnVoltage(double volts) {
     turnSparkMax.setVoltage(
-        volts
-            * Constants.Swerve
-                .SPEED_FINAL_MULTIPLIER); // TODO testing if turn jerks still with low Volts
+        volts);
   }
 
   @Override

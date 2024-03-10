@@ -14,14 +14,13 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -29,14 +28,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.arm.DisableArm;
 import frc.robot.commands.arm.SetArm;
+import frc.robot.commands.arm.SetArmJoystick;
 import frc.robot.commands.arm.SetArmLimelight;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.arm.ArmSubsystemNew;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -63,13 +65,15 @@ public class RobotContainer {
   // private final ElevatorSubsystem elevatorSubsystem;
   private final LimelightSubsystem limelightSubsystem;
   private final ArmSubsystemNew armSubsystemNew;
+  private final LedSubsystem ledSubsystem;
   // private final Flywheel flywheel;
 
   // Controller
   public final CommandXboxController controllerDriver = new CommandXboxController(0);
+  public final CommandXboxController controllerOperator = new CommandXboxController(1);
   public final Joystick joystick = new Joystick(0);
   public SteeringDevice steeringDevice =
-      SteeringDevice.GAMEPAD; // TODO CHOOSE DRIVER STEERING DEVICE
+      SteeringDevice.GAMEPAD;
 
   private enum SteeringDevice {
     GAMEPAD,
@@ -98,6 +102,9 @@ public class RobotContainer {
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystemNew = new ArmSubsystemNew();
+        ledSubsystem =
+            new LedSubsystem(
+                intakeSubsystem, shooterSubsystem, armSubsystemNew, limelightSubsystem);
 
         // ! add new subsystems here!
         // ! add new commands here!
@@ -126,6 +133,9 @@ public class RobotContainer {
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystemNew = new ArmSubsystemNew();
+        ledSubsystem =
+            new LedSubsystem(
+                intakeSubsystem, shooterSubsystem, armSubsystemNew, limelightSubsystem);
         // ! add new subsystems here!
         // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIOSim());
@@ -145,6 +155,9 @@ public class RobotContainer {
         // elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         armSubsystemNew = new ArmSubsystemNew();
+        ledSubsystem =
+            new LedSubsystem(
+                intakeSubsystem, shooterSubsystem, armSubsystemNew, limelightSubsystem);
 
         // ! add new subsystems here!
         // ! add new commands here!
@@ -155,35 +168,15 @@ public class RobotContainer {
     // Creates UsbCamera and MjpegServer [1] and connects them
     CameraServer.startAutomaticCapture();
 
-    // Creates the CvSink and connects it to the UsbCamera
-    CvSink cvSink = CameraServer.getVideo();
+    // // Creates the CvSink and connects it to the UsbCamera
+    // CvSink cvSink = CameraServer.getVideo();
 
-    // Creates the CvSource and MjpegServer [2] and connects them
-    CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
-
-    // Must be a PWM header, not MXP or DIO
-    AddressableLED m_led = new AddressableLED(3);
-
-    // Reuse buffer
-    // Default to a length of 60, start empty output
-    // Length is expensive to set, so only set it once, then just update data
-    AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(78 + 23);
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for red
-      m_ledBuffer.setRGB(i, 25, 0, 0);
-    }
-    m_led.setLength(m_ledBuffer.getLength());
-
-    // Set the data
-    m_led.setData(m_ledBuffer);
-    m_led.start();
-
-    // Set up auto routines
-    // NamedCommands.registerCommand(
-    //     "Run Flywheel",
-    //     Commands.startEnd(
-    //             () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel)
-    //         .withTimeout(5.0));
+    // // Creates the CvSource and MjpegServer [2] and connects them
+    // CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
+    
+    //! TODO register all commands for autonomous
+    NamedCommands.registerCommand("setShooterTrapezoid(0.5s)", new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM));
+    
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up feedforward characterization
@@ -216,13 +209,19 @@ public class RobotContainer {
 
     switch (steeringDevice) {
       case GAMEPAD:
+      double speedModifier;
         drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
-                () -> 0.8,   // TODO - do stalej 
+                () -> {if(controllerDriver.leftBumper().getAsBoolean()) {
+                    return 1;
+                } else {
+                    return 0.8;
+                }},
                 () -> -controllerDriver.getLeftY(),
                 () -> -controllerDriver.getLeftX(),
                 () -> -controllerDriver.getRightX()));
+
         controllerDriver
             .povCenter()
             .onTrue(
@@ -234,11 +233,13 @@ public class RobotContainer {
                     .ignoringDisable(true));
 
         // ! ARM AND SHOOTER CONTROLS FOR TESTS
-        // controllerDriver.rightBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, 0.5));
-        // controllerDriver.leftBumper().whileTrue(new ArmPwmCommand(armSubsystemNew, -0.3));
         controllerDriver.leftTrigger().whileTrue(new IntakeNote(intakeSubsystem));
-        controllerDriver.leftTrigger().whileTrue(new SetArm(armSubsystemNew, 15));
-        controllerDriver.leftBumper().whileTrue(new SetArm(armSubsystemNew, 69));
+        controllerDriver
+            .leftTrigger()
+            .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
+        controllerDriver
+            .leftBumper()
+            .whileTrue(new SetArm(armSubsystemNew, 69)); // TODO ! dac tu boosta speeda zamiast tego
         controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
         controllerDriver.rightBumper().whileTrue(new PassNoteToShooter(intakeSubsystem));
 
@@ -247,11 +248,15 @@ public class RobotContainer {
             .whileTrue(
                 new ParallelCommandGroup(
                     new DisableArm(armSubsystemNew),
-                    new SetShooterTrapezoid(shooterSubsystem, 4200)));
+                    new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM)));
 
-        controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, 25));
-        controllerDriver.povDown().whileTrue(new SetArm(armSubsystemNew, 15));
-        controllerDriver.povRight().whileTrue(new SetArm(armSubsystemNew, 40));
+        controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MAX_SETPOINT));
+        controllerDriver
+            .povDown()
+            .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
+        controllerDriver
+            .povRight()
+            .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MIDDLE_SETPOINT));
         controllerDriver.povLeft().whileTrue(new DisableArm(armSubsystemNew));
 
         controllerDriver
@@ -259,11 +264,29 @@ public class RobotContainer {
             .whileTrue(
                 DriveCommands.angleRotate(
                     drive,
-                    () -> 0.8,  // TODO - do stalej 
+                    () -> 0.8,
                     () -> -controllerDriver.getLeftY(),
                     () -> -controllerDriver.getLeftX(),
                     limelightSubsystem,
                     limelightSubsystem.getTvInt()));
+
+        controllerOperator
+            .a()
+            .whileTrue(new SetArmJoystick(armSubsystemNew, () -> -controllerDriver.getLeftY()));
+
+        controllerOperator.b().whileTrue(new DisableArm(armSubsystemNew));
+
+        controllerOperator
+            .leftBumper()
+            .whileTrue(new ArmPwmCommand(armSubsystemNew, Constants.Arm.MANUAL_SPEED_UP));
+        controllerOperator
+            .rightBumper()
+            .whileTrue(new ArmPwmCommand(armSubsystemNew, Constants.Arm.MANUAL_SPEED_DOWN));
+
+        break;
+      
+        case JOYSTICK:
+          //TODO jak chcemy joystick
         break;
     }
 

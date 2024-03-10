@@ -39,10 +39,10 @@ public final class Constants {
 
   public static class Intake {
 
-    public static final double INTAKING_POWER = 0.8; // how much power to use when intaking notes
-    public static final double PASSING_POWER = 0.5; // how much power to use when passing to shooter
-    public static final double PASSING_TIME =
-        1.5; // (seconds) for how long intake rolls when passing
+    public static final double INTAKING_VOLTS = 5; // how much power to use when intaking notes
+    public static final double BACKING_VOLTS = -3.5; // how much power to use when intaking notes
+    public static final double PASSING_VOLTS = 6; // how much power to use when passing to shooter
+    public static final double PASSING_TIME = 1; // (seconds) for how long intake rolls when passing
   }
 
   public static class Shooter {
@@ -50,9 +50,18 @@ public final class Constants {
     public static final double SHOOTING_POWER = 1.0; // how much power to use when shooting
     public static final double SHOOTER_SPEEDUP_DELAY =
         0.5; // (seconds) how much time between speeding up shooter and passing
+
+    public static final double DEFAULT_RPM = 4200;
   }
 
   public static class Arm {
+
+    public static final double INTAKING_SETPOINT = 15; // angle for intaking
+    public static final double MAX_SETPOINT = 90; // angle for shooting
+    public static final double MIDDLE_SETPOINT = 40; // angle for shooting
+
+    public static final double MANUAL_SPEED_UP = 0.5;
+    public static final double MANUAL_SPEED_DOWN = -0.3;
 
     public static final double ENCODER_OFFSET_DEGREES = 51;
     public static final double PWM_TEST_POWER = 0.2;
@@ -77,8 +86,6 @@ public final class Constants {
 
     public static final double kMaxVelocityRadPerSecond = Math.toRadians(30);
     public static final double kMaxAccelerationRadPerSecSquared = Math.toRadians(30);
-    public static final double kEncoderDistancePerPulse =
-        2 * Math.PI / REDUCTION_CHAIN / ENCODER_TICK_RATE; // 2rad per full rotation
     public static final double kArmOffsetRads = -0.3; // arm rest position counting from horizontal
 
     public static final double MAX_VOLTAGE_OUTPUT_UP = 5;
@@ -100,7 +107,8 @@ public final class Constants {
 
   public static class Swerve {
 
-    public static final double SPEED_FINAL_MULTIPLIER = 1;
+    public static final double SPEED_BOOSTED = 1.0;
+    public static final double SPEED_NOT_BOOSTED = 0.69;
     public static final double ROBOT_MAX_SPEED = 4.5;
     // Units.feetToMeters(14.5);
     public static final double ROBOT_TRACK_WIDTH_X = 0.70; // meters

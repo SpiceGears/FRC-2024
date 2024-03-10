@@ -21,15 +21,67 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.limelight.LimelightSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
-
+  private static final double LIMELIGHT_DEADBAND = 0.15;
+  
+  /**
+  * Field relative drive command using two joysticks (controlling linear and angular velocities).
+  */
+  public static Command joystickDrive(
+    Drive drive,
+    Trigger boostSupplier,
+    DoubleSupplier xSupplier,
+    DoubleSupplier ySupplier,
+    DoubleSupplier omegaSupplier) {
+  return Commands.run(
+      () -> {
+        // Apply deadband
+  
+        double speedModifier;
+  
+        double linearMagnitude =
+            MathUtil.applyDeadband(
+                Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
+        Rotation2d linearDirection =
+            new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+        double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+  
+        // Square values
+        linearMagnitude = linearMagnitude * linearMagnitude;
+        omega = Math.copySign(omega * omega, omega);
+  
+        // Calcaulate new linear velocity
+        Translation2d linearVelocity =
+            new Pose2d(new Translation2d(), linearDirection)
+                .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+                .getTranslation();
+  
+        // ! adjust joystick axis [-1 to 1] value to usable modifier [0-1]
+        if (boostSupplier.getAsBoolean()) {
+          speedModifier = Constants.Swerve.SPEED_BOOSTED;
+        } else {
+          speedModifier = Constants.Swerve.SPEED_NOT_BOOSTED;
+        }
+  
+        // Convert to field relative speeds & send command
+        drive.runVelocity(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
+                linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec() * speedModifier,
+                omega * drive.getMaxAngularSpeedRadPerSec() * speedModifier,
+                drive.getRotation()));
+      },
+      drive);
+  }
   private DriveCommands() {}
-
+  
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    */
@@ -77,6 +129,7 @@ public class DriveCommands {
         drive);
   }
 
+
   /**
    * @param drive Drive drive
    * @param angleSupplier -1 to 1 value of how much to the side to aim
@@ -120,6 +173,12 @@ public class DriveCommands {
           // error -1 to 1
           double error =
               (omega + xGamepad * 4) / 30; // should be max error = 1 or -1 and center is 0
+
+          if (Math.abs(error) < LIMELIGHT_DEADBAND) {
+            drive.onTarget = true;
+          } else {
+            drive.onTarget = false;
+          }
 
           // Convert to field relative speeds & send command
 

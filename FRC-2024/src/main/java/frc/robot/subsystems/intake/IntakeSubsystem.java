@@ -17,14 +17,21 @@ public class IntakeSubsystem extends SubsystemBase {
   public DigitalInput intakeSensor; // ir digital obstacle avoidance sensor
   public boolean isNoteInside;
 
+  public enum IntakeState {
+    INTAKING,
+    BACKING,
+    READY,
+    SHOT
+  }
+
+  public static IntakeState intakeState;
+
   public IntakeSubsystem() {
 
     intakeMaster = new Talon(PortMap.Intake.INTAKE_MASTER_PORT);
-    // intakeSlave = new Talon(PortMap.INTAKE_SLAVE_PORT);
     intakeSensor = new DigitalInput(PortMap.Intake.INTAKE_SENSOR_PORT);
 
     intakeMaster.setInverted(false);
-    // intakeSlave.setInverted(true);
 
     isNoteInside = false;
   }
@@ -33,30 +40,6 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     logIntakeValues();
   }
-
-  // /**
-  //  * Roll intake when note is not inside
-  //  */
-  // public void intakeNotes() {
-  //   if(checkForNoteInside() == true) {
-  //     stopIntake();
-  //   } else {
-  //     setIntakePower(Constants.Intake.intakingPower);
-  //   }
-  // }
-
-  // /**
-  //  * Passes note to shooter by rolling intake for x seconds.
-  //  */
-  // public void passNoteToShooter() {
-  //   double startTime = Timer.getFPGATimestamp();
-  //   double endTime = startTime + Constants.Intake.passingTime;
-  //   if (Timer.getFPGATimestamp() < endTime) {
-  //     setIntakePower(Constants.Intake.passingPower);
-  //   } else {
-  //     stopIntake();
-  //   }
-  // }
 
   /**
    * Roll intake with desired power

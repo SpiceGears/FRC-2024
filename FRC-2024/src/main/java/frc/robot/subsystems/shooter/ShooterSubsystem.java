@@ -26,17 +26,15 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public static ShooterMode shooterMode;
-  public static boolean isShooterReadyToShoot;
+  public static boolean isShooterReady;
   public static double shooterManualPower;
 
   private static PIDController shooterPIDController;
 
   public ShooterSubsystem() {
 
-    shooterMaster =
-        new CANSparkMax(
-            PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless); // ! TODO FOR NEO SHOOTER
-    shooterMaster.restoreFactoryDefaults(); // TODO UNCOMMENT AFTER SPARK
+    shooterMaster = new CANSparkMax(PortMap.Shooter.SHOOTER_MASTER_PORT, MotorType.kBrushless);
+    shooterMaster.restoreFactoryDefaults();
     // shooterMaster.setCANTimeout(250);
     // shooterMaster.setSmartCurrentLimit(40);
     // shooterMaster.enableVoltageCompensation(12.0);
@@ -56,8 +54,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterSlave.follow(shooterMaster);
     // shooterSlave.burnFlash();
 
-    shooterEncoder = shooterMaster.getEncoder(); // TODO UNCOMMENT AFTER SPARK
-    shooterEncoder.setPosition(0.0); // TODO UNCOMMENT AFTER SPARK
+    shooterEncoder = shooterMaster.getEncoder();
+    shooterEncoder.setPosition(0.0);
     shooterEncoder.setMeasurementPeriod(10);
     shooterEncoder.setAverageDepth(2);
 
@@ -66,7 +64,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMode = ShooterMode.MANUAL;
 
-    isShooterReadyToShoot = false;
+    isShooterReady = false;
     shooterManualPower = 0;
   }
 
@@ -85,24 +83,19 @@ public class ShooterSubsystem extends SubsystemBase {
           output_shooter += 0;
         }
 
-        setShooterVolts(output_shooter); // ! TODO FOR NEO SHOOTER
-        System.out.println(
-            "test|pidoputput= "
-                + String.format("%.3f%n", output_shooter)
-                + " goal "
-                + this.shooterPIDController.getSetpoint()
-                + " velocity "
-                + String.format("%.3f%n", shooterEncoder.getVelocity()));
+        setShooterVolts(output_shooter);
+        // System.out.println(
+        //     "test|pidoputput= "
+        //         + String.format("%.3f%n", output_shooter)
+        //         + " goal "
+        //         + shooterPIDController.getSetpoint()
+        //         + " velocity "
+        //         + String.format("%.3f%n", shooterEncoder.getVelocity()));
 
-        if (shooterPIDController.atSetpoint()) {
-          isShooterReadyToShoot = true;
-        } else {
-          isShooterReadyToShoot = false;
-        }
         break;
       case MANUAL:
         setShooterPower(shooterManualPower);
-        isShooterReadyToShoot = true;
+        isShooterReady = true;
         break;
     }
 
@@ -127,10 +120,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void resetPIDController() {
     shooterPIDController.reset();
-  }
-
-  public boolean getReadyForShot() {
-    return isShooterReadyToShoot;
   }
 
   private double calculateShooterPIDOutput() {

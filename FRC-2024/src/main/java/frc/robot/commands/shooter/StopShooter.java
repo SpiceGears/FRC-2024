@@ -23,5 +23,6 @@ public class StopShooter extends InstantCommand {
   @Override
   public void initialize() {
     shooterSubsystem.setShooterPIDSetpoint(0);
+    ShooterSubsystem.isShooterReady = false;
   }
 }

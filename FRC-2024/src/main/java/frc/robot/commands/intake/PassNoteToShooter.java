@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem.IntakeState;
 
 public class PassNoteToShooter extends Command {
 
@@ -25,18 +26,22 @@ public class PassNoteToShooter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSubsystem.setIntakePower(Constants.Intake.PASSING_POWER);
+    intakeSubsystem.setIntakeVolts(Constants.Intake.PASSING_VOLTS);
     startTime = Timer.getFPGATimestamp();
     endTime = startTime + Constants.Intake.PASSING_TIME;
+    IntakeSubsystem.intakeState = IntakeState.SHOT;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    intakeSubsystem.setIntakeVolts(Constants.Intake.PASSING_VOLTS);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    IntakeSubsystem.intakeState = IntakeState.SHOT;
     intakeSubsystem.stopIntake();
   }
 

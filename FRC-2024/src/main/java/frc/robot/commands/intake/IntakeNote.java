@@ -6,18 +6,11 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem.IntakeState;
 
 public class IntakeNote extends Command {
 
   private final IntakeSubsystem intakeSubsystem;
-
-  private enum IntakeState {
-    INTAKING,
-    BACKING,
-    READY
-  }
-
-  private IntakeState intakeState;
 
   /** Intake notes until note is collected */
   public IntakeNote(IntakeSubsystem intakeSubsystem) {
@@ -29,17 +22,17 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeState = IntakeState.INTAKING;
+    IntakeSubsystem.intakeState = IntakeState.INTAKING;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    switch (intakeState) {
+    switch (IntakeSubsystem.intakeState) {
       case INTAKING:
-        intakeSubsystem.setIntakeVolts(6);
+        intakeSubsystem.setIntakeVolts(5);
         if (intakeSubsystem.checkForNoteInside()) {
-          intakeState = IntakeState.BACKING;
+          IntakeSubsystem.intakeState = IntakeState.BACKING;
         }
         break;
 
@@ -47,14 +40,17 @@ public class IntakeNote extends Command {
         if (intakeSubsystem.checkForNoteInside()) {
           intakeSubsystem.setIntakeVolts(-3.6);
         } else {
-          intakeState = IntakeState.READY;
+          IntakeSubsystem.intakeState = IntakeState.READY;
         }
 
         break;
 
       case READY:
-        // intakeSubsystem.setIntakeVolts(0);
+        // IntakeSubsystem.setIntakeVolts(0);
         break;
+
+      case SHOT:
+        IntakeSubsystem.intakeState = IntakeState.INTAKING;
     }
   }
 
@@ -67,6 +63,6 @@ public class IntakeNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeState == IntakeState.READY;
+    return IntakeSubsystem.intakeState == IntakeState.READY;
   }
 }

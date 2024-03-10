@@ -51,6 +51,8 @@ public class Drive extends SubsystemBase {
   private Pose2d pose = new Pose2d();
   private Rotation2d lastGyroRotation = new Rotation2d();
 
+  public boolean onTarget; // if limelight is on target
+
   public Drive(
       GyroIO gyroIO,
       ModuleIO flModuleIO,

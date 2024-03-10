@@ -16,6 +16,12 @@ public class SetShooterTrapezoid extends Command {
   double startTime;
   double timeGoal;
 
+  /**
+   * Roll shooter up to speed in given time
+   *
+   * @param shooterSubsystem
+   * @param speedRPM
+   */
   public SetShooterTrapezoid(ShooterSubsystem shooterSubsystem, double speedRPM) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
@@ -28,7 +34,7 @@ public class SetShooterTrapezoid extends Command {
   public void initialize() {
     this.shooterSubsystem.resetPIDController();
     this.startTime = Timer.getFPGATimestamp();
-    timeGoal = 0.69; // in seconds
+    timeGoal = 0.5; // in seconds
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,6 +43,9 @@ public class SetShooterTrapezoid extends Command {
     double finalOutput = 0;
     double currentTime = Timer.getFPGATimestamp();
     finalOutput = Math.min((currentTime - this.startTime) / this.timeGoal, 1) * this.speedRPM;
+    if ((currentTime - this.startTime) > timeGoal) {
+      ShooterSubsystem.isShooterReady = true;
+    }
     shooterSubsystem.setShooterPIDSetpoint(finalOutput);
   }
 
