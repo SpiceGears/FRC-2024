@@ -219,7 +219,7 @@ public class RobotContainer {
         drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
-                () -> 0.420,   // TODO - do stalej 
+                () -> 0.8,   // TODO - do stalej 
                 () -> -controllerDriver.getLeftY(),
                 () -> -controllerDriver.getLeftX(),
                 () -> -controllerDriver.getRightX()));
@@ -259,7 +259,7 @@ public class RobotContainer {
             .whileTrue(
                 DriveCommands.angleRotate(
                     drive,
-                    () -> 0.420,  // TODO - do stalej 
+                    () -> 0.8,  // TODO - do stalej 
                     () -> -controllerDriver.getLeftY(),
                     () -> -controllerDriver.getLeftX(),
                     limelightSubsystem,
