@@ -107,6 +107,7 @@ public final class Constants {
 
   public static class Swerve {
 
+    public static final double SPEED_LIMELIGHT = 0.8;
     public static final double SPEED_BOOSTED = 1.0;
     public static final double SPEED_NOT_BOOSTED = 0.69;
     public static final double ROBOT_MAX_SPEED = 4.5;
@@ -130,16 +131,13 @@ public final class Constants {
 
       // CASE: REAL
       public class Real {
-        // TODO tune in
         public static final double DRIVE_FF_kS = 0;
         public static final double DRIVE_FF_kV = 0;
 
-        // TODO tune in
         public static final double DRIVE_PID_kP = 0.5;
         public static final double DRIVE_PID_kI = 0;
         public static final double DRIVE_PID_kD = 0;
 
-        // TODO tune in
         public static final double TURN_PID_kP = 0.5;
         public static final double TURN_PID_kI = 0;
         public static final double TURN_PID_kD = 0;

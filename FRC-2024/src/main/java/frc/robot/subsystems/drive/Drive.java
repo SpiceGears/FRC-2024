@@ -149,9 +149,7 @@ public class Drive extends SubsystemBase {
     pose = pose.exp(twist);
   }
 
-  private void logDriveValues() {
-    // TODO
-  }
+  private void logDriveValues() {}
 
   /**
    * Runs the drive at the desired velocity.

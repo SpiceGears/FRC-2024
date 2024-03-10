@@ -120,7 +120,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
   public void setManualPower(double power) {
     armState = ArmState.MANUAL;
     manualPower = power;
-    System.out.println("manual power set to " + power); // TODO
+    System.out.println("manual power set to " + power);
   }
 
   private static void setArmPower(double power) {

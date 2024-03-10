@@ -17,8 +17,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -38,6 +36,7 @@ import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.arm.ArmSubsystemNew;
 import frc.robot.subsystems.drive.Drive;
@@ -72,8 +71,7 @@ public class RobotContainer {
   public final CommandXboxController controllerDriver = new CommandXboxController(0);
   public final CommandXboxController controllerOperator = new CommandXboxController(1);
   public final Joystick joystick = new Joystick(0);
-  public SteeringDevice steeringDevice =
-      SteeringDevice.GAMEPAD;
+  public SteeringDevice steeringDevice = SteeringDevice.GAMEPAD;
 
   private enum SteeringDevice {
     GAMEPAD,
@@ -173,10 +171,27 @@ public class RobotContainer {
 
     // // Creates the CvSource and MjpegServer [2] and connects them
     // CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
-    
-    //! TODO register all commands for autonomous
-    NamedCommands.registerCommand("setShooterTrapezoid(0.5s)", new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM));
-    
+
+    // ! TODO register all commands for autonomous
+    // ! TODO rainbow LED in autonomous
+    NamedCommands.registerCommand(
+        "SetShooterTrapezoid(0.5s)",
+        new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM));
+    NamedCommands.registerCommand("StopShooter", new StopShooter(shooterSubsystem));
+    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+    NamedCommands.registerCommand("PassNote(1s)", new PassNoteToShooter(intakeSubsystem));
+    NamedCommands.registerCommand(
+        "SetArmLimelight", new SetArmLimelight(armSubsystemNew, limelightSubsystem));
+    NamedCommands.registerCommand(
+        "RotateSwerveToTarget",
+        DriveCommands.angleRotate(
+            drive,
+            () -> Constants.Swerve.SPEED_LIMELIGHT,
+            () -> 0,
+            () -> 0,
+            limelightSubsystem,
+            limelightSubsystem.getTvInt()));
+
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up feedforward characterization
@@ -189,11 +204,6 @@ public class RobotContainer {
     autoChooser.addOption("rotate-test - 2 circles around", new PathPlannerAuto("rotate-test"));
     autoChooser.addOption("rotate over notes", new PathPlannerAuto("rotateovernotes"));
     autoChooser.addOption("fastallnotes", new PathPlannerAuto("fastallnotes"));
-
-    // autoChooser.addOption(
-    //     "Flywheel FF Characterization",
-    //     new FeedForwardCharacterization(
-    //         flywheel, flywheel::runVolts, flywheel::getCharacterizationVelocity));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -209,15 +219,16 @@ public class RobotContainer {
 
     switch (steeringDevice) {
       case GAMEPAD:
-      double speedModifier;
         drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
-                () -> {if(controllerDriver.leftBumper().getAsBoolean()) {
+                () -> {
+                  if (controllerDriver.leftBumper().getAsBoolean()) {
                     return 1;
-                } else {
-                    return 0.8;
-                }},
+                  } else {
+                    return 0.7;
+                  }
+                },
                 () -> -controllerDriver.getLeftY(),
                 () -> -controllerDriver.getLeftX(),
                 () -> -controllerDriver.getRightX()));
@@ -237,9 +248,6 @@ public class RobotContainer {
         controllerDriver
             .leftTrigger()
             .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
-        controllerDriver
-            .leftBumper()
-            .whileTrue(new SetArm(armSubsystemNew, 69)); // TODO ! dac tu boosta speeda zamiast tego
         controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
         controllerDriver.rightBumper().whileTrue(new PassNoteToShooter(intakeSubsystem));
 
@@ -264,7 +272,7 @@ public class RobotContainer {
             .whileTrue(
                 DriveCommands.angleRotate(
                     drive,
-                    () -> 0.8,
+                    () -> Constants.Swerve.SPEED_LIMELIGHT,
                     () -> -controllerDriver.getLeftY(),
                     () -> -controllerDriver.getLeftX(),
                     limelightSubsystem,
@@ -284,9 +292,9 @@ public class RobotContainer {
             .whileTrue(new ArmPwmCommand(armSubsystemNew, Constants.Arm.MANUAL_SPEED_DOWN));
 
         break;
-      
-        case JOYSTICK:
-          //TODO jak chcemy joystick
+
+      case JOYSTICK:
+        // TODO jak chcemy joystick
         break;
     }
 

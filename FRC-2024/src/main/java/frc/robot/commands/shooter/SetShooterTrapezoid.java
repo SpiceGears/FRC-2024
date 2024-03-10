@@ -45,6 +45,8 @@ public class SetShooterTrapezoid extends Command {
     finalOutput = Math.min((currentTime - this.startTime) / this.timeGoal, 1) * this.speedRPM;
     if ((currentTime - this.startTime) > timeGoal) {
       ShooterSubsystem.isShooterReady = true;
+    } else {
+      ShooterSubsystem.isShooterReady = false;
     }
     shooterSubsystem.setShooterPIDSetpoint(finalOutput);
   }
@@ -53,6 +55,7 @@ public class SetShooterTrapezoid extends Command {
   @Override
   public void end(boolean interrupted) {
     shooterSubsystem.setShooterPIDSetpoint(0);
+    ShooterSubsystem.isShooterReady = false;
   }
 
   // Returns true when the command should end.

@@ -148,8 +148,7 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   @Override
   public void setTurnVoltage(double volts) {
-    turnSparkMax.setVoltage(
-        volts);
+    turnSparkMax.setVoltage(volts);
   }
 
   @Override

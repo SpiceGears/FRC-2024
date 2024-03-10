@@ -2,7 +2,6 @@ package frc.robot;
 
 public class PortMap {
 
-  // TODO set correct ports
   public class Intake {
 
     public static final int INTAKE_MASTER_PORT = 2; // PWM
