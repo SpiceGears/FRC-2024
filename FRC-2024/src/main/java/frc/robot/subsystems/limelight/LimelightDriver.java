@@ -3,11 +3,8 @@ package frc.robot.subsystems.limelight;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class LimelightSubsystem extends SubsystemBase {
-
-  public LimelightSubsystem() {}
+public class LimelightDriver {
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -35,13 +32,9 @@ public class LimelightSubsystem extends SubsystemBase {
 
   double distanceFromLimelightToGoalCm;
 
-  @Override
-  public void periodic() {
-    // read values periodically
-    updateLimelightVariables();
-  }
+  public void updateLimelightVariables() {
 
-  private void updateLimelightVariables() {
+    System.out.println("updateLimelightVariables()");
     tx =
         table
             .getEntry("tx")

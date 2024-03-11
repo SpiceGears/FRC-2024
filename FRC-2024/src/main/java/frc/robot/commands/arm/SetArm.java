@@ -30,7 +30,7 @@ public class SetArm extends InstantCommand {
   public void initialize() {
     ArmSubsystemNew.setArmState(ArmState.ENCODER);
     ArmSubsystemNew.enable();
-    ArmSubsystemNew.setSetpoint(position);
+    ArmSubsystemNew.setGoal(position);
     SmartDashboard.putNumber("ARM/setpoint", position);
   }
 }

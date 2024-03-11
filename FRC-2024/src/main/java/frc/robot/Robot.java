@@ -38,6 +38,10 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
+
+    for (int i = 0; i < robotContainer.drive.getModules().length; i++) {
+      robotContainer.drive.getModules()[i].setBrakeMode(true);
+    }
     // Record metadata
     // Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     // Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -98,11 +102,16 @@ public class Robot extends LoggedRobot {
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    robotContainer.limelightSubsystem.updateLimelightVariables();
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    for (int i = 0; i < robotContainer.drive.getModules().length; i++) {
+      robotContainer.drive.getModules()[i].setBrakeMode(false);
+    }
+  }
 
   /** This function is called periodically when disabled. */
   @Override

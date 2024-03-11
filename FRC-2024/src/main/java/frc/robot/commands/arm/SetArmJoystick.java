@@ -50,7 +50,7 @@ public class SetArmJoystick extends Command {
       angle = value * 30 + 45;
     }
     ArmSubsystemNew.setArmState(ArmState.ENCODER);
-    ArmSubsystemNew.setSetpoint(angle);
+    ArmSubsystemNew.setGoal(angle);
 
     // if (limelightSubsystem.getTvInt() == 1) {
     //   this.position = AimBot.interpolate(limelightSubsystem.getDistance())[0];

@@ -11,7 +11,7 @@ import frc.robot.PortMap;
 import frc.robot.subsystems.arm.ArmSubsystemNew;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem.IntakeState;
-import frc.robot.subsystems.limelight.LimelightSubsystem;
+import frc.robot.subsystems.limelight.LimelightDriver;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class LedSubsystem extends SubsystemBase {
@@ -20,7 +20,7 @@ public class LedSubsystem extends SubsystemBase {
 
   private ShooterSubsystem shooterSubsystem;
   private ArmSubsystemNew armSubsystemNew;
-  private LimelightSubsystem limelightSubsystem;
+  private LimelightDriver limelightSubsystem;
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
   // ........
@@ -29,7 +29,7 @@ public class LedSubsystem extends SubsystemBase {
       IntakeSubsystem intakeSubsystem,
       ShooterSubsystem shooterSubsystem,
       ArmSubsystemNew armSubsystem,
-      LimelightSubsystem limelightSubsystem) {
+      LimelightDriver limelightSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     this.shooterSubsystem = shooterSubsystem;
     this.armSubsystemNew = armSubsystem;

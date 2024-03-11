@@ -22,7 +22,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.limelight.LimelightSubsystem;
+import frc.robot.subsystems.limelight.LimelightDriver;
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {
@@ -86,8 +86,8 @@ public class DriveCommands {
       DoubleSupplier speedSupplier,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      LimelightSubsystem limelightSubsystem, // ! limelightSubsystem.getTxDouble()
-      int tv) {
+      LimelightDriver limelightDriver // ! limelightSubsystem.getTxDouble()
+      ) {
     return Commands.run(
         () -> {
 
@@ -97,7 +97,7 @@ public class DriveCommands {
                   Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
           Rotation2d linearDirection =
               new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-          double tx = limelightSubsystem.getTxDouble();
+          double tx = limelightDriver.getTxDouble();
           double omega = -MathUtil.applyDeadband(tx, DEADBAND);
 
           // Square values
@@ -135,7 +135,7 @@ public class DriveCommands {
           // ! adjust joystick axis [-1 to 1] value to usable modifier [0-1]
           double speedModifier = speedSupplier.getAsDouble();
 
-          if (tv == 1) { // IF LIMELIGHT SEE TARGET
+          if (limelightDriver.getTvInt() == 1) { // IF LIMELIGHT SEE TARGET
 
             drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(

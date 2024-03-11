@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     EMPTY // empty when shot out and before trying to intake
   }
 
-  public static IntakeState intakeState;
+  public IntakeState intakeState;
 
   public IntakeSubsystem() {
 

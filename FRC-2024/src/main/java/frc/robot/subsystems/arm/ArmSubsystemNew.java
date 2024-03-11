@@ -6,23 +6,25 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants;
 import frc.robot.PortMap;
 
-public class ArmSubsystemNew extends PIDSubsystem {
+public class ArmSubsystemNew extends ProfiledPIDSubsystem {
   /** Creates a new ArmSubsystemNewNew. */
   private static final VictorSP armMasterMotor = new VictorSP(PortMap.Arm.MASTER_PORT);
 
   private static final VictorSP armSlaveMotor = new VictorSP(PortMap.Arm.SLAVE_PORT);
 
-  public ArmFeedforward feedforward = new ArmFeedforward(0.5, 0.5, 0.5);
+  private final ArmFeedforward feedforward = new ArmFeedforward(0.5, 0.5, 1); // TODO check/tune
+
   public boolean onSetpoint;
 
   public static enum ArmState {
@@ -47,7 +49,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
   public ArmSubsystemNew() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(0.5, 80, 0));
+        new ProfiledPIDController(0.5, 0.1, 0, new TrapezoidProfile.Constraints(1, 1)));
     getController().setTolerance(1);
   }
 
@@ -73,7 +75,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
   }
 
   @Override
-  public void useOutput(double output, double setpoint) {
+  public void useOutput(double output, TrapezoidProfile.State setpoint) {
 
     // update values
     updateArmPosition();
@@ -82,8 +84,9 @@ public class ArmSubsystemNew extends PIDSubsystem {
     double maxVoltageUp = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
     double maxVoltageDown = Constants.Arm.MAX_VOLTAGE_OUTPUT_DOWN;
     // Add the feedforward to the PID output to get the motor output
-    double ff = feedforward.calculate(getArmPosition().getDegrees(), 30);
-    double encoderStateOutput = MathUtil.clamp(-output, -maxVoltageUp, maxVoltageDown);
+    double feedforwardOutput = feedforward.calculate(setpoint.position, setpoint.velocity);
+    double encoderStateOutput =
+        -MathUtil.clamp(output + feedforwardOutput, -maxVoltageUp, maxVoltageDown);
 
     switch (armState) {
       case ENCODER:
@@ -97,8 +100,8 @@ public class ArmSubsystemNew extends PIDSubsystem {
 
     SmartDashboard.putNumber("ARM/encoderStateOutput", encoderStateOutput);
     SmartDashboard.putNumber("ARM/pidOutput", output);
-    SmartDashboard.putNumber("ARM/setpoint", setpoint);
-    SmartDashboard.putNumber("ARM/ff", ff);
+    SmartDashboard.putNumber("ARM/setpointposition", setpoint.position);
+    SmartDashboard.putNumber("ARM/setpointvelocity", setpoint.velocity);
     SmartDashboard.putString("ARM/armstate", armState.name());
     SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
     SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());

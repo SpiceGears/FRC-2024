@@ -29,7 +29,7 @@ public class PassNoteToShooter extends Command {
     intakeSubsystem.setIntakeVolts(Constants.Intake.PASSING_VOLTS);
     startTime = Timer.getMatchTime();
     endTime = startTime + Constants.Intake.PASSING_TIME;
-    IntakeSubsystem.intakeState = IntakeState.EMPTY;
+    intakeSubsystem.intakeState = IntakeState.EMPTY;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,14 +41,14 @@ public class PassNoteToShooter extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    IntakeSubsystem.intakeState = IntakeState.EMPTY;
+    intakeSubsystem.intakeState = IntakeState.EMPTY;
     intakeSubsystem.stopIntake();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Timer.getMatchTime() > endTime) {
+    if (Timer.getMatchTime() - startTime > endTime) {
       return true;
     } else {
       return false;

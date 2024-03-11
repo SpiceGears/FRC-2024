@@ -22,17 +22,17 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    IntakeSubsystem.intakeState = IntakeState.INTAKING;
+    intakeSubsystem.intakeState = IntakeState.INTAKING;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    switch (IntakeSubsystem.intakeState) {
+    switch (intakeSubsystem.intakeState) {
       case INTAKING:
         intakeSubsystem.setIntakeVolts(5);
         if (intakeSubsystem.checkForNoteInside()) {
-          IntakeSubsystem.intakeState = IntakeState.BACKING;
+          intakeSubsystem.intakeState = IntakeState.BACKING;
         }
         break;
 
@@ -40,7 +40,7 @@ public class IntakeNote extends Command {
         if (intakeSubsystem.checkForNoteInside()) {
           intakeSubsystem.setIntakeVolts(-3.6);
         } else {
-          IntakeSubsystem.intakeState = IntakeState.READY;
+          intakeSubsystem.intakeState = IntakeState.READY;
         }
 
         break;
@@ -50,7 +50,7 @@ public class IntakeNote extends Command {
         break;
 
       case EMPTY:
-        IntakeSubsystem.intakeState = IntakeState.INTAKING;
+        intakeSubsystem.intakeState = IntakeState.INTAKING;
     }
   }
 
@@ -63,6 +63,6 @@ public class IntakeNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return IntakeSubsystem.intakeState == IntakeState.READY;
+    return intakeSubsystem.intakeState == IntakeState.READY;
   }
 }

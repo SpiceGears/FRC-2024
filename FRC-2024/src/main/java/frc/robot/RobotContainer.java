@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.TurboCommand;
 import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.arm.DisableArm;
 import frc.robot.commands.arm.SetArm;
@@ -45,7 +46,7 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.limelight.LimelightSubsystem;
+import frc.robot.subsystems.limelight.LimelightDriver;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -57,18 +58,18 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  public final Drive drive;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   // private final ElevatorSubsystem elevatorSubsystem;
-  private final LimelightSubsystem limelightSubsystem;
+  public final LimelightDriver limelightSubsystem;
   private final ArmSubsystemNew armSubsystemNew;
   private final LedSubsystem ledSubsystem;
   // private final Flywheel flywheel;
 
   // Controller
-  public final CommandXboxController controllerDriver = new CommandXboxController(0);
-  public final CommandXboxController controllerOperator = new CommandXboxController(1);
+  public static final CommandXboxController controllerDriver = new CommandXboxController(0);
+  public static final CommandXboxController controllerOperator = new CommandXboxController(1);
   public final Joystick joystick = new Joystick(0);
   public SteeringDevice steeringDevice = SteeringDevice.GAMEPAD;
 
@@ -97,7 +98,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         // elevatorSubsystem = new ElevatorSubsystem();
-        limelightSubsystem = new LimelightSubsystem();
+        limelightSubsystem = new LimelightDriver();
         armSubsystemNew = new ArmSubsystemNew();
         ledSubsystem =
             new LedSubsystem(
@@ -128,7 +129,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         // elevatorSubsystem = new ElevatorSubsystem();
-        limelightSubsystem = new LimelightSubsystem();
+        limelightSubsystem = new LimelightDriver();
         armSubsystemNew = new ArmSubsystemNew();
         ledSubsystem =
             new LedSubsystem(
@@ -150,7 +151,7 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
         // elevatorSubsystem = new ElevatorSubsystem();
-        limelightSubsystem = new LimelightSubsystem();
+        limelightSubsystem = new LimelightDriver();
         armSubsystemNew = new ArmSubsystemNew();
         ledSubsystem =
             new LedSubsystem(
@@ -184,12 +185,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "RotateSwerveToTarget",
         DriveCommands.angleRotate(
-            drive,
-            () -> Constants.Swerve.SPEED_LIMELIGHT,
-            () -> 0,
-            () -> 0,
-            limelightSubsystem,
-            limelightSubsystem.getTvInt()));
+            drive, () -> Constants.Swerve.SPEED_LIMELIGHT, () -> 0, () -> 0, limelightSubsystem));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -278,8 +274,11 @@ public class RobotContainer {
                         () -> Constants.Swerve.SPEED_LIMELIGHT,
                         () -> -controllerDriver.getLeftY(),
                         () -> -controllerDriver.getLeftX(),
-                        limelightSubsystem,
-                        limelightSubsystem.getTvInt())));
+                        limelightSubsystem)));
+
+        // fully automatic sequence used in autonomous
+        controllerDriver.b().onTrue(new TurboCommand(shooterSubsystem, intakeSubsystem, armSubsystemNew, limelightSubsystem, ledSubsystem, drive));
+
         // controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
         // controllerDriver
         // .a()
