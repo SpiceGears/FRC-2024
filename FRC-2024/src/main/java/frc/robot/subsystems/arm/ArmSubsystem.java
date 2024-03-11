@@ -154,4 +154,41 @@ public class ArmSubsystem extends ProfiledPIDSubsystem {
     SmartDashboard.putBoolean("arm/frontLimitSwitch", frontLimitSwitchState);
     SmartDashboard.putBoolean("arm/backLimitSwitch", backLimitSwitchState);
   }
+
+  public class LinearInterpolation {
+    // (metry, kat ramienia, speed_shootera)
+    static double[][] data = {
+            {1, 30, 50},
+            {3, 20, 80},
+            {5, 10, 100}
+    };
+    //TODO input correct data (do przetestowania)
+
+    public static double[] interpolate(double distance) {
+        // Znajdz dwa najblizsze punkty
+        double[] low = data[0];
+        double[] high = data[data.length - 1];
+
+        for (int i = 0; i < data.length - 1; i++) {
+            if (distance >= data[i][0] && distance <= data[i + 1][0]) {
+                low = data[i];
+                high = data[i + 1];
+                break;
+            }
+        }
+
+        // Interpolacja liniowa
+        double distRatio = (distance - low[0]) / (high[0] - low[0]);
+        double angle = low[1] + (high[1] - low[1]) * distRatio;
+        double speed = low[2] + (high[2] - low[2]) * distRatio;
+
+        return new double[]{angle, speed};
+    }
+
+    public static void main(String[] args) {
+        double distance = 2; 
+        double[] result = interpolate(distance);
+        System.out.println("Dla dystansu: " + distance + "m, kat: " + result[0] + " stopni, predkosc: " + result[1] + " / 100");
+    }
+}
 }

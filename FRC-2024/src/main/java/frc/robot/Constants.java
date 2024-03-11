@@ -90,6 +90,12 @@ public final class Constants {
     public static final double kVVoltSecondPerRad = 0;
     public static final double kAVoltSecondSquaredPerRad = 0;
 
+    public class LIMELIGHT {
+      public static final double LIMELIGHT_ANGLE = 25 //TODO check limelight angle from vertical position
+      public static final double LIMELIGHT_HEIGHT = 2 //limelight height in inches TODO check limelight height
+
+    }
+
     public class POSITION {
       public static final double INTAKE = -0.3;
       public static final double HORIZONTAL = 0.0;
