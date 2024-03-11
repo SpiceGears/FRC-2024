@@ -52,6 +52,9 @@ public class LedSubsystem extends SubsystemBase {
     // Set the data
     m_led.setData(m_ledBuffer);
     m_led.start();
+
+    //create analog switch
+    AnalogInput switch = new AnalogInput(PortMap.LED_SWITCH_PORT);
   }
 
   @Override
@@ -77,12 +80,28 @@ public class LedSubsystem extends SubsystemBase {
         m_ledBuffer.setRGB(i, 0, 100, 0); // green
       }
     }
+    if(switch.getValue()== 1) {
+      for (var i = 0; i < m_ledBuffer.getLength(); i++)
+       // Calculate the hue - hue is easier for rainbows because the color
+      // shape is a circle so only one value needs to precess
+      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+      // Set the value
+      m_ledBuffer.setHSV(i, hue, 127, 64);
+    }
+    // Increase by to make the rainbow "move"
+    m_rainbowFirstPixelHue += 3;
+    // Check bounds
+    m_rainbowFirstPixelHue %= 180;
+    
+    
+
+  }
+
+    }
     // TODO LEDs based on auto path
-    // TODO unicorn button
 
     // Set the data for this period
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);
     m_led.start();
-  }
-}
+

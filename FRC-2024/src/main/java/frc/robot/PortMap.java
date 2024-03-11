@@ -3,6 +3,7 @@ package frc.robot;
 public class PortMap {
 
   public static final int LED_PORT = 5; // PWM
+  public static final int LED_SWITCH_PORT = 4 //TODO connect switch to DIO port 
 
   public class Intake {
 
