@@ -186,6 +186,7 @@ public class RobotContainer {
         "RotateSwerveToTarget",
         DriveCommands.angleRotate(
             drive, () -> Constants.Swerve.SPEED_LIMELIGHT, () -> 0, () -> 0, limelightSubsystem));
+    NamedCommands.registerCommand("TurboCommand", new TurboCommand(shooterSubsystem, intakeSubsystem, armSubsystemNew, limelightSubsystem, ledSubsystem, drive));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
