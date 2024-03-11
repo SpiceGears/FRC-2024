@@ -21,7 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
     INTAKING,
     BACKING,
     READY,
-    SHOT
+    EMPTY // empty when shot out and before trying to intake
   }
 
   public static IntakeState intakeState;
@@ -33,6 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     intakeMaster.setInverted(false);
 
+    intakeState = IntakeState.EMPTY;
     isNoteInside = false;
   }
 

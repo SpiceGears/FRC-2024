@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.PortMap;
 import frc.robot.subsystems.arm.ArmSubsystemNew;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem.IntakeState;
@@ -20,8 +21,8 @@ public class LedSubsystem extends SubsystemBase {
   private ShooterSubsystem shooterSubsystem;
   private ArmSubsystemNew armSubsystemNew;
   private LimelightSubsystem limelightSubsystem;
-  private AddressableLED m_led = new AddressableLED(3);
-  private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(78 + 23);
+  private AddressableLED m_led;
+  private AddressableLEDBuffer m_ledBuffer;
   // ........
 
   public LedSubsystem(
@@ -36,12 +37,12 @@ public class LedSubsystem extends SubsystemBase {
     // .........
 
     // Must be a PWM header, not MXP or DIO
-    AddressableLED m_led = new AddressableLED(3);
+    m_led = new AddressableLED(PortMap.LED_PORT);
 
     // Reuse buffer
     // Default to a length of 60, start empty output
     // Length is expensive to set, so only set it once, then just update data
-    AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(78 + 23);
+    m_ledBuffer = new AddressableLEDBuffer(24 + 30 + 24 + 23);
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       // Sets the specified LED to the RGB values for red
       m_ledBuffer.setRGB(i, 25, 0, 0);

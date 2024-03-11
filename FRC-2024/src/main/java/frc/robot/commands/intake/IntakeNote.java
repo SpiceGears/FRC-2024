@@ -49,7 +49,7 @@ public class IntakeNote extends Command {
         // IntakeSubsystem.setIntakeVolts(0);
         break;
 
-      case SHOT:
+      case EMPTY:
         IntakeSubsystem.intakeState = IntakeState.INTAKING;
     }
   }

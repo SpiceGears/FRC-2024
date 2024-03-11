@@ -133,11 +133,7 @@ public class DriveCommands {
           finalRotation = MathUtil.applyDeadband(finalRotation, 0.02);
 
           // ! adjust joystick axis [-1 to 1] value to usable modifier [0-1]
-          double speedModifier = (speedSupplier.getAsDouble() + 1) / 2;
-          double speedModifierMinimum = 0.2;
-          if (speedModifier < speedModifierMinimum) {
-            speedModifier = speedModifierMinimum;
-          }
+          double speedModifier = speedSupplier.getAsDouble();
 
           if (tv == 1) { // IF LIMELIGHT SEE TARGET
 

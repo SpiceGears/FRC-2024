@@ -2,6 +2,8 @@ package frc.robot;
 
 public class PortMap {
 
+  public static final int LED_PORT = 5; // PWM
+
   public class Intake {
 
     public static final int INTAKE_MASTER_PORT = 2; // PWM

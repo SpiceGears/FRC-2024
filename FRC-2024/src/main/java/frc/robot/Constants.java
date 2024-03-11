@@ -56,7 +56,7 @@ public final class Constants {
 
   public static class Arm {
 
-    public static final double INTAKING_SETPOINT = 15; // angle for intaking
+    public static final double INTAKING_SETPOINT = 16; // angle for intaking
     public static final double MAX_SETPOINT = 90; // angle for shooting
     public static final double MIDDLE_SETPOINT = 40; // angle for shooting
 
@@ -88,8 +88,8 @@ public final class Constants {
     public static final double kMaxAccelerationRadPerSecSquared = Math.toRadians(30);
     public static final double kArmOffsetRads = -0.3; // arm rest position counting from horizontal
 
-    public static final double MAX_VOLTAGE_OUTPUT_UP = 5;
-    public static final double MAX_VOLTAGE_OUTPUT_DOWN = 2.0;
+    public static final double MAX_VOLTAGE_OUTPUT_UP = 8.0;
+    public static final double MAX_VOLTAGE_OUTPUT_DOWN = 8.0;
 
     public static final double kSVolts = 0;
     public static final double kGVolts = 0;
