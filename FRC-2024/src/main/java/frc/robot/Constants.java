@@ -56,7 +56,7 @@ public final class Constants {
 
   public static class Arm {
 
-    public static final double INTAKING_SETPOINT = 16; // angle for intaking
+    public static final double INTAKING_SETPOINT = 19; // angle for intaking
     public static final double MAX_SETPOINT = 90; // angle for shooting
     public static final double MIDDLE_SETPOINT = 40; // angle for shooting
 
@@ -88,8 +88,8 @@ public final class Constants {
     public static final double kMaxAccelerationRadPerSecSquared = Math.toRadians(30);
     public static final double kArmOffsetRads = -0.3; // arm rest position counting from horizontal
 
-    public static final double MAX_VOLTAGE_OUTPUT_UP = 8.0;
-    public static final double MAX_VOLTAGE_OUTPUT_DOWN = 8.0;
+    public static final double MAX_VOLTAGE_OUTPUT_UP = 6.0;
+    public static final double MAX_VOLTAGE_OUTPUT_DOWN = 6.0;
 
     public static final double kSVolts = 0;
     public static final double kGVolts = 0;
@@ -107,7 +107,7 @@ public final class Constants {
 
   public static class Swerve {
 
-    public static final double SPEED_LIMELIGHT = 0.8;
+    public static final double SPEED_LIMELIGHT = 0.5;
     public static final double SPEED_BOOSTED = 1.0;
     public static final double SPEED_NOT_BOOSTED = 0.69;
     public static final double ROBOT_MAX_SPEED = 4.5;

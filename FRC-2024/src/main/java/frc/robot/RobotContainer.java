@@ -32,7 +32,6 @@ import frc.robot.commands.arm.SetArm;
 import frc.robot.commands.arm.SetArmJoystick;
 import frc.robot.commands.arm.SetArmLimelight;
 import frc.robot.commands.drive.DriveCommands;
-import frc.robot.commands.drive.FeedForwardCharacterization;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
@@ -195,15 +194,18 @@ public class RobotContainer {
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up feedforward characterization
-    autoChooser.addOption(
-        "Drive FF Characterization",
-        new FeedForwardCharacterization(
-            drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
-    autoChooser.addDefaultOption(
-        "all-notes - all notes one by one with subwoofer align", new PathPlannerAuto("all-notes"));
-    autoChooser.addOption("rotate-test - 2 circles around", new PathPlannerAuto("rotate-test"));
-    autoChooser.addOption("rotate over notes", new PathPlannerAuto("rotateovernotes"));
-    autoChooser.addOption("fastallnotes", new PathPlannerAuto("fastallnotes"));
+    autoChooser.addOption("alpha", new PathPlannerAuto("alpha"));
+
+    // autoChooser.addOption(
+    //     "Drive FF Characterization",
+    //     new FeedForwardCharacterization(
+    //         drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
+    // autoChooser.addDefaultOption(
+    //     "all-notes - all notes one by one with subwoofer align", new
+    // PathPlannerAuto("all-notes"));
+    // autoChooser.addOption("rotate-test - 2 circles around", new PathPlannerAuto("rotate-test"));
+    // autoChooser.addOption("rotate over notes", new PathPlannerAuto("rotateovernotes"));
+    // autoChooser.addOption("fastallnotes", new PathPlannerAuto("fastallnotes"));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -234,7 +236,7 @@ public class RobotContainer {
                 () -> -controllerDriver.getRightX()));
 
         controllerDriver
-            .povCenter()
+            .x()
             .onTrue(
                 Commands.runOnce(
                         () ->
@@ -248,7 +250,6 @@ public class RobotContainer {
         controllerDriver
             .leftTrigger()
             .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
-        controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
         controllerDriver.rightBumper().whileTrue(new PassNoteToShooter(intakeSubsystem));
 
         controllerDriver
@@ -270,13 +271,26 @@ public class RobotContainer {
         controllerDriver
             .a()
             .whileTrue(
-                DriveCommands.angleRotate(
-                    drive,
-                    () -> Constants.Swerve.SPEED_LIMELIGHT,
-                    () -> -controllerDriver.getLeftY(),
-                    () -> -controllerDriver.getLeftX(),
-                    limelightSubsystem,
-                    limelightSubsystem.getTvInt()));
+                new ParallelCommandGroup(
+                    new SetArmLimelight(armSubsystemNew, limelightSubsystem),
+                    DriveCommands.angleRotate(
+                        drive,
+                        () -> Constants.Swerve.SPEED_LIMELIGHT,
+                        () -> -controllerDriver.getLeftY(),
+                        () -> -controllerDriver.getLeftX(),
+                        limelightSubsystem,
+                        limelightSubsystem.getTvInt())));
+        // controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
+        // controllerDriver
+        // .a()
+        // .whileTrue(
+        //     DriveCommands.angleRotate(
+        //         drive,
+        //         () -> Constants.Swerve.SPEED_LIMELIGHT,
+        //         () -> -controllerDriver.getLeftY(),
+        //         () -> -controllerDriver.getLeftX(),
+        //         limelightSubsystem,
+        //         limelightSubsystem.getTvInt()));
 
         controllerOperator
             .a()

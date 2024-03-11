@@ -27,7 +27,7 @@ public class PassNoteToShooter extends Command {
   @Override
   public void initialize() {
     intakeSubsystem.setIntakeVolts(Constants.Intake.PASSING_VOLTS);
-    startTime = Timer.getFPGATimestamp();
+    startTime = Timer.getMatchTime();
     endTime = startTime + Constants.Intake.PASSING_TIME;
     IntakeSubsystem.intakeState = IntakeState.EMPTY;
   }
@@ -48,7 +48,7 @@ public class PassNoteToShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Timer.getFPGATimestamp() > endTime) {
+    if (Timer.getMatchTime() > endTime) {
       return true;
     } else {
       return false;

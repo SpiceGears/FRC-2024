@@ -5,6 +5,7 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -21,6 +22,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
 
   private static final VictorSP armSlaveMotor = new VictorSP(PortMap.Arm.SLAVE_PORT);
 
+  public ArmFeedforward feedforward = new ArmFeedforward(0.5, 0.5, 0.5);
   public boolean onSetpoint;
 
   public static enum ArmState {
@@ -45,7 +47,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
   public ArmSubsystemNew() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(1.92, 0.00, 0));
+        new PIDController(0.5, 80, 0));
     getController().setTolerance(1);
   }
 
@@ -64,8 +66,10 @@ public class ArmSubsystemNew extends PIDSubsystem {
   public void logArmValues() {
     SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
     SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
+    SmartDashboard.putNumber("arm/pid/p", getController().getP());
+    SmartDashboard.putNumber("arm/pid/i", getController().getI());
+    SmartDashboard.putNumber("arm/pid/d", getController().getD());
     SmartDashboard.putNumber("arm/encoderoutput [degrees]", armPosition.getDegrees());
-    SmartDashboard.putNumber("arm/encoder raw voltage", armEncoder.getVoltage());
   }
 
   @Override
@@ -78,6 +82,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
     double maxVoltageUp = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
     double maxVoltageDown = Constants.Arm.MAX_VOLTAGE_OUTPUT_DOWN;
     // Add the feedforward to the PID output to get the motor output
+    double ff = feedforward.calculate(getArmPosition().getDegrees(), 30);
     double encoderStateOutput = MathUtil.clamp(-output, -maxVoltageUp, maxVoltageDown);
 
     switch (armState) {
@@ -93,6 +98,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
     SmartDashboard.putNumber("ARM/encoderStateOutput", encoderStateOutput);
     SmartDashboard.putNumber("ARM/pidOutput", output);
     SmartDashboard.putNumber("ARM/setpoint", setpoint);
+    SmartDashboard.putNumber("ARM/ff", ff);
     SmartDashboard.putString("ARM/armstate", armState.name());
     SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
     SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());

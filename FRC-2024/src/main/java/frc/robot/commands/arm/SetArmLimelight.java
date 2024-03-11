@@ -30,6 +30,7 @@ public class SetArmLimelight extends Command {
   @Override
   public void initialize() {
     this.position = AimBot.interpolate(limelightSubsystem.getDistance())[0];
+    ArmSubsystemNew.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

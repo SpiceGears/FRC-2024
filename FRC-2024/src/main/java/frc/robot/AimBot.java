@@ -7,7 +7,7 @@ package frc.robot;
 /** Add your docs here. */
 public class AimBot {
   // (metry, kat ramienia, speed_shootera)
-  static final double error = 5.5;
+  static final double error = 4;
   static double[][] data = {
     {102, 25 + error, 4200},
     {170, 33 + error, 4200},
