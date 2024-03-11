@@ -37,6 +37,7 @@ public class GyroIONavx implements GyroIO {
     inputs.connected = gyro.isConnected();
     inputs.yawPosition =
         Rotation2d.fromDegrees((double) -gyro.getYaw()); // ! HAS TO BE NEGATIVE TO WORK GOOD
+    inputs.rollPosition = Rotation2d.fromDegrees((double) gyro.getRoll());
     inputs.yawVelocityRadPerSec = Units.degreesToRadians((double) gyro.getRawGyroZ());
     logGyroValues();
   }

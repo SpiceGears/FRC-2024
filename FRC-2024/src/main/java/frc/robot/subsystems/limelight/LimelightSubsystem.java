@@ -2,6 +2,7 @@ package frc.robot.subsystems.limelight;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -9,10 +10,6 @@ public class LimelightSubsystem extends SubsystemBase {
   public LimelightSubsystem() {}
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-
-  //   NetworkTableEntry tx = table.getEntry("tx");
-  //   NetworkTableEntry ty = table.getEntry("ty");
-  //   NetworkTableEntry ta = table.getEntry("ta");
 
   double tx =
       table
@@ -35,6 +32,8 @@ public class LimelightSubsystem extends SubsystemBase {
           .getEntry("botpose")
           .getDoubleArray(new double[6]); // Robot transform in field-space. Translation (X,Y,Z)
   // Rotation(Roll,Pitch,Yaw), total latency (cl+tl)
+
+  double distanceFromLimelightToGoalCm;
 
   @Override
   public void periodic() {
@@ -66,6 +65,28 @@ public class LimelightSubsystem extends SubsystemBase {
             .getEntry("botpose")
             .getDoubleArray(new double[6]); // Robot transform in field-space. Translation (X,Y,Z)
     // Rotation(Roll,Pitch,Yaw), total latency (cl+tl)
+
+    // how many degrees back is your limelight rotated from perfectly vertical?
+    double limelightMountAngleDegrees = 33.5;
+
+    // distance from the center of the Limelight lens to the floor
+    double limelightLensHeightCm = 20.0;
+
+    // distance from the target to the floor
+    double goalHeightCm = 145; // to center of speaker apriltag
+
+    double angleToGoalDegrees = limelightMountAngleDegrees + ty;
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+    // calculate distance
+    distanceFromLimelightToGoalCm =
+        (goalHeightCm - limelightLensHeightCm) / Math.tan(angleToGoalRadians);
+
+    SmartDashboard.putNumber(
+        "limelight/distanceFromLimelightToGoalCm", distanceFromLimelightToGoalCm);
+    SmartDashboard.putNumber("limelight/tx", tx);
+    SmartDashboard.putNumber("limelight/ty", ty);
+    SmartDashboard.putNumber("limelight/tv", tv);
   }
 
   public double getTxDouble() {
@@ -82,6 +103,13 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public int getTvInt() {
     return tv;
+  }
+
+  /**
+   * @return distance from LL to goal in Cm
+   */
+  public double getDistance() {
+    return distanceFromLimelightToGoalCm;
   }
 
   public double[] getBotpose() {

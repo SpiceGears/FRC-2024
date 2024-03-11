@@ -5,24 +5,24 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class StartShooterManual extends InstantCommand {
+public class StopShooter extends InstantCommand {
   ShooterSubsystem shooterSubsystem;
 
-  public StartShooterManual(ShooterSubsystem shooterSubsystem) {
+  public StopShooter(ShooterSubsystem shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
-    addRequirements(this.shooterSubsystem);
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterSubsystem.setShooterManual(Constants.Shooter.SHOOTING_POWER);
+    shooterSubsystem.setShooterPIDSetpoint(0);
+    ShooterSubsystem.isShooterReady = false;
   }
 }
