@@ -41,7 +41,7 @@ public final class Constants {
 
     public static final double INTAKING_VOLTS = 5; // how much power to use when intaking notes
     public static final double BACKING_VOLTS = -3.5; // how much power to use when intaking notes
-    public static final double PASSING_VOLTS = 6; // how much power to use when passing to shooter
+    public static final double PASSING_VOLTS = 10; // how much power to use when passing to shooter
     public static final double PASSING_TIME = 1; // (seconds) for how long intake rolls when passing
   }
 
@@ -56,8 +56,8 @@ public final class Constants {
 
   public static class Arm {
 
-    public static final double INTAKING_SETPOINT = 19; // angle for intaking
-    public static final double MAX_SETPOINT = 90; // angle for shooting
+    public static final double INTAKING_SETPOINT = 17; // angle for intaking
+    public static final double MAX_SETPOINT = 80; // angle max
     public static final double MIDDLE_SETPOINT = 40; // angle for shooting
 
     public static final double MANUAL_SPEED_UP = 0.5;
@@ -123,6 +123,7 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_OFFSET_FR = 2.95;
     public static final double ABSOLUTE_ENCODER_OFFSET_BL = 2.75;
     public static final double ABSOLUTE_ENCODER_OFFSET_BR = -1.25;
+    public static final double MAX_DRIVE_VOLTS_MULTIPLIER = 10 / 12.0; // multiplier
 
     public static class DriveSettings {
       // driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);

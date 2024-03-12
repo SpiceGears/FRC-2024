@@ -6,7 +6,6 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class SetShooterTrapezoid extends Command {
@@ -35,7 +34,7 @@ public class SetShooterTrapezoid extends Command {
   public void initialize() {
     this.shooterSubsystem.resetPIDController();
     this.startTime = Timer.getFPGATimestamp();
-    timeGoal = 0.5; // in seconds
+    timeGoal = 0.254; // in seconds
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -23,7 +23,7 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
 
   private static final VictorSP armSlaveMotor = new VictorSP(PortMap.Arm.SLAVE_PORT);
 
-  private final ArmFeedforward feedforward = new ArmFeedforward(0.5, 0.5, 1); // TODO check/tune
+  private final ArmFeedforward feedforward = new ArmFeedforward(2, 1, 0); // TODO check/tune
 
   public boolean onSetpoint;
 
@@ -49,8 +49,8 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
   public ArmSubsystemNew() {
     super(
         // The PIDController used by the subsystem
-        new ProfiledPIDController(0.5, 0.1, 0, new TrapezoidProfile.Constraints(1, 1)));
-    getController().setTolerance(1);
+        new ProfiledPIDController(0.69, 0.1, 0, new TrapezoidProfile.Constraints(75, 75)));
+    getController().setTolerance(0.2);
   }
 
   public static Rotation2d getArmPosition() {
@@ -80,16 +80,20 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
     // update values
     updateArmPosition();
     // Calculate the feedforward from the sepoint
+    output = -output;
     // Limit output voltage
     double maxVoltageUp = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
     double maxVoltageDown = Constants.Arm.MAX_VOLTAGE_OUTPUT_DOWN;
     // Add the feedforward to the PID output to get the motor output
-    double feedforwardOutput = feedforward.calculate(setpoint.position, setpoint.velocity);
+    double feedforwardOutput = -feedforward.calculate(setpoint.position, setpoint.velocity);
     double encoderStateOutput =
-        -MathUtil.clamp(output + feedforwardOutput, -maxVoltageUp, maxVoltageDown);
+        MathUtil.clamp(output + feedforwardOutput, -maxVoltageUp, maxVoltageDown);
 
     switch (armState) {
       case ENCODER:
+        if ((encoderStateOutput > 0) && (getArmPosition().getDegrees() > 25.4)) {
+          encoderStateOutput *= 0.6;
+        }
         setArmVolts(encoderStateOutput);
         break;
 
@@ -100,6 +104,7 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
 
     SmartDashboard.putNumber("ARM/encoderStateOutput", encoderStateOutput);
     SmartDashboard.putNumber("ARM/pidOutput", output);
+    SmartDashboard.putNumber("ARM/ffOutput", feedforwardOutput);
     SmartDashboard.putNumber("ARM/setpointposition", setpoint.position);
     SmartDashboard.putNumber("ARM/setpointvelocity", setpoint.velocity);
     SmartDashboard.putString("ARM/armstate", armState.name());

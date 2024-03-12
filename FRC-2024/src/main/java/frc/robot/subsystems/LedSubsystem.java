@@ -58,7 +58,7 @@ public class LedSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 100, 100, 100); // white
+      m_ledBuffer.setRGB(i, 10, 10, 10); // white
     }
 
     if (intakeSubsystem.intakeState.equals(IntakeState.READY)) {

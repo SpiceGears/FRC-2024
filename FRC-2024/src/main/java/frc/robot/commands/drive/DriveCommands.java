@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.limelight.LimelightDriver;
 import java.util.function.DoubleSupplier;
@@ -128,7 +129,7 @@ public class DriveCommands {
 
           // Convert to field relative speeds & send command
 
-          double finalRotation = error * 2.5;
+          double finalRotation = error * 1.5;
 
           finalRotation = MathUtil.applyDeadband(finalRotation, 0.02);
 
@@ -154,5 +155,17 @@ public class DriveCommands {
           }
         },
         drive);
+  }
+
+  public static InstantCommand stopDrive(Drive drive) {
+    return new InstantCommand(
+        () -> {
+          drive.runVelocity(new ChassisSpeeds());
+        },
+        drive);
+    // () -> {
+    //   drive.stop();
+    // }
+    // );
   }
 }

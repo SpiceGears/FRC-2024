@@ -177,21 +177,45 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SetShooterTrapezoid(0.5s)",
         new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM));
+    NamedCommands.registerCommand("SetArm(40)", new SetArm(armSubsystemNew, 40));
+    NamedCommands.registerCommand("SetArm(28)", new SetArm(armSubsystemNew, 28));
     NamedCommands.registerCommand("StopShooter", new StopShooter(shooterSubsystem));
     NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
     NamedCommands.registerCommand("PassNote(1s)", new PassNoteToShooter(intakeSubsystem));
     NamedCommands.registerCommand(
-        "SetArmLimelight", new SetArmLimelight(armSubsystemNew, limelightSubsystem));
+        "SetArmLimelight()", new SetArmLimelight(armSubsystemNew, limelightSubsystem));
     NamedCommands.registerCommand(
         "RotateSwerveToTarget",
         DriveCommands.angleRotate(
             drive, () -> Constants.Swerve.SPEED_LIMELIGHT, () -> 0, () -> 0, limelightSubsystem));
-    NamedCommands.registerCommand("TurboCommand", new TurboCommand(shooterSubsystem, intakeSubsystem, armSubsystemNew, limelightSubsystem, ledSubsystem, drive));
+    NamedCommands.registerCommand(
+        "SetArm(Intake)", new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
+    NamedCommands.registerCommand(
+        "TurboCommand",
+        new TurboCommand(
+            2,
+            shooterSubsystem,
+            intakeSubsystem,
+            armSubsystemNew,
+            limelightSubsystem,
+            ledSubsystem,
+            drive));
+    NamedCommands.registerCommand(
+        "TurboCommandSlow",
+        new TurboCommand(
+            2.5,
+            shooterSubsystem,
+            intakeSubsystem,
+            armSubsystemNew,
+            limelightSubsystem,
+            ledSubsystem,
+            drive));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up feedforward characterization
     autoChooser.addOption("alpha", new PathPlannerAuto("alpha"));
+    autoChooser.addOption("beta", new PathPlannerAuto("beta"));
 
     // autoChooser.addOption(
     //     "Drive FF Characterization",
@@ -253,7 +277,7 @@ public class RobotContainer {
             .rightTrigger()
             .whileTrue(
                 new ParallelCommandGroup(
-                    new DisableArm(armSubsystemNew),
+                    // new DisableArm(armSubsystemNew),
                     new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM)));
 
         controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MAX_SETPOINT));
@@ -278,7 +302,17 @@ public class RobotContainer {
                         limelightSubsystem)));
 
         // fully automatic sequence used in autonomous
-        controllerDriver.b().onTrue(new TurboCommand(shooterSubsystem, intakeSubsystem, armSubsystemNew, limelightSubsystem, ledSubsystem, drive));
+        controllerDriver
+            .b()
+            .whileTrue(
+                new TurboCommand(
+                    1.5,
+                    shooterSubsystem,
+                    intakeSubsystem,
+                    armSubsystemNew,
+                    limelightSubsystem,
+                    ledSubsystem,
+                    drive));
 
         // controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
         // controllerDriver

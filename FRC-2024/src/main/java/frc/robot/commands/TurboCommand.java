@@ -33,6 +33,7 @@ public class TurboCommand extends SequentialCommandGroup {
   Drive drive;
 
   public TurboCommand(
+      double aimTime,
       ShooterSubsystem shooterSubsystem,
       IntakeSubsystem intakeSubsystem,
       ArmSubsystemNew armSubsystemNew,
@@ -43,18 +44,18 @@ public class TurboCommand extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelDeadlineGroup( // ends after aim and pass sequence
-        
             new SequentialCommandGroup( // aim then pass
                 new ParallelDeadlineGroup( // setup aim left/right and arm angle
-                    new WaitCommand(2),
+                    new WaitCommand(aimTime),
                     DriveCommands.angleRotate(drive, () -> 0.5, () -> 0, () -> 0, limelightDriver),
                     new SetArmLimelight(armSubsystemNew, limelightDriver)),
-                new PassNoteToShooter(intakeSubsystem) // pass note to sped up shooter
-            ),
-
+                DriveCommands.stopDrive(drive),
+                new ParallelDeadlineGroup(
+                    new WaitCommand(0.420),
+                    new PassNoteToShooter(intakeSubsystem) // pass note to sped up shooter
+                    )),
             new SetShooterTrapezoid(shooterSubsystem, 4200) // start shooter while aiming
-
-          ),
+            ),
         new StopShooter(shooterSubsystem));
   }
 }

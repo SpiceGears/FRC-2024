@@ -30,7 +30,9 @@ public class SetArmLimelight extends Command {
   @Override
   public void initialize() {
     this.position = AimBot.interpolate(limelightDriver.getDistance())[0];
+    armSubsystemNew.setArmState(ArmState.ENCODER);
     armSubsystemNew.enable();
+    armSubsystemNew.setGoal(position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,10 +40,8 @@ public class SetArmLimelight extends Command {
   public void execute() {
     if (limelightDriver.getTvInt() == 1) {
       this.position = AimBot.interpolate(limelightDriver.getDistance())[0];
-      armSubsystemNew.setArmState(ArmState.ENCODER);
+      System.out.println("position LL = " + position);
       armSubsystemNew.setGoal(position);
-    } else {
-      armSubsystemNew.disable();
     }
     SmartDashboard.putNumber("ARM/setpoint", position);
   }
