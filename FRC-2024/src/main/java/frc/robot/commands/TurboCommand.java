@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.arm.SetArmLimelight;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.intake.PassNoteToShooter;
-import frc.robot.commands.shooter.SetShooterTrapezoid;
+import frc.robot.commands.shooter.StartShooter;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.arm.ArmSubsystemNew;
@@ -54,7 +54,7 @@ public class TurboCommand extends SequentialCommandGroup {
                     new WaitCommand(0.420),
                     new PassNoteToShooter(intakeSubsystem) // pass note to sped up shooter
                     )),
-            new SetShooterTrapezoid(shooterSubsystem, 4200) // start shooter while aiming
+            new StartShooter(shooterSubsystem, 4200) // start shooter while aiming
             ),
         new StopShooter(shooterSubsystem));
   }

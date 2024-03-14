@@ -26,6 +26,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.ShootFromAngle;
+import frc.robot.commands.ShootFromLimelight;
+import frc.robot.commands.ShootFromLimelight;
 import frc.robot.commands.TurboCommand;
 import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.arm.DisableArm;
@@ -35,7 +38,7 @@ import frc.robot.commands.arm.SetArmLimelight;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
-import frc.robot.commands.shooter.SetShooterTrapezoid;
+import frc.robot.commands.shooter.StartShooter;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.arm.ArmSubsystemNew;
@@ -176,7 +179,7 @@ public class RobotContainer {
     // ! TODO rainbow LED in autonomous
     NamedCommands.registerCommand(
         "SetShooterTrapezoid(0.5s)",
-        new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM));
+        new StartShooter(shooterSubsystem, Constants.Shooter.DEFAULT_RPM));
     NamedCommands.registerCommand("SetArm(40)", new SetArm(armSubsystemNew, 40));
     NamedCommands.registerCommand("SetArm(28)", new SetArm(armSubsystemNew, 28));
     NamedCommands.registerCommand("StopShooter", new StopShooter(shooterSubsystem));
@@ -190,6 +193,10 @@ public class RobotContainer {
             drive, () -> Constants.Swerve.SPEED_LIMELIGHT, () -> 0, () -> 0, limelightSubsystem));
     NamedCommands.registerCommand(
         "SetArm(Intake)", new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
+
+    NamedCommands.registerCommand("ShootFromAngle", new ShootFromAngle(28, armSubsystemNew, intakeSubsystem, shooterSubsystem, limelightSubsystem));
+    NamedCommands.registerCommand("ShootFromLimelight", new ShootFromLimelight(armSubsystemNew, intakeSubsystem, shooterSubsystem, limelightSubsystem));
+
     NamedCommands.registerCommand(
         "TurboCommand",
         new TurboCommand(
@@ -211,6 +218,7 @@ public class RobotContainer {
             ledSubsystem,
             drive));
 
+            
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up feedforward characterization
@@ -278,7 +286,7 @@ public class RobotContainer {
             .whileTrue(
                 new ParallelCommandGroup(
                     // new DisableArm(armSubsystemNew),
-                    new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM)));
+                    new StartShooter(shooterSubsystem, Constants.Shooter.DEFAULT_RPM)));
 
         controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MAX_SETPOINT));
         controllerDriver
