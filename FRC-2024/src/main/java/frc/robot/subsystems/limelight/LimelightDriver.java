@@ -34,7 +34,7 @@ public class LimelightDriver {
 
   public void updateLimelightVariables() {
 
-    System.out.println("updateLimelightVariables()");
+    // System.out.println("updateLimelightVariables()");
     tx =
         table
             .getEntry("tx")

@@ -79,7 +79,7 @@ public class LedSubsystem extends SubsystemBase {
       }
     }
     // TODO LEDs based on auto path
-    
+
     // Set the data for this period
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);

@@ -134,7 +134,7 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
   public void setManualPower(double power) {
     armState = ArmState.MANUAL;
     manualPower = power;
-    System.out.println("manual power set to " + power);
+    // System.out.println("manual power set to " + power);
   }
 
   private static void setArmPower(double power) {

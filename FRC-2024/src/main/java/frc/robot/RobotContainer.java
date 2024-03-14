@@ -33,6 +33,7 @@ import frc.robot.commands.arm.SetArm;
 import frc.robot.commands.arm.SetArmJoystick;
 import frc.robot.commands.arm.SetArmLimelight;
 import frc.robot.commands.drive.DriveCommands;
+import frc.robot.commands.drive.DriveLL;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
@@ -267,10 +268,14 @@ public class RobotContainer {
                     .ignoringDisable(true));
 
         // ! ARM AND SHOOTER CONTROLS FOR TESTS
-        controllerDriver.leftTrigger().whileTrue(new IntakeNote(intakeSubsystem));
+        // controllerDriver.leftTrigger().whileTrue(new IntakeNote(intakeSubsystem));
         controllerDriver
             .leftTrigger()
-            .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
+            .whileTrue(
+                new ParallelCommandGroup(
+                    new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
+                    new IntakeNote(intakeSubsystem)));
+
         controllerDriver.rightBumper().whileTrue(new PassNoteToShooter(intakeSubsystem));
 
         controllerDriver
@@ -294,7 +299,7 @@ public class RobotContainer {
             .whileTrue(
                 new ParallelCommandGroup(
                     new SetArmLimelight(armSubsystemNew, limelightSubsystem),
-                    DriveCommands.angleRotate(
+                    new DriveLL(
                         drive,
                         () -> Constants.Swerve.SPEED_LIMELIGHT,
                         () -> -controllerDriver.getLeftY(),
