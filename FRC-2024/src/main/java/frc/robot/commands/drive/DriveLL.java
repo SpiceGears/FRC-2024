@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.limelight.LimelightDriver;
@@ -40,7 +41,9 @@ public class DriveLL extends Command {
   }
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    drive.isDriveByLL = true;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -69,7 +72,9 @@ public class DriveLL extends Command {
 
     // omega -30 to 30 degrees
     // error -1 to 1
-    double error = ((omega + xGamepad * 2) / 30); // should be max error = 1 or -1 and center is 0
+    double error =
+        ((omega - (xGamepad * 5.883)) / 30); // should be max error = 1 or -1 and center is 0
+    SmartDashboard.putNumber("LL/error", error);
 
     if (Math.abs(error) < 0.1) {
       drive.onTarget = true;
@@ -88,7 +93,7 @@ public class DriveLL extends Command {
 
     if (limelightDriver.getTvInt() == 1) { // IF LIMELIGHT SEE TARGET
 
-      System.out.println("finalRotation=" + finalRotation + "error=" + error + "");
+      // //System.out.println("finalRotation=" + finalRotation + "error=" + error + "");
 
       drive.runVelocity(
           ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -116,6 +121,7 @@ public class DriveLL extends Command {
             0,
             0, // DOESNT ROTATE WITHOUT TARGET
             drive.getRotation()));
+    drive.isDriveByLL = false;
   }
 
   // Returns true when the command should end.

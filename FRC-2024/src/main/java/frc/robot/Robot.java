@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -31,6 +32,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+  private Timer timer = new Timer();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -64,8 +66,8 @@ public class Robot extends LoggedRobot {
     switch (Constants.currentMode) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")
-        Logger.addDataReceiver(new WPILOGWriter());
-        Logger.addDataReceiver(new NT4Publisher());
+        // Logger.addDataReceiver(new WPILOGWriter());
+        // Logger.addDataReceiver(new NT4Publisher());
         break;
 
       case SIM:
@@ -86,7 +88,7 @@ public class Robot extends LoggedRobot {
     // Logger.disableDeterministicTimestamps()
 
     // Start AdvantageKit logger
-    Logger.start();
+    // Logger.start();
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
@@ -141,12 +143,19 @@ public class Robot extends LoggedRobot {
     // this line or comment it out.
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
+      autonomousCommand = null;
     }
+    timer.reset();
+    timer.start();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    if (timer.advanceIfElapsed(5)) {
+      System.gc();
+    }
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override

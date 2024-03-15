@@ -23,6 +23,7 @@ public class IntakeNote extends Command {
   @Override
   public void initialize() {
     intakeSubsystem.intakeState = IntakeState.INTAKING;
+    intakeSubsystem.isIntakeIntaking = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,6 +59,7 @@ public class IntakeNote extends Command {
   @Override
   public void end(boolean interrupted) {
     intakeSubsystem.setIntakeVolts(0);
+    intakeSubsystem.isIntakeIntaking = false;
   }
 
   // Returns true when the command should end.

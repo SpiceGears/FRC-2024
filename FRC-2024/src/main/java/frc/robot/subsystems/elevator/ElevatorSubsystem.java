@@ -5,8 +5,6 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
@@ -18,10 +16,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Talon elevatorMotorLeft;
 
   public Talon elevatorMotorRight;
-  public Encoder elevatorEncoderLeft;
-  public Encoder elevatorEncoderRight;
-  public DigitalInput elevatorLimitLeft;
-  public DigitalInput elevatorLimitRight;
+  // public Encoder elevatorEncoderLeft;
+  // public Encoder elevatorEncoderRight;
+  // public DigitalInput elevatorLimitLeft;
+  // public DigitalInput elevatorLimitRight;
   public ElevatorMode elevatorState; // Elevator state/mode
   public double
       elevatorManualPower; // Power that is periodically sent to elevator motors when in MANUAL mode
@@ -46,14 +44,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorMotorLeft = new Talon(PortMap.Elevator.ELEVATOR_LEFT_PORT);
     elevatorMotorRight = new Talon(PortMap.Elevator.ELEVATOR_RIGHT_PORT);
+    elevatorMotorLeft.setInverted(true);
+    elevatorMotorRight.setInverted(true);
 
-    elevatorEncoderLeft = new Encoder(1, 2);
-    elevatorEncoderLeft.setDistancePerPulse(1); // TODO find correct values for our rope roll
-    elevatorEncoderRight = new Encoder(3, 4);
-    elevatorEncoderRight.setDistancePerPulse(1); // TODO find correct values for our rope roll
+    // elevatorEncoderLeft = new Encoder(1, 2);
+    // elevatorEncoderLeft.setDistancePerPulse(1); // TODO find correct values for our rope roll
+    // elevatorEncoderRight = new Encoder(3, 4);
+    // elevatorEncoderRight.setDistancePerPulse(1); // TODO find correct values for our rope roll
 
-    elevatorLimitLeft = new DigitalInput(5);
-    elevatorLimitRight = new DigitalInput(6);
+    // elevatorLimitLeft = new DigitalInput(5);
+    // elevatorLimitRight = new DigitalInput(6);
 
     elevatorState = ElevatorMode.MANUAL; // Starting elevator state/mode
   }
@@ -61,8 +61,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    elevatorEncoderLeft.get();
-    elevatorEncoderRight.get();
+    // elevatorEncoderLeft.get();
+    // elevatorEncoderRight.get();
     // gyro.updateInputs(gyroInputs);
 
     // this.rollError = gyroInputs.rollPosition.getDegrees();
@@ -88,39 +88,39 @@ public class ElevatorSubsystem extends SubsystemBase {
     *
     */
 
-    if (elevatorLimitLeft.get()) {
-      elevatorEncoderLeft.reset();
-    }
-    if (elevatorLimitRight.get()) {
-      elevatorEncoderRight.reset();
-    }
+    // if (elevatorLimitLeft.get()) {
+    //   elevatorEncoderLeft.reset();
+    // }
+    // if (elevatorLimitRight.get()) {
+    //   elevatorEncoderRight.reset();
+    // }
   }
 
   public void ejectToSetPoint() {}
 
-  public void setElevatorManual(double power) {
+  private void setElevatorManual(double power) {
     elevatorState = ElevatorMode.MANUAL;
     elevatorManualPower = power;
   }
 
-  public Encoder getEncoderLeft() {
-    return elevatorEncoderLeft;
-  }
+  // public Encoder getEncoderLeft() {
+  //   return elevatorEncoderLeft;
+  // }
 
-  public Encoder getEncoderRight() {
-    return elevatorEncoderRight;
-  }
+  // public Encoder getEncoderRight() {
+  //   return elevatorEncoderRight;
+  // }
 
-  private void setElevatorBothPower(double speed) {
+  public void setElevatorBothPower(double speed) {
     elevatorMotorLeft.set(speed);
     elevatorMotorRight.set(speed);
   }
 
-  private void setElevatorLeftPower(double speed) {
+  public void setElevatorLeftPower(double speed) {
     elevatorMotorLeft.set(speed);
   }
 
-  private void setElevatorRightPower(double speed) {
+  public void setElevatorRightPower(double speed) {
     elevatorMotorRight.set(speed);
   }
 }

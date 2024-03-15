@@ -26,7 +26,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public static ShooterMode shooterMode;
-  public static boolean isShooterReady;
+  public static boolean isShooterReady = false;
   public static double shooterManualPower;
 
   private static PIDController shooterPIDController;
@@ -84,7 +84,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         setShooterVolts(output_shooter);
-        // System.out.println(
+        // //System.out.println(
         //     "test|pidoputput= "
         //         + String.format("%.3f%n", output_shooter)
         //         + " goal "
@@ -143,6 +143,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putString("shooter/mode", shooterMode.name());
     SmartDashboard.putNumber("test/pidoutput", calculateShooterPIDOutput());
     SmartDashboard.putBoolean("test/isShooterPIDMode", shooterMode.equals(ShooterMode.PID));
+    SmartDashboard.putBoolean("shooter/isShooterReady", isShooterReady);
 
     SmartDashboard.updateValues();
   }

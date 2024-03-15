@@ -25,6 +25,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public IntakeState intakeState;
+  public boolean isIntakeIntaking;
+  public boolean isIntakePassing;
 
   public IntakeSubsystem() {
 
@@ -34,6 +36,8 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMaster.setInverted(false);
 
     intakeState = IntakeState.EMPTY;
+    isIntakeIntaking = false;
+    isIntakePassing = false;
     isNoteInside = false;
   }
 
@@ -49,6 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   public void setIntakePower(double power) {
     intakeMaster.set(power);
+    isIntakeIntaking = Math.abs(power) > 0.1;
     // intakeSlave.set(power);
   }
 
@@ -74,6 +79,9 @@ public class IntakeSubsystem extends SubsystemBase {
   private void logIntakeValues() {
     SmartDashboard.putNumber("intake/speed", getIntakePower());
     SmartDashboard.putBoolean("intake/isNoteInside", checkForNoteInside());
+    SmartDashboard.putString("intake/state", intakeState.name());
+    SmartDashboard.putBoolean("intake/isIntakeIntaking", isIntakeIntaking);
+    SmartDashboard.putBoolean("intake/isIntakePassing", isIntakePassing);
     SmartDashboard.updateValues();
   }
 }

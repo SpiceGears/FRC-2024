@@ -30,10 +30,13 @@ import frc.robot.commands.TurboCommand;
 import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.arm.DisableArm;
 import frc.robot.commands.arm.SetArm;
-import frc.robot.commands.arm.SetArmJoystick;
 import frc.robot.commands.arm.SetArmLimelight;
 import frc.robot.commands.drive.DriveCommands;
 import frc.robot.commands.drive.DriveLL;
+import frc.robot.commands.elevator.ElevatorCommands;
+import frc.robot.commands.elevator.SetElevatorBothManual;
+import frc.robot.commands.elevator.SetElevatorLeftUp;
+import frc.robot.commands.elevator.SetElevatorRightUp;
 import frc.robot.commands.intake.IntakeNote;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
@@ -46,6 +49,7 @@ import frc.robot.subsystems.drive.GyroIONavx;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.limelight.LimelightDriver;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -62,7 +66,7 @@ public class RobotContainer {
   public final Drive drive;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
-  // private final ElevatorSubsystem elevatorSubsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
   public final LimelightDriver limelightSubsystem;
   private final ArmSubsystemNew armSubsystemNew;
   private final LedSubsystem ledSubsystem;
@@ -98,7 +102,7 @@ public class RobotContainer {
                 new ModuleIOSparkMax(3));
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        // elevatorSubsystem = new ElevatorSubsystem();
+        elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightDriver();
         armSubsystemNew = new ArmSubsystemNew();
         ledSubsystem =
@@ -129,7 +133,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        // elevatorSubsystem = new ElevatorSubsystem();
+        elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightDriver();
         armSubsystemNew = new ArmSubsystemNew();
         ledSubsystem =
@@ -151,7 +155,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
-        // elevatorSubsystem = new ElevatorSubsystem();
+        elevatorSubsystem = new ElevatorSubsystem();
         limelightSubsystem = new LimelightDriver();
         armSubsystemNew = new ArmSubsystemNew();
         ledSubsystem =
@@ -187,7 +191,7 @@ public class RobotContainer {
         "SetArmLimelight()", new SetArmLimelight(armSubsystemNew, limelightSubsystem));
     NamedCommands.registerCommand(
         "RotateSwerveToTarget",
-        DriveCommands.angleRotate(
+        new DriveLL(
             drive, () -> Constants.Swerve.SPEED_LIMELIGHT, () -> 0, () -> 0, limelightSubsystem));
     NamedCommands.registerCommand(
         "SetArm(Intake)", new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT));
@@ -250,7 +254,7 @@ public class RobotContainer {
                   if (controllerDriver.leftBumper().getAsBoolean()) {
                     return 1;
                   } else {
-                    return 0.7;
+                    return 0.6;
                   }
                 },
                 () -> -controllerDriver.getLeftY(),
@@ -331,10 +335,15 @@ public class RobotContainer {
         //         limelightSubsystem,
         //         limelightSubsystem.getTvInt()));
 
-        controllerOperator
-            .a()
-            .whileTrue(new SetArmJoystick(armSubsystemNew, () -> -controllerDriver.getLeftY()));
+        // controllerOperator
+        //     .a()
+        //     .whileTrue(new SetArmJoystick(armSubsystemNew, () -> -controllerDriver.getLeftY()));
 
+        elevatorSubsystem.setDefaultCommand(
+            ElevatorCommands.elevatorControl(
+                elevatorSubsystem,
+                () -> -controllerOperator.getLeftY(),
+                () -> controllerOperator.getRightY()));
         controllerOperator.b().whileTrue(new DisableArm(armSubsystemNew));
 
         controllerOperator
@@ -343,6 +352,11 @@ public class RobotContainer {
         controllerOperator
             .rightBumper()
             .whileTrue(new ArmPwmCommand(armSubsystemNew, Constants.Arm.MANUAL_SPEED_DOWN));
+
+        controllerOperator.povUp().whileTrue(new SetElevatorBothManual(elevatorSubsystem, 1));
+        controllerOperator.povDown().whileTrue(new SetElevatorBothManual(elevatorSubsystem, -1));
+        controllerOperator.povLeft().whileTrue(new SetElevatorLeftUp(elevatorSubsystem, 0.7));
+        controllerOperator.povRight().whileTrue(new SetElevatorRightUp(elevatorSubsystem, 0.7));
 
         break;
 

@@ -26,6 +26,7 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
   private final ArmFeedforward feedforward = new ArmFeedforward(2, 1, 0); // TODO check/tune
 
   public boolean onSetpoint;
+  public boolean isArmByLL = false;
 
   public static enum ArmState {
     ENCODER,
@@ -66,12 +67,14 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
   }
 
   public void logArmValues() {
-    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
-    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
-    SmartDashboard.putNumber("arm/pid/p", getController().getP());
-    SmartDashboard.putNumber("arm/pid/i", getController().getI());
-    SmartDashboard.putNumber("arm/pid/d", getController().getD());
-    SmartDashboard.putNumber("arm/encoderoutput [degrees]", armPosition.getDegrees());
+    SmartDashboard.putNumber("ARM/armpowermaster", armMasterMotor.get());
+    SmartDashboard.putNumber("ARM/armopowerslave", armSlaveMotor.get());
+    SmartDashboard.putNumber("ARM/pid/p", getController().getP());
+    SmartDashboard.putNumber("ARM/pid/i", getController().getI());
+    SmartDashboard.putNumber("ARM/pid/d", getController().getD());
+    SmartDashboard.putNumber("ARM/encoderoutput [degrees]", armPosition.getDegrees());
+    SmartDashboard.putString("ARM/armstate", armState.name());
+    SmartDashboard.putBoolean("ARM/isArmByLL", isArmByLL);
   }
 
   @Override
@@ -107,9 +110,6 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
     SmartDashboard.putNumber("ARM/ffOutput", feedforwardOutput);
     SmartDashboard.putNumber("ARM/setpointposition", setpoint.position);
     SmartDashboard.putNumber("ARM/setpointvelocity", setpoint.velocity);
-    SmartDashboard.putString("ARM/armstate", armState.name());
-    SmartDashboard.putNumber("arm/armpowermaster", armMasterMotor.get());
-    SmartDashboard.putNumber("arm/armopowerslave", armSlaveMotor.get());
   }
 
   private static void setArmVolts(double volts) {
@@ -122,8 +122,13 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
     double measurement = getArmPosition().getDegrees();
 
     onSetpoint = getController().atSetpoint();
-    logArmValues();
     return measurement;
+  }
+
+  @Override
+  public void periodic() {
+    super.periodic();
+    logArmValues();
   }
 
   public void setArmState(ArmState armState) {
@@ -134,7 +139,7 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
   public void setManualPower(double power) {
     armState = ArmState.MANUAL;
     manualPower = power;
-    // System.out.println("manual power set to " + power);
+    // //System.out.println("manual power set to " + power);
   }
 
   private static void setArmPower(double power) {

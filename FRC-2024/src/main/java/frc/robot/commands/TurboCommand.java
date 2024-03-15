@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.arm.SetArmLimelight;
-import frc.robot.commands.drive.DriveCommands;
+import frc.robot.commands.drive.DriveLL;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
 import frc.robot.commands.shooter.StopShooter;
@@ -47,9 +47,8 @@ public class TurboCommand extends SequentialCommandGroup {
             new SequentialCommandGroup( // aim then pass
                 new ParallelDeadlineGroup( // setup aim left/right and arm angle
                     new WaitCommand(aimTime),
-                    DriveCommands.angleRotate(drive, () -> 0.5, () -> 0, () -> 0, limelightDriver),
+                    new DriveLL(drive, () -> 0.5, () -> 0, () -> 0, limelightDriver),
                     new SetArmLimelight(armSubsystemNew, limelightDriver)),
-                DriveCommands.stopDrive(drive),
                 new ParallelDeadlineGroup(
                     new WaitCommand(0.420),
                     new PassNoteToShooter(intakeSubsystem) // pass note to sped up shooter
