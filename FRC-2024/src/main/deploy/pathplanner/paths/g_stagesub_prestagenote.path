@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8098077298911497,
-        "y": 6.131253966768585
+        "x": 0.6782004541452696,
+        "y": 4.474992408631434
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0039564352912262,
-        "y": 6.347052260883232
+        "x": 1.4026075285404516,
+        "y": 4.422178499280643
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "subwoofer_stage_corner"
     },
     {
       "anchor": {
-        "x": 2.694518872747019,
-        "y": 6.769068976734444
+        "x": 2.139002573744496,
+        "y": 4.330969664445595
       },
       "prevControl": {
-        "x": 2.529167959707511,
-        "y": 6.630824770750594
+        "x": 1.139002573744496,
+        "y": 4.330969664445595
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,9 +30,9 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -139.23639479905864,
-      "rotateFast": false
+      "waypointRelativePos": 0.25,
+      "rotationDegrees": 154.17900802581067,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
@@ -45,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -139.79825277066539,
+    "rotation": 149.66874657773434,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "alpha,beta",
+  "folder": "gamma",
   "previewStartingState": {
-    "rotation": -135.00000000000017,
+    "rotation": 121.08750532347997,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -198,7 +198,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "TurboCommand",
         new TurboCommand(
-            2,
+            1,
             shooterSubsystem,
             intakeSubsystem,
             armSubsystemNew,
@@ -208,7 +208,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "TurboCommandSlow",
         new TurboCommand(
-            2.5,
+            2,
             shooterSubsystem,
             intakeSubsystem,
             armSubsystemNew,
@@ -219,8 +219,11 @@ public class RobotContainer {
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up feedforward characterization
-    autoChooser.addOption("alpha", new PathPlannerAuto("alpha"));
-    autoChooser.addOption("beta", new PathPlannerAuto("beta"));
+    autoChooser.addOption("alpha", new PathPlannerAuto("CENTER_alpha"));
+    autoChooser.addOption("beta", new PathPlannerAuto("CENTER_beta"));
+    autoChooser.addOption("gamma", new PathPlannerAuto("STAGE_gamma"));
+    autoChooser.addOption("gamma_far", new PathPlannerAuto("STAGE_gamma_far"));
+    autoChooser.addDefaultOption("justshoot", new PathPlannerAuto("justshoot"));
 
     // autoChooser.addOption(
     //     "Drive FF Characterization",
