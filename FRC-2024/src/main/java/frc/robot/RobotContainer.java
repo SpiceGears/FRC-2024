@@ -283,6 +283,8 @@ public class RobotContainer {
                     new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
                     new IntakeNote(intakeSubsystem)));
 
+        controllerDriver.y().whileTrue(new IntakeNote(intakeSubsystem));
+
         controllerDriver.rightBumper().whileTrue(new PassNoteToShooter(intakeSubsystem));
 
         controllerDriver
@@ -318,29 +320,13 @@ public class RobotContainer {
             .b()
             .whileTrue(
                 new TurboCommand(
-                    1.5,
+                    1,
                     shooterSubsystem,
                     intakeSubsystem,
                     armSubsystemNew,
                     limelightSubsystem,
                     ledSubsystem,
                     drive));
-
-        // controllerDriver.a().whileTrue(new SetArmLimelight(armSubsystemNew, limelightSubsystem));
-        // controllerDriver
-        // .a()
-        // .whileTrue(
-        //     DriveCommands.angleRotate(
-        //         drive,
-        //         () -> Constants.Swerve.SPEED_LIMELIGHT,
-        //         () -> -controllerDriver.getLeftY(),
-        //         () -> -controllerDriver.getLeftX(),
-        //         limelightSubsystem,
-        //         limelightSubsystem.getTvInt()));
-
-        // controllerOperator
-        //     .a()
-        //     .whileTrue(new SetArmJoystick(armSubsystemNew, () -> -controllerDriver.getLeftY()));
 
         elevatorSubsystem.setDefaultCommand(
             ElevatorCommands.elevatorControl(
