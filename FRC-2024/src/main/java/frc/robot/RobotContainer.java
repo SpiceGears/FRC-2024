@@ -111,6 +111,11 @@ public class RobotContainer {
             new LedSubsystem(
                 intakeSubsystem, shooterSubsystem, armSubsystemNew, limelightSubsystem);
 
+        drive.setPose(
+            new Pose2d(
+                drive.getPose().getTranslation(),
+                new Rotation2d().rotateBy(new Rotation2d().fromDegrees(180))));
+
         // ! add new subsystems here!
         // ! add new commands here!
 
@@ -141,6 +146,10 @@ public class RobotContainer {
         ledSubsystem =
             new LedSubsystem(
                 intakeSubsystem, shooterSubsystem, armSubsystemNew, limelightSubsystem);
+        drive.setPose(
+            new Pose2d(
+                drive.getPose().getTranslation(),
+                new Rotation2d().rotateBy(new Rotation2d().fromDegrees(180))));
         // ! add new subsystems here!
         // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIOSim());
@@ -163,7 +172,10 @@ public class RobotContainer {
         ledSubsystem =
             new LedSubsystem(
                 intakeSubsystem, shooterSubsystem, armSubsystemNew, limelightSubsystem);
-
+        drive.setPose(
+            new Pose2d(
+                drive.getPose().getTranslation(),
+                new Rotation2d().rotateBy(new Rotation2d().fromDegrees(180))));
         // ! add new subsystems here!
         // ! add new commands here!
         // flywheel = new Flywheel(new FlywheelIO() {});

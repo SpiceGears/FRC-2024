@@ -14,6 +14,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -28,6 +29,10 @@ import java.util.function.DoubleSupplier;
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
   private static final double LIMELIGHT_DEADBAND = 0.15;
+  private static final double rateLimit = 1.25;
+  private static SlewRateLimiter xLimiter = new SlewRateLimiter(rateLimit);
+  private static SlewRateLimiter yLimiter = new SlewRateLimiter(rateLimit);
+  private static SlewRateLimiter omegaLimiter = new SlewRateLimiter(rateLimit);
 
   /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
@@ -42,11 +47,11 @@ public class DriveCommands {
         () -> {
           double linearMagnitude =
               MathUtil.applyDeadband(
-                  Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
+                  Math.hypot(xLimiter.calculate(xSupplier.getAsDouble()), yLimiter.calculate(ySupplier.getAsDouble())), DEADBAND);
           Rotation2d linearDirection =
-              new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+              new Rotation2d(xLimiter.calculate(xSupplier.getAsDouble()), yLimiter.calculate(ySupplier.getAsDouble()));
 
-          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND) * 0.69;
+          double omega = MathUtil.applyDeadband(omegaLimiter.calculate(omegaSupplier.getAsDouble()), DEADBAND) * 0.69;
 
           // Square values
           linearMagnitude = linearMagnitude * linearMagnitude;
