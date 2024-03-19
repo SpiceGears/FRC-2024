@@ -224,6 +224,8 @@ public class RobotContainer {
     autoChooser.addOption("CENTER_alpha", new PathPlannerAuto("alpha"));
     autoChooser.addOption("CENTER_beta", new PathPlannerAuto("beta"));
     autoChooser.addOption("STAGE_gamma", new PathPlannerAuto("gamma"));
+    autoChooser.addOption("AMP_delta", new PathPlannerAuto("delta"));
+    autoChooser.addOption("AMP_delta_far", new PathPlannerAuto("delta_far"));
     autoChooser.addOption("STAGE_gamma_far", new PathPlannerAuto("gamma_far"));
     autoChooser.setDefaultOption("justshoot", new PathPlannerAuto("justshoot"));
 

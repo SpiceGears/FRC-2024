@@ -40,9 +40,15 @@ public class SetArmLimelight extends Command {
   @Override
   public void execute() {
     if (limelightDriver.getTvInt() == 1) {
-      this.position = AimBot.interpolate(limelightDriver.getDistance())[0];
-      // //System.out.println("position LL = " + position);
-      armSubsystemNew.setGoal(position);
+      double distance = limelightDriver.getDistance();
+      if (distance != 0) {
+        this.position = AimBot.interpolate(distance)[0];
+        // //System.out.println("position LL = " + position);
+        armSubsystemNew.setGoal(position);
+
+      } else {
+        armSubsystemNew.setArmVolts(0);
+      }
     }
     SmartDashboard.putNumber("ARM/setpoint", position);
   }

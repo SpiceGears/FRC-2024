@@ -112,7 +112,7 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
     SmartDashboard.putNumber("ARM/setpointvelocity", setpoint.velocity);
   }
 
-  private static void setArmVolts(double volts) {
+  public void setArmVolts(double volts) {
     armMasterMotor.setVoltage(volts);
     armSlaveMotor.setVoltage(volts);
   }
