@@ -38,7 +38,8 @@ public class LedSubsystem extends SubsystemBase {
     RED,
     BLUE,
     RAINBOW,
-    POLIZE
+    POLIZE,
+    WHITE
   }
 
   enum LEDpart {
@@ -123,7 +124,7 @@ public class LedSubsystem extends SubsystemBase {
           }
           break;
         default:
-          ledMode = LEDMode.RED;
+          ledMode = LEDMode.WHITE;
           break;
       }
     } else {
@@ -209,6 +210,9 @@ public class LedSubsystem extends SubsystemBase {
         break;
       case BLUE:
         setAllLEDs(0, 0, 255);
+        break;
+      case WHITE:
+        setAllLEDs(50, 50, 50);
         break;
       case RAINBOW:
       case DEFAULT:

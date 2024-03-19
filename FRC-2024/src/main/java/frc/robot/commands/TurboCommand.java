@@ -50,7 +50,7 @@ public class TurboCommand extends SequentialCommandGroup {
                     new DriveLL(drive, () -> 0.5, () -> 0, () -> 0, limelightDriver),
                     new SetArmLimelight(armSubsystemNew, limelightDriver)),
                 new ParallelDeadlineGroup(
-                    new WaitCommand(0.420),
+                    new WaitCommand(0.69),
                     new PassNoteToShooter(intakeSubsystem) // pass note to sped up shooter
                     )),
             new SetShooterTrapezoid(shooterSubsystem, 4200) // start shooter while aiming

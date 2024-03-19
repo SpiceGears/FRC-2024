@@ -13,7 +13,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -22,6 +21,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -84,7 +85,8 @@ public class RobotContainer {
   }
 
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
+  private final LoggedDashboardChooser<Command> cameraChooser;
   // private final LoggedDashboardNumber flywheelSpeedInput =
   //     new LoggedDashboardNumber("Flywheel Speed", 1500.0);
 
@@ -216,14 +218,19 @@ public class RobotContainer {
             ledSubsystem,
             drive));
 
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
+    autoChooser = new SendableChooser<>();
     // Set up feedforward characterization
-    autoChooser.addOption("alpha", new PathPlannerAuto("CENTER_alpha"));
-    autoChooser.addOption("beta", new PathPlannerAuto("CENTER_beta"));
-    autoChooser.addOption("gamma", new PathPlannerAuto("STAGE_gamma"));
-    autoChooser.addOption("gamma_far", new PathPlannerAuto("STAGE_gamma_far"));
-    autoChooser.addDefaultOption("justshoot", new PathPlannerAuto("justshoot"));
+    autoChooser.addOption("testtesttest", new PathPlannerAuto("beta"));
+    autoChooser.addOption("CENTER_alpha", new PathPlannerAuto("alpha"));
+    autoChooser.addOption("CENTER_beta", new PathPlannerAuto("beta"));
+    autoChooser.addOption("STAGE_gamma", new PathPlannerAuto("gamma"));
+    autoChooser.addOption("STAGE_gamma_far", new PathPlannerAuto("gamma_far"));
+    autoChooser.setDefaultOption("justshoot", new PathPlannerAuto("justshoot"));
+
+    SmartDashboard.putData("AUTONOMOUS CHOOSE", autoChooser);
+
+    cameraChooser = new LoggedDashboardChooser<>("Camera Choices");
+    cameraChooser.addDefaultOption("Camera", getAutonomousCommand());
 
     // autoChooser.addOption(
     //     "Drive FF Characterization",
@@ -270,7 +277,9 @@ public class RobotContainer {
                 Commands.runOnce(
                         () ->
                             drive.setPose(
-                                new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                                new Pose2d(
+                                    drive.getPose().getTranslation(),
+                                    new Rotation2d().rotateBy(new Rotation2d().fromDegrees(180)))),
                         drive)
                     .ignoringDisable(true));
 
@@ -332,7 +341,7 @@ public class RobotContainer {
             ElevatorCommands.elevatorControl(
                 elevatorSubsystem,
                 () -> -controllerOperator.getLeftY(),
-                () -> controllerOperator.getRightY()));
+                () -> -controllerOperator.getRightY()));
         controllerOperator.b().whileTrue(new DisableArm(armSubsystemNew));
 
         controllerOperator
@@ -404,6 +413,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    return autoChooser.getSelected();
   }
 }
