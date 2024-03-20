@@ -123,7 +123,7 @@ public final class Constants {
     public static final double ABSOLUTE_ENCODER_OFFSET_FR = 2.95;
     public static final double ABSOLUTE_ENCODER_OFFSET_BL = 2.75;
     public static final double ABSOLUTE_ENCODER_OFFSET_BR = -1.25;
-    public static final double MAX_DRIVE_VOLTS_MULTIPLIER = 10 / 12.0; // multiplier
+    public static final double MAX_DRIVE_VOLTS_MULTIPLIER = 6.9 / 12.0; // multiplier
 
     public static class DriveSettings {
       // driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
