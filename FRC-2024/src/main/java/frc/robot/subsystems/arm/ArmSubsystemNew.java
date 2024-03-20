@@ -67,6 +67,7 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
   }
 
   public void logArmValues() {
+    updateArmPosition();
     SmartDashboard.putNumber("ARM/armpowermaster", armMasterMotor.get());
     SmartDashboard.putNumber("ARM/armopowerslave", armSlaveMotor.get());
     SmartDashboard.putNumber("ARM/pid/p", getController().getP());
@@ -92,12 +93,13 @@ public class ArmSubsystemNew extends ProfiledPIDSubsystem {
     double encoderStateOutput =
         MathUtil.clamp(output + feedforwardOutput, -maxVoltageUp, maxVoltageDown);
 
+    armState = ArmState.MANUAL;
     switch (armState) {
       case ENCODER:
         if ((encoderStateOutput > 0) && (getArmPosition().getDegrees() > 25.4)) {
           encoderStateOutput *= 0.6;
         }
-        setArmVolts(encoderStateOutput);
+        // setArmVolts(encoderStateOutput);
         break;
 
       case MANUAL:

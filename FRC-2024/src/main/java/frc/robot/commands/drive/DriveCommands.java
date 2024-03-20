@@ -47,14 +47,19 @@ public class DriveCommands {
         () -> {
           double linearMagnitude =
               MathUtil.applyDeadband(
-                  Math.hypot(
-                      xLimiter.calculate(xSupplier.getAsDouble()),
-                      yLimiter.calculate(ySupplier.getAsDouble())),
-                  DEADBAND);
+                  Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
           Rotation2d linearDirection =
-              new Rotation2d(
-                  xLimiter.calculate(xSupplier.getAsDouble()),
-                  yLimiter.calculate(ySupplier.getAsDouble()));
+              new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+          // double linearMagnitude =
+          //     MathUtil.applyDeadband(
+          //         Math.hypot(
+          //             xLimiter.calculate(xSupplier.getAsDouble()),
+          //             yLimiter.calculate(ySupplier.getAsDouble())),
+          //         DEADBAND);
+          // Rotation2d linearDirection =
+          //     new Rotation2d(
+          //         xLimiter.calculate(xSupplier.getAsDouble()),
+          //         yLimiter.calculate(ySupplier.getAsDouble()));
 
           double omega =
               MathUtil.applyDeadband(omegaLimiter.calculate(omegaSupplier.getAsDouble()), DEADBAND)

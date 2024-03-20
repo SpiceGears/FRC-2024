@@ -212,7 +212,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "TurboCommand",
         new TurboCommand(
-            1,
+            1.8,
             shooterSubsystem,
             intakeSubsystem,
             armSubsystemNew,
@@ -239,7 +239,8 @@ public class RobotContainer {
     autoChooser.addOption("AMP_delta", new PathPlannerAuto("delta"));
     autoChooser.addOption("AMP_delta_far", new PathPlannerAuto("delta_far"));
     autoChooser.addOption("STAGE_gamma_far", new PathPlannerAuto("gamma_far"));
-    autoChooser.setDefaultOption("justshoot", new PathPlannerAuto("justshoot"));
+    autoChooser.addOption("justshoot", new PathPlannerAuto("justshoot"));
+    autoChooser.setDefaultOption("justout", new PathPlannerAuto("justout"));
 
     SmartDashboard.putData("AUTONOMOUS CHOOSE", autoChooser);
 
@@ -303,7 +304,7 @@ public class RobotContainer {
             .leftTrigger()
             .whileTrue(
                 new ParallelCommandGroup(
-                    new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
+                    // new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
                     new IntakeNote(intakeSubsystem)));
 
         controllerDriver.y().whileTrue(new IntakeNote(intakeSubsystem));
@@ -330,7 +331,7 @@ public class RobotContainer {
             .a()
             .whileTrue(
                 new ParallelCommandGroup(
-                    new SetArmLimelight(armSubsystemNew, limelightSubsystem),
+                    // new SetArmLimelight(armSubsystemNew, limelightSubsystem),
                     new DriveLL(
                         drive,
                         () -> Constants.Swerve.SPEED_LIMELIGHT,

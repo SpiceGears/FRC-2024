@@ -60,10 +60,10 @@ public final class Constants {
     public static final double MAX_SETPOINT = 90; // angle max
     public static final double MIDDLE_SETPOINT = 30; // angle for shooting
 
-    public static final double MANUAL_SPEED_UP = 0.5;
-    public static final double MANUAL_SPEED_DOWN = -0.3;
+    public static final double MANUAL_SPEED_UP = 0.7;
+    public static final double MANUAL_SPEED_DOWN = -0.5;
 
-    public static final double ENCODER_OFFSET_DEGREES = 51;
+    public static final double ENCODER_OFFSET_DEGREES = 51 - 23;
     public static final double PWM_TEST_POWER = 0.2;
 
     public static final double KP = 6.20;
