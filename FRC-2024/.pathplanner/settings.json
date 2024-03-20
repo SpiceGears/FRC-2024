@@ -3,8 +3,9 @@
   "robotLength": 0.8,
   "holonomicMode": true,
   "pathFolders": [
-    "delta",
+    "New Folder",
     "alpha,beta",
+    "delta",
     "gamma"
   ],
   "autoFolders": [],

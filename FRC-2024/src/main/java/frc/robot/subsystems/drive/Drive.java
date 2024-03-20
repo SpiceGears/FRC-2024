@@ -235,6 +235,7 @@ public class Drive extends SubsystemBase {
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
     this.pose = pose; // TODO CAN INPUT LIMELIGHT POSE HERE
+    System.out.println("X CLICKED RESET GYRO!!!");
   }
 
   /** Returns the maximum linear speed in meters per sec. */

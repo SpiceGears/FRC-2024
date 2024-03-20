@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SetArm(28)"
+            "name": "SetArm(Intake)"
           }
         },
         {
@@ -33,6 +33,12 @@
           "type": "named",
           "data": {
             "name": "SetArm(Intake)"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.7
           }
         },
         {

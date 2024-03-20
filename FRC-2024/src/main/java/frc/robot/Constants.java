@@ -39,8 +39,8 @@ public final class Constants {
 
   public static class Intake {
 
-    public static final double INTAKING_VOLTS = 5; // how much power to use when intaking notes
-    public static final double BACKING_VOLTS = -3.5; // how much power to use when intaking notes
+    public static final double INTAKING_VOLTS = 9.5; // how much power to use when intaking notes
+    public static final double BACKING_VOLTS = -5.5; // how much power to use when intaking notes
     public static final double PASSING_VOLTS = 10; // how much power to use when passing to shooter
     public static final double PASSING_TIME = 1; // (seconds) for how long intake rolls when passing
   }
