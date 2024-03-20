@@ -279,7 +279,7 @@ public class RobotContainer {
                   if (controllerDriver.leftBumper().getAsBoolean()) {
                     return 1;
                   } else {
-                    return 0.9;
+                    return 0.8;
                   }
                 },
                 () -> -controllerDriver.getLeftY(),
@@ -304,7 +304,7 @@ public class RobotContainer {
             .leftTrigger()
             .whileTrue(
                 new ParallelCommandGroup(
-                    // new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
+                    new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
                     new IntakeNote(intakeSubsystem)));
 
         controllerDriver.y().whileTrue(new IntakeNote(intakeSubsystem));
@@ -315,7 +315,7 @@ public class RobotContainer {
             .rightTrigger()
             .whileTrue(
                 new ParallelCommandGroup(
-                    // new DisableArm(armSubsystemNew),
+                    new DisableArm(armSubsystemNew),
                     new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM)));
 
         controllerDriver.povUp().whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MAX_SETPOINT));
@@ -331,7 +331,7 @@ public class RobotContainer {
             .a()
             .whileTrue(
                 new ParallelCommandGroup(
-                    // new SetArmLimelight(armSubsystemNew, limelightSubsystem),
+                    new SetArmLimelight(armSubsystemNew, limelightSubsystem),
                     new DriveLL(
                         drive,
                         () -> Constants.Swerve.SPEED_LIMELIGHT,

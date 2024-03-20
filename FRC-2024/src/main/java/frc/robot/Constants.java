@@ -56,7 +56,7 @@ public final class Constants {
 
   public static class Arm {
 
-    public static final double INTAKING_SETPOINT = 10.98; // angle for intaking
+    public static final double INTAKING_SETPOINT = 0; // angle for intaking
     public static final double MAX_SETPOINT = 90; // angle max
     public static final double MIDDLE_SETPOINT = 30; // angle for shooting
 
