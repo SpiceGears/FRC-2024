@@ -278,7 +278,7 @@ public class RobotContainer {
                   if (controllerDriver.leftBumper().getAsBoolean()) {
                     return 1;
                   } else {
-                    return 0.6;
+                    return 0.9;
                   }
                 },
                 () -> -controllerDriver.getLeftY(),

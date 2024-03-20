@@ -212,7 +212,8 @@ public class LedSubsystem extends SubsystemBase {
         setAllLEDs(0, 0, 255);
         break;
       case WHITE:
-        setAllLEDs(10, 10, 10);
+        setAllLEDs(5, 5, 5);
+        // setAllLEDs(10, 10, 10);
         break;
       case RAINBOW:
       case DEFAULT:
