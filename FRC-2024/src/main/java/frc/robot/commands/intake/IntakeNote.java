@@ -22,26 +22,27 @@ public class IntakeNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSubsystem.intakeState = IntakeState.INTAKING;
+    intakeSubsystem.setIntakeState(IntakeState.INTAKING);
+    System.out.print("init intake");
     intakeSubsystem.isIntakeIntaking = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    switch (intakeSubsystem.intakeState) {
+    switch (intakeSubsystem.getIntakeState()) {
       case INTAKING:
-        intakeSubsystem.setIntakeVolts(5);
+        intakeSubsystem.setIntakeVolts(6.9);
         if (intakeSubsystem.checkForNoteInside()) {
-          intakeSubsystem.intakeState = IntakeState.BACKING;
+          intakeSubsystem.setIntakeState(IntakeState.BACKING);
         }
         break;
 
       case BACKING:
         if (intakeSubsystem.checkForNoteInside()) {
-          intakeSubsystem.setIntakeVolts(-5);
+          intakeSubsystem.setIntakeVolts(-6.9);
         } else {
-          intakeSubsystem.intakeState = IntakeState.READY;
+          intakeSubsystem.setIntakeState(IntakeState.READY);
         }
 
         break;
@@ -51,8 +52,9 @@ public class IntakeNote extends Command {
         break;
 
       case EMPTY:
-        intakeSubsystem.intakeState = IntakeState.INTAKING;
+        intakeSubsystem.setIntakeState(IntakeState.INTAKING);
     }
+    // SmartDashboar
   }
 
   // Called once the command ends or is interrupted.
@@ -65,6 +67,6 @@ public class IntakeNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeSubsystem.intakeState == IntakeState.READY;
+    return intakeSubsystem.getIntakeState() == IntakeState.READY;
   }
 }

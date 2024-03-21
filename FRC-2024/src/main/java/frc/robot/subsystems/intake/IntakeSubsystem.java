@@ -71,6 +71,14 @@ public class IntakeSubsystem extends SubsystemBase {
     // intakeSlave.setVoltage(volts);
   }
 
+  public void setIntakeState(IntakeState _intakeState) {
+    this.intakeState = _intakeState;
+  }
+
+  public IntakeState getIntakeState() {
+    return this.intakeState;
+  }
+
   public boolean checkForNoteInside() {
     isNoteInside = !intakeSensor.get();
     return isNoteInside;

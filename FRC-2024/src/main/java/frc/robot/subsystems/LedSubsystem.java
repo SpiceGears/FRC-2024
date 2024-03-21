@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
@@ -99,10 +100,12 @@ public class LedSubsystem extends SubsystemBase {
     // Stałe dla progu błędu
     String intake_state = SmartDashboard.getString("intake/state", "");
     LEDMode ledMode = LEDMode.DEFAULT;
-    boolean isArmInPosition = armEncoder < 20;
+    boolean isArmInPosition = armEncoder < 7;
     double errorToTargetX = limelightError;
     double errorToTargetY = armSetpoint - armEncoder;
     boolean seesTarget = tv == 1;
+    double limelightBlink = 2;
+    double limelightDefault = 0;
     boolean is_aimed =
         (Math.abs(errorToTargetX) < ERROR_THRESHOLD_X)
             && (Math.abs(errorToTargetY) < ERROR_THRESHOLD_Y)
@@ -115,6 +118,11 @@ public class LedSubsystem extends SubsystemBase {
           break;
         case "BACKING":
           ledMode = LEDMode.GREEN_BLINK_FAST;
+          NetworkTableInstance.getDefault()
+              .getTable("limelight")
+              .getEntry("ledMode")
+              .setNumber(limelightBlink);
+
           break;
         case "INTAKING":
           if (isIntakeIntaking) {
@@ -124,10 +132,18 @@ public class LedSubsystem extends SubsystemBase {
           }
           break;
         default:
+          NetworkTableInstance.getDefault()
+              .getTable("limelight")
+              .getEntry("ledMode")
+              .setNumber(limelightBlink);
           ledMode = LEDMode.WHITE;
           break;
       }
     } else {
+      NetworkTableInstance.getDefault()
+          .getTable("limelight")
+          .getEntry("ledMode")
+          .setNumber(limelightDefault);
       if (isArmByLL) {
         if (!seesTarget) {
           // nie widzi targetu

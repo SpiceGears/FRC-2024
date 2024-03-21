@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TurboCommand;
+import frc.robot.commands.TurboCommandClose;
 import frc.robot.commands.arm.ArmPwmCommand;
 import frc.robot.commands.arm.DisableArm;
 import frc.robot.commands.arm.SetArm;
@@ -230,6 +231,16 @@ public class RobotContainer {
             limelightSubsystem,
             ledSubsystem,
             drive));
+    NamedCommands.registerCommand(
+        "TurboCommandClose",
+        new TurboCommandClose(
+            2,
+            shooterSubsystem,
+            intakeSubsystem,
+            armSubsystemNew,
+            limelightSubsystem,
+            ledSubsystem,
+            drive));
 
     autoChooser = new SendableChooser<>();
     // Set up feedforward characterization
@@ -304,9 +315,10 @@ public class RobotContainer {
         controllerDriver
             .leftTrigger()
             .whileTrue(
-                new ParallelCommandGroup(
-                    new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
-                    new IntakeNote(intakeSubsystem)));
+                // new ParallelCommandGroup(
+                // new SetArm(armSubsystemNew, Constants.Arm.INTAKING_SETPOINT),
+                new IntakeNote(intakeSubsystem));
+        // );
 
         controllerDriver.y().whileTrue(new IntakeNote(intakeSubsystem));
 
@@ -362,8 +374,8 @@ public class RobotContainer {
         controllerOperator
             .a()
             .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MIDDLE_SETPOINT));
-        controllerOperator.a().whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MAX_SETPOINT));
-        controllerDriver.leftTrigger().whileTrue(new OutNoteFromIntake(intakeSubsystem));
+        controllerOperator.y().whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MAX_SETPOINT));
+        controllerOperator.leftTrigger().whileTrue(new OutNoteFromIntake(intakeSubsystem));
 
         elevatorSubsystem.setDefaultCommand(
             ElevatorCommands.elevatorControl(
