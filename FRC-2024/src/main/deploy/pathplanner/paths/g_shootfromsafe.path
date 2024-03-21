@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6782004541452696,
-        "y": 4.474992408631434
+        "x": 0.7707865039790234,
+        "y": 4.485279747501851
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.089694008961953,
-        "y": 3.9297634484993287
+        "x": 1.182280058795706,
+        "y": 3.9400507873697457
       },
       "isLocked": false,
       "linkedName": "subwoofer_stage_corner"
     },
     {
       "anchor": {
-        "x": 2.0772785405219936,
-        "y": 3.199362388699715
+        "x": 1.4394635305561345,
+        "y": 3.4976952159418113
       },
       "prevControl": {
-        "x": 1.0772785405219936,
-        "y": 3.199362388699715
+        "x": 1.0893039676777667,
+        "y": 4.003481251210565
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 128.41805534482202,
+    "rotation": 127.40535663140862,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "gamma",
   "previewStartingState": {
-    "rotation": 112.03622694014548,
+    "rotation": 121.42956561483848,
     "velocity": 0
   },
   "useDefaultConstraints": true

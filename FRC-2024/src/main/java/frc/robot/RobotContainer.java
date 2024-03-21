@@ -39,6 +39,7 @@ import frc.robot.commands.elevator.SetElevatorBothManual;
 import frc.robot.commands.elevator.SetElevatorLeftUp;
 import frc.robot.commands.elevator.SetElevatorRightUp;
 import frc.robot.commands.intake.IntakeNote;
+import frc.robot.commands.intake.OutNoteFromIntake;
 import frc.robot.commands.intake.PassNoteToShooter;
 import frc.robot.commands.shooter.SetShooterTrapezoid;
 import frc.robot.commands.shooter.StopShooter;
@@ -352,11 +353,24 @@ public class RobotContainer {
                     ledSubsystem,
                     drive));
 
+        // awaryjne wypuszczenie intake
+        // ramie z bliska/amp na padzie operator
+        // rozkrecanie rolek shooter
+        controllerOperator
+            .rightTrigger()
+            .whileTrue(new SetShooterTrapezoid(shooterSubsystem, Constants.Shooter.DEFAULT_RPM));
+        controllerOperator
+            .a()
+            .whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MIDDLE_SETPOINT));
+        controllerOperator.a().whileTrue(new SetArm(armSubsystemNew, Constants.Arm.MAX_SETPOINT));
+        controllerDriver.leftTrigger().whileTrue(new OutNoteFromIntake(intakeSubsystem));
+
         elevatorSubsystem.setDefaultCommand(
             ElevatorCommands.elevatorControl(
                 elevatorSubsystem,
                 () -> -controllerOperator.getLeftY(),
                 () -> -controllerOperator.getRightY()));
+
         controllerOperator.b().whileTrue(new DisableArm(armSubsystemNew));
 
         controllerOperator

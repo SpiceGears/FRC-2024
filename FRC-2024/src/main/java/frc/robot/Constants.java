@@ -58,7 +58,7 @@ public final class Constants {
 
     public static final double INTAKING_SETPOINT = 0; // angle for intaking
     public static final double MAX_SETPOINT = 90; // angle max
-    public static final double MIDDLE_SETPOINT = 30; // angle for shooting
+    public static final double MIDDLE_SETPOINT = 13.5; // angle for shooting closeup
 
     public static final double MANUAL_SPEED_UP = 0.7;
     public static final double MANUAL_SPEED_DOWN = -0.5;
