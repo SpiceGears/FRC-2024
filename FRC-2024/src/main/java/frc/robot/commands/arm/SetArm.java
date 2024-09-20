@@ -4,10 +4,8 @@
 
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.arm.ArmSubsystemNew;
-import frc.robot.subsystems.arm.ArmSubsystemNew.ArmState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -28,8 +26,8 @@ public class SetArm extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ArmSubsystemNew.setArmState(ArmState.ENCODER);
-    ArmSubsystemNew.setSetpoint(position);
-    SmartDashboard.putNumber("ARM/setpoint", position);
+    // ArmSubsystemNew.setArmState(ArmState.ENCODER);
+    // ArmSubsystemNew.setSetpoint(position);
+    // SmartDashboard.putNumber("ARM/setpoint", position);
   }
 }

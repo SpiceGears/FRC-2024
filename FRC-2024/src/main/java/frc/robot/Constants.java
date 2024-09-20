@@ -81,8 +81,8 @@ public final class Constants {
         2 * Math.PI / REDUCTION_CHAIN / ENCODER_TICK_RATE; // 2rad per full rotation
     public static final double kArmOffsetRads = -0.3; // arm rest position counting from horizontal
 
-    public static final double MAX_VOLTAGE_OUTPUT_UP = 5;
-    public static final double MAX_VOLTAGE_OUTPUT_DOWN = 2.0;
+    public static final double MAX_VOLTAGE_OUTPUT_UP = 10;
+    public static final double MAX_VOLTAGE_OUTPUT_DOWN = 10;
 
     public static final double kSVolts = 0;
     public static final double kGVolts = 0;

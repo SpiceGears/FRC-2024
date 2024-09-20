@@ -69,7 +69,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
   public void useOutput(double output, double setpoint) {
 
     // update values
-    updateArmPosition();
+    // updateArmPosition();
     // Calculate the feedforward from the sepoint
     // Limit output voltage
     double maxVoltageUp = Constants.Arm.MAX_VOLTAGE_OUTPUT_UP;
@@ -79,7 +79,7 @@ public class ArmSubsystemNew extends PIDSubsystem {
 
     switch (armState) {
       case ENCODER:
-        setArmVolts(encoderStateOutput);
+        // setArmVolts(encoderStateOutput);
         break;
 
       case MANUAL:
@@ -114,8 +114,8 @@ public class ArmSubsystemNew extends PIDSubsystem {
   }
 
   public void setManualPower(double power) {
-    armState = ArmState.MANUAL;
-    manualPower = power;
+    setArmState(ArmState.MANUAL);
+    ArmSubsystemNew.manualPower = power;
     System.out.println("manual power set to " + power); // TODO
   }
 
